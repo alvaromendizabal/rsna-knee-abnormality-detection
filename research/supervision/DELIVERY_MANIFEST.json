@@ -1,0 +1,21 @@
+{
+  "version": "source_locked_supervision_1",
+  "files": {
+    "notebooks/04_supervision_and_validation.ipynb": "e9559e4abbfce73232cf9b15f766276ff45871994c152d7b264910fcbbbbdb0c",
+    "research/supervision/LLM_ANNOTATION_CONTRACT.md": "e35e45b59fb9dbc30087f9379d112ff705d44ee5d121b18b38b1dfa8bf991007",
+    "research/supervision/README.md": "a41356f5c9bbdb399579f42e54c4768985c79e229c4fdeaa7790ac5d9e1d952e",
+    "research/supervision/SOURCES.md": "16b1da17eb9ff8476ea78fbe31692df3501bb2bbace704de5eed92a8726e1583",
+    "research/supervision/common.py": "0b81ecfe5e5c138058480eb5ed86d4854247f96cae473fe85836a5f8377a368d",
+    "research/supervision/constraints.txt": "bfc8838d47e5c22282c44c245ab2dcf217e84194fcc2dca94b74c38a398ed490",
+    "research/supervision/labels.py": "b438b1f16fbaf9d203c1bbf079fb4ea027a8acb531f307ff06113daff6b08042",
+    "research/supervision/pipeline.py": "b99b24f47fdabf9b5c3017f0f4e08de016efb5471c771f65b833865e867b7a21",
+    "research/supervision/plots.py": "00e4f3cb16bd102bd772eefd688cf115d559b1681f361aa3a86170735593f9d6",
+    "research/supervision/protocol.json": "e99544d2211518b8ac0267d336a04944563732304e72551724776b15a5ecf26f",
+    "research/supervision/run.py": "9b6e23f0c3e62fecb6483326c5b052745fd23ac91082f54f5555882cc7fea98b",
+    "research/supervision/target_contract.json": "434bcd9197d6a3eb75f55eee03099c08848fe0f44410c8bd67e5970a6e85af14",
+    "research/supervision/tests.py": "613acf6751a03c2944699b1ae3e4cd2d041ba18561ef4081621eecd561bb92e5"
+  },
+  "notebook_source_sha256": "cfea9ff37056b0ad0c738a2fa801e27166f92105a4635ebeb707313ec47e2868",
+  "project_tests_executed_by_assistant": false,
+  "notebook_executed_by_assistant": false
+}

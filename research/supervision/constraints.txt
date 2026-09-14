@@ -1,0 +1,5 @@
+# Preserve the installed core numeric stack; PNG companion renderer is the only new top-level dependency.
+numpy==2.2.6
+pandas==2.3.3
+plotly==6.3.0
+matplotlib==3.10.6

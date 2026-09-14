@@ -1,0 +1,15 @@
+{
+  "milestone": "m01_metadata_and_supervision_audit",
+  "raw_directory": "data/raw/metadata",
+  "maximum_total_csv_bytes": 262144000,
+  "worker_soft_seconds": 120,
+  "worker_hard_seconds": 180,
+  "worker_rss_gib": 4,
+  "model_fit_budget": 0,
+  "image_download_budget": 0,
+  "report_text_export_allowed": false,
+  "patient_disjointness_verified": false,
+  "official_metric": "unweighted mean of 12 ROC AUC values; higher is better",
+  "gold_outcome_distribution_inspection": "deferred until validation design",
+  "feature_policy": "acquisition coverage candidates only; no predictive utility claimed"
+}

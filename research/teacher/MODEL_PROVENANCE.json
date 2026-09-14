@@ -1,0 +1,41 @@
+{
+  "model": {
+    "original": "Qwen/Qwen3-4B-Instruct-2507",
+    "quantizer": "unsloth",
+    "repository": "unsloth/Qwen3-4B-Instruct-2507-GGUF",
+    "revision": "a06e946bb6b655725eafa393f4a9745d460374c9",
+    "file": "Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+    "quantization": "Q4_K_M",
+    "bytes": 2497281120,
+    "sha256": "3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597",
+    "url": "https://huggingface.co/unsloth/Qwen3-4B-Instruct-2507-GGUF/resolve/a06e946bb6b655725eafa393f4a9745d460374c9/Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+    "license": "Apache-2.0 as published; retain original license for redistribution; weights not included in this delivery",
+    "medical_validation": "not established",
+    "training_corpus_and_benchmark_contamination": "not ruled out",
+    "competition_permission": "public model license is not competition permission; do not submit without verifying current competition external-model rules"
+  },
+  "runtime": {
+    "repository": "ggml-org/llama.cpp",
+    "tag": "b10937",
+    "prerelease": true,
+    "release_api": "https://api.github.com/repos/ggml-org/llama.cpp/releases/tags/b10937",
+    "license": "MIT",
+    "integrity": "Require the selected public GitHub asset SHA-256 digest; persist asset ID, bytes, digest and extracted file hashes",
+    "compatibility": "official prebuilt Ubuntu x64 CPU binary; --help is checked before model download; no build fallback"
+  },
+  "decoding": {
+    "temperature": 0,
+    "seed": 20260914,
+    "max_output_tokens": 1024,
+    "context_tokens": 8192,
+    "threads": 4,
+    "gpu_layers": 0
+  },
+  "privacy": {
+    "inference": "127.0.0.1 only; ephemeral local auth generated automatically; never a cloud model endpoint",
+    "external_transfers": "public runtime and weights only; reports, IDs and quotes excluded from return packages",
+    "tools": "disabled",
+    "runtime_logs": "discarded",
+    "scope": "Research only, not medical advice or a validated diagnostic system"
+  }
+}

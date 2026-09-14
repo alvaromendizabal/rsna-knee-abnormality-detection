@@ -1,0 +1,68 @@
+{
+  "milestone": "supervision_and_validation",
+  "revision": "source_locked_english_scope_pilot_1",
+  "seed": 20260914,
+  "sample_reports": 256,
+  "sampling": "one report per normalized group, training folds only, deterministic hash order",
+  "arms": [
+    "mention_only",
+    "joint_context",
+    "joint_no_negation",
+    "joint_no_uncertainty",
+    "joint_no_context_gate"
+  ],
+  "previous": {
+    "core_source_hash": "a7f5941629d2b6e0a4abd4c1ffdb97b0f2ff17181a98a8784f68b25025ed2c97",
+    "metadata_sha256": {
+      "train.csv": "8ca2203c0e9d61c080c7a314c7cdb51c1b03a1d9eb4770819f7f34af53ef4e33",
+      "train_series.csv": "573c1d80772bf41211c91b149c95677385a1c22d63f485c347f1b46c0177aef3",
+      "test.csv": "7539466fe487069345c233352b2632edeec1dd24128b08eda318de99ff7650ff",
+      "test_series.csv": "d8b0402ccd4d1383bf8b154b781e53f156a5438778fadca04fca3c64592f4f2d",
+      "sample_submission.csv": "bf96706cfea74f089b0450290206e659bf5ee2a17a8d732774e1f2a5bcac53e4"
+    },
+    "stage_keys": {
+      "m01": "ea40bda00eb65237168de9bc64789d850e7cc72cf14df8d9af948694d87bc22e",
+      "r01": "fce2c47262e4325efb3bd874e1b7fd9a5b64e4573d0361f465f759b2dfdc2d28",
+      "r02": "57b65141e19798f0d1ad16eeffd1324a845e01ba693f74296da8fdf691160021"
+    },
+    "completed_notebooks": [
+      "01_metadata_and_representation_audit.ipynb",
+      "02_protocol_feature_investigation.ipynb",
+      "03_image_context_feature_investigation.ipynb"
+    ]
+  },
+  "limits": {
+    "analysis_seconds": 180,
+    "rss_gib": 4,
+    "model_fits": 0,
+    "image_downloads": 0,
+    "api_calls": 0,
+    "annotation_model_calls": 0,
+    "review_queue_reports": 24
+  },
+  "holdout": "58 expert studies and casefolded normalized-report overlaps remain sealed. Neither extractor consumes expert outcome values.",
+  "split": "5 deterministic report-group folds, fold 0 development, 1-4 training; already sampled image groups forced to training",
+  "split_limitations": [
+    "normalized report is not patient identity",
+    "near duplicates not resolved",
+    "sites not verified",
+    "no disease stratification from gold outcomes"
+  ],
+  "approval": {
+    "candidate_training_use": false,
+    "clinical_accuracy_established": false,
+    "english_scope_adjudicated": false,
+    "metric_on_expert_labels_allowed": false
+  },
+  "benchmark": {
+    "metric": "unweighted macro ROC AUC across 12 findings",
+    "direction": "higher",
+    "source": "https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/overview/evaluation",
+    "leaderboard_source": "https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/leaderboard",
+    "top_score": null,
+    "verified_top_score": false,
+    "reason": "Public page available but leading rows were not retrievable during this review."
+  },
+  "inference": "Report text and report-derived state variables are NEVER test-time predictors. They are candidate training supervision only.",
+  "predeclared_decision": "Measure joint and leave-one-block-out assignment differences. Do not promote labels or claim accuracy without adjudication. Review multilingual feasibility next."
+}

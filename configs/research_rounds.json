@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "seed": 20260912,
+  "round1": {"seconds": 180, "rss_gib": 4, "sample_studies": 2},
+  "round2": {"seconds": 300, "rss_gib": 4, "maximum_series": 6, "maximum_slices_per_series": 96},
+  "image_download": {"batch_series": 1, "wire_bytes": 536870912, "seconds": 300, "maximum_requests": 600},
+  "validation": {"supervised_evaluation_enabled": false, "metric_contract_currently_verified": false,
+    "patient_disjointness_verified": false, "site_disjointness_verified": false,
+    "expert_labels_reserved": true, "leaderboard_score": null},
+  "publication": {"mode": "public_showcase_private_research", "allow_raw_data": false,
+    "allow_research_code": false, "allow_raw_notebooks": false, "allow_automatic_push": false}
+}
