@@ -1,0 +1,22 @@
+{
+  "name": "rsna-knee-teacher",
+  "version": 1,
+  "files": {
+    "notebooks/05_multilingual_teacher_pilot.ipynb": "53dd882373bbe8a1beeb7369ab5409eb9a78bb8c9671560bf8e304b450b98a64",
+    "research/teacher/MODEL_PROVENANCE.json": "2637429199c3c1ec223bbfd51f7a6e46e23e0c7b26fcd85d25d6fcfb1711ecc7",
+    "research/teacher/README.md": "ea800e00e8a66f3162049c2ae23e55290e17c52813c13af6f7b3156276dde20e",
+    "research/teacher/REVIEW_PROTOCOL.md": "08cf17c9b6133bd7db6f1bbdf235c4a9544eeadd3a1751f67f5824ead4b1be5b",
+    "research/teacher/SOURCES.md": "7ae80d8cb2fb192390b5ea45d2805e11c58c61e547da26b34c8fdd06a20a1d8b",
+    "research/teacher/protocol.json": "e25b4bdbdb47c7b2d77beb76971c609305900a4daf99a123a4fe88ea9fabc0e2",
+    "research/teacher/run.py": "4a39aed3cbd368483658b81594270169f7c737c22f25ba1a6231c66a857d234a",
+    "research/teacher/teacher_common.py": "d172b89ee78553003f65fb1274af3b8c603a554d7ca0fdfb98d2e3967cd89664",
+    "research/teacher/teacher_contract.py": "d5531404dcbdfc8dffd64d793871a2dd0313a1d7cdd9cd6e64485556061b2ea2",
+    "research/teacher/teacher_pipeline.py": "d1e2ddace334a13cd5b7d462061db01d65b871236ca0e4ad94342e92ae801d29",
+    "research/teacher/teacher_plots.py": "7516850181a4856a4b310f066639693bb8579981488b91a7bf907e9c10aaef0b",
+    "research/teacher/teacher_runtime.py": "d86d2a96b024326fda0060378acf44487b45d98179afbad23f733c9ab417ffef",
+    "research/teacher/tests.py": "79062faec8a9babfeb43823547c77bc8939df2b0d948753255e94edaf9a506eb"
+  },
+  "notebook_source_sha256": "d9cbc4b5c1f588395d571899c97d410e122c2e3c99da09bbc7d3772d899a23d7",
+  "execution_status": "prepared_not_executed",
+  "overwrites_allowed": false
+}

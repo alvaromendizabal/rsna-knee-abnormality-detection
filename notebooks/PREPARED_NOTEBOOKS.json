@@ -1,0 +1,14 @@
+{
+  "notebooks/00_workspace_preflight.ipynb": {
+    "code_sha256": "60d6ab18d00e653e11ea7cc3b77e847cc82c699fb6bd3eb00aaa34e97845f80a",
+    "minimum_plotly_outputs": 3,
+    "completion_marker": "M01_PREFLIGHT_COMPLETE",
+    "status": "prepared_not_executed"
+  },
+  "notebooks/01_metadata_and_representation_audit.ipynb": {
+    "code_sha256": "553b5cb9293b9dfa51ae5acdbfeccacc8755e064936c4b973215fb81229c0c64",
+    "minimum_plotly_outputs": 12,
+    "completion_marker": "M01_METADATA_AUDIT_COMPLETE",
+    "status": "prepared_not_executed"
+  }
+}

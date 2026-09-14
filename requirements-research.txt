@@ -1,0 +1,3 @@
+# Optional only for Round 2; existing M01 environment is retained.
+# This is a direct pin, not a transitive environment lock.
+pydicom==3.0.2

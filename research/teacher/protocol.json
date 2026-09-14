@@ -1,0 +1,69 @@
+{
+  "stage": "local-multilingual-teacher-pilot",
+  "version": 1,
+  "seed": 20260914,
+  "reports": 4,
+  "max_report_characters": 3000,
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "plotly": "6.3.0",
+    "psutil": "7.0.0",
+    "matplotlib": "3.10.6",
+    "Pillow": "12.3.0",
+    "ipykernel": "6.29.5",
+    "nbformat": "5.10.4"
+  },
+  "limits": {
+    "call_seconds": 150,
+    "pilot_outer_seconds": 900,
+    "memory_gib": 10,
+    "threads": 4,
+    "max_new_inference_calls": 10
+  },
+  "previous": {
+    "key": "02aa73ae7b70d88102f31317a9cb8048b214574ee06b2dc6646693d89fe948aa",
+    "supervision_source": {
+      "common.py": "0b81ecfe5e5c138058480eb5ed86d4854247f96cae473fe85836a5f8377a368d",
+      "labels.py": "b438b1f16fbaf9d203c1bbf079fb4ea027a8acb531f307ff06113daff6b08042",
+      "pipeline.py": "b99b24f47fdabf9b5c3017f0f4e08de016efb5471c771f65b833865e867b7a21",
+      "plots.py": "00e4f3cb16bd102bd772eefd688cf115d559b1681f361aa3a86170735593f9d6",
+      "run.py": "9b6e23f0c3e62fecb6483326c5b052745fd23ac91082f54f5555882cc7fea98b",
+      "tests.py": "613acf6751a03c2944699b1ae3e4cd2d041ba18561ef4081621eecd561bb92e5",
+      "protocol.json": "e99544d2211518b8ac0267d336a04944563732304e72551724776b15a5ecf26f",
+      "target_contract.json": "434bcd9197d6a3eb75f55eee03099c08848fe0f44410c8bd67e5970a6e85af14",
+      "constraints.txt": "bfc8838d47e5c22282c44c245ab2dcf217e84194fcc2dca94b74c38a398ed490"
+    },
+    "checkpoint_files": {
+      "split_assignments.private.csv": "c3b53a66ad2479796d9305e234608716421b570a6af779efb5db87d8000208a0",
+      "candidate_states.private.json": "b4607cb06aae83d8ae0c71a0b9aac7d7a7847df97101cbacce9e0f52e74ec460",
+      "review_queue.private.json": "64eed7f6c1e8a70abd6c5c11c2de8d940edb9d43e97969b8a33c386ade29f19a",
+      "summary.json": "392570be03894c87c9d6302214ed8b621f8be4d6467b9a7a492ecdf184e53ddd",
+      "lineage.json": "72b471d9c655fbc82931485166dc2e9d3c8bd340292edfe5d30f20d9dcaead19",
+      "DECISION.json": "9863ad2440983e68a183f1e6022660acf2500d340956c54f2ba4879482084000"
+    },
+    "metadata_sha256": {
+      "train.csv": "8ca2203c0e9d61c080c7a314c7cdb51c1b03a1d9eb4770819f7f34af53ef4e33",
+      "train_series.csv": "573c1d80772bf41211c91b149c95677385a1c22d63f485c347f1b46c0177aef3",
+      "test.csv": "7539466fe487069345c233352b2632edeec1dd24128b08eda318de99ff7650ff",
+      "test_series.csv": "d8b0402ccd4d1383bf8b154b781e53f156a5438778fadca04fca3c64592f4f2d",
+      "sample_submission.csv": "bf96706cfea74f089b0450290206e659bf5ee2a17a8d732774e1f2a5bcac53e4"
+    }
+  },
+  "study_design": {
+    "arms": [
+      "minimal_contract",
+      "domain_contract"
+    ],
+    "same_model": true,
+    "same_reports": true,
+    "counterbalanced_order": true,
+    "lexical_reference": "cached joint_context predictions on identical successful report subset",
+    "expert_outcomes_analyzed": false,
+    "model_fits": 0,
+    "training_targets_approved": false,
+    "max_canaries": 2,
+    "max_report_arm_calls": 8
+  }
+}

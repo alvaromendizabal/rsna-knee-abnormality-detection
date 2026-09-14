@@ -1,0 +1,105 @@
+{
+  "status": "research interpretation pending review; official definitions prevail",
+  "source": "https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/data",
+  "targets": {
+    "ACL": {
+      "target": "anterior cruciate ligament injury",
+      "requires": "explicit injury/tear/rupture/sprain or explicit normal anatomy",
+      "do_not_equate": [
+        "reconstruction history",
+        "mucoid degeneration without injury"
+      ]
+    },
+    "MCL": {
+      "target": "medial collateral ligament injury",
+      "requires": "explicit injury/tear/rupture/sprain or explicit normal anatomy",
+      "do_not_equate": [
+        "pain alone",
+        "postoperative history"
+      ]
+    },
+    "Medial Meniscus": {
+      "target": "medial meniscus tear",
+      "requires": "medial localization and tear, or explicit intact/normal finding",
+      "do_not_equate": [
+        "intrasubstance degeneration alone",
+        "lateral meniscal tear"
+      ]
+    },
+    "Lateral Meniscus": {
+      "target": "lateral meniscus tear",
+      "requires": "lateral localization and tear, or explicit intact/normal finding",
+      "do_not_equate": [
+        "intrasubstance degeneration alone",
+        "medial meniscal tear"
+      ]
+    },
+    "Medial OA": {
+      "target": "medial tibiofemoral osteoarthritis",
+      "requires": "medial compartment localization and explicit osteoarthritis term",
+      "do_not_equate": [
+        "unspecified OA",
+        "cartilage loss alone",
+        "medial meniscal degeneration"
+      ]
+    },
+    "Lateral OA": {
+      "target": "lateral tibiofemoral osteoarthritis",
+      "requires": "lateral compartment localization and explicit osteoarthritis term",
+      "do_not_equate": [
+        "unspecified OA",
+        "cartilage loss alone",
+        "lateral meniscal degeneration"
+      ]
+    },
+    "PF OA": {
+      "target": "patellofemoral osteoarthritis",
+      "requires": "patellofemoral localization and explicit osteoarthritis term",
+      "do_not_equate": [
+        "unspecified OA",
+        "isolated patellar cartilage signal"
+      ]
+    },
+    "Effusion": {
+      "target": "joint effusion / excess fluid",
+      "requires": "explicit effusion statement",
+      "do_not_equate": [
+        "synovitis",
+        "physiologic trace fluid automatically negative or positive clinical label"
+      ],
+      "note": "Severity-to-target mapping needs review."
+    },
+    "Synovitis": {
+      "target": "inflammation of joint lining",
+      "requires": "explicit synovitis statement",
+      "do_not_equate": [
+        "effusion",
+        "Baker cyst"
+      ]
+    },
+    "Baker's": {
+      "target": "Baker's / popliteal cyst",
+      "requires": "explicit named cyst statement",
+      "do_not_equate": [
+        "unspecified cyst",
+        "meniscal cyst"
+      ]
+    },
+    "Contusion": {
+      "target": "bone contusion / bone bruise",
+      "requires": "explicit bone/marrow/osseous contusion statement",
+      "do_not_equate": [
+        "unspecified edema",
+        "degenerative marrow lesion"
+      ]
+    },
+    "Fracture": {
+      "target": "fracture",
+      "requires": "explicit current fracture statement",
+      "do_not_equate": [
+        "edema alone",
+        "old healed fracture history"
+      ]
+    }
+  }
+}
