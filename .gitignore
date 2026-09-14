@@ -1,0 +1,40 @@
+# Competition and runtime data
+data/
+artifacts/
+logs/
+returns/
+checkpoints/
+models/
+model_weights/
+*.dcm
+*.dicom
+*.gguf
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.npy
+*.npz
+*.parquet
+*.feather
+*.arrow
+*.pkl
+*.joblib
+
+# Environments and caches
+.venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.pyc
+
+# Credentials and local state
+.env
+.env.*
+!.env.example
+kaggle.json
+.aws/
+.huggingface/
