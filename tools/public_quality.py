@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import ast, json, pathlib, re, sys
+import ast, json, pathlib, re, subprocess, sys
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 for p in ROOT.rglob('*.py'):
     if '.git' not in p.parts:
@@ -31,4 +31,5 @@ for name, marker in markers.items():
 for bad in ['data', 'artifacts', 'logs', 'returns', '.venv']:
     if (ROOT / bad).exists():
         raise SystemExit(f'forbidden public path: {bad}')
+subprocess.run([sys.executable, str(ROOT / 'tools/check_image_models.py')], check=True)
 print('PUBLIC_QUALITY_PASSED')

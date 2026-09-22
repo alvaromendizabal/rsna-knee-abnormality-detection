@@ -1,0 +1,209 @@
+{
+  "schema": "rsna_image_model_public_evidence_v1",
+  "as_of_utc": "2026-09-22T02:06:39.184113+00:00",
+  "source_return_sha256": "4664856916536acb2a92320a8c26bbb88dc3b55d096a0f32b8dbbb2a8b721d22",
+  "checkpoint_sha256": "89606f05849838529e1b4658d28fb049623205d9853371548403bca460361ded",
+  "evaluation": "Separate-cohort development replication; not untouched holdout, OOF, clinical validation or leaderboard performance.",
+  "pilot_studies": 12,
+  "replication_studies": 12,
+  "pilot_overlap": 0,
+  "pilot": {
+    "raptor_full42": {
+      "macro_auc": 0.9347111992945326,
+      "brier": 0.14499225942744823
+    },
+    "raptor_fluid24": {
+      "macro_auc": 0.9373153659611994,
+      "brier": 0.13711753888246528
+    },
+    "dino_uniform24": {
+      "macro_auc": 0.8177110890652558,
+      "brier": 0.19484379991285886
+    },
+    "blend_full90_dino10": {
+      "macro_auc": 0.9420414462081128,
+      "brier": 0.14250391490150188
+    },
+    "blend_fluid90_dino10": {
+      "macro_auc": 0.9394372795414462,
+      "brier": 0.13559766835782294
+    }
+  },
+  "replication": {
+    "blend_fluid90_dino10": {
+      "brier": 0.17830513851382707,
+      "macro_auc": 0.9263833774250441
+    },
+    "blend_full90_dino10": {
+      "brier": 0.17886694071966414,
+      "macro_auc": 0.9191495811287478
+    },
+    "dino_uniform24": {
+      "brier": 0.18214139092032403,
+      "macro_auc": 0.7885113536155203
+    },
+    "raptor_fluid24": {
+      "brier": 0.1860572174212544,
+      "macro_auc": 0.9224096119929454
+    },
+    "raptor_full42": {
+      "brier": 0.18639435402754756,
+      "macro_auc": 0.9206073633156967
+    }
+  },
+  "primary_candidate": "blend_full90_dino10",
+  "baseline": "raptor_fluid24",
+  "primary_decision": "STOP_FIXED_BLEND_DIRECTION",
+  "primary_auc_delta": -0.0032600308641975717,
+  "primary_brier_delta": -0.0071902767015902536,
+  "secondary_candidate": "blend_fluid90_dino10",
+  "secondary_status": "Hypothesis-generating; not a successful primary confirmation.",
+  "bootstrap": {
+    "auc_defined_draws": 464,
+    "auc_delta_percentile_95": [
+      -0.03444919808201058,
+      0.02872273704304956
+    ],
+    "auc_undefined_draws": 536,
+    "brier_delta_percentile_95": [
+      -0.014323415629538313,
+      0.0010155063762960943
+    ],
+    "interpretation": "Within-cohort sampling sensitivity only. Fixed original target set; undefined AUC resamples omitted and counted. No adjustment for historical checkpoint selection or pilot search.",
+    "replicates": 1000,
+    "seed": 272026,
+    "unit": "study"
+  },
+  "per_target": [
+    {
+      "target": "ACL",
+      "positive": 4,
+      "negative": 8,
+      "baseline_auc": 0.9375,
+      "primary_auc": 0.9375,
+      "secondary_auc": 0.96875
+    },
+    {
+      "target": "MCL",
+      "positive": 2,
+      "negative": 10,
+      "baseline_auc": 1.0,
+      "primary_auc": 1.0,
+      "secondary_auc": 1.0
+    },
+    {
+      "target": "Medial Meniscus",
+      "positive": 6,
+      "negative": 6,
+      "baseline_auc": 0.9166666666666666,
+      "primary_auc": 0.8333333333333334,
+      "secondary_auc": 0.8888888888888888
+    },
+    {
+      "target": "Lateral Meniscus",
+      "positive": 5,
+      "negative": 7,
+      "baseline_auc": 1.0,
+      "primary_auc": 1.0,
+      "secondary_auc": 1.0
+    },
+    {
+      "target": "Medial OA",
+      "positive": 5,
+      "negative": 7,
+      "baseline_auc": 0.9714285714285714,
+      "primary_auc": 1.0,
+      "secondary_auc": 0.9714285714285714
+    },
+    {
+      "target": "Lateral OA",
+      "positive": 2,
+      "negative": 10,
+      "baseline_auc": 1.0,
+      "primary_auc": 1.0,
+      "secondary_auc": 1.0
+    },
+    {
+      "target": "PF OA",
+      "positive": 7,
+      "negative": 5,
+      "baseline_auc": 0.7428571428571429,
+      "primary_auc": 0.7142857142857143,
+      "secondary_auc": 0.7428571428571429
+    },
+    {
+      "target": "Effusion",
+      "positive": 5,
+      "negative": 7,
+      "baseline_auc": 1.0,
+      "primary_auc": 1.0,
+      "secondary_auc": 1.0
+    },
+    {
+      "target": "Synovitis",
+      "positive": 4,
+      "negative": 8,
+      "baseline_auc": 0.6875,
+      "primary_auc": 0.71875,
+      "secondary_auc": 0.71875
+    },
+    {
+      "target": "Baker's",
+      "positive": 3,
+      "negative": 9,
+      "baseline_auc": 0.9629629629629629,
+      "primary_auc": 0.9259259259259259,
+      "secondary_auc": 0.9259259259259259
+    },
+    {
+      "target": "Contusion",
+      "positive": 1,
+      "negative": 11,
+      "baseline_auc": 1.0,
+      "primary_auc": 1.0,
+      "secondary_auc": 1.0
+    },
+    {
+      "target": "Fracture",
+      "positive": 2,
+      "negative": 10,
+      "baseline_auc": 0.85,
+      "primary_auc": 0.9,
+      "secondary_auc": 0.9
+    }
+  ],
+  "execution": {
+    "gates_passed": 32,
+    "regression_tests": 278,
+    "elapsed_seconds": 649.953,
+    "decoded_files": 1769,
+    "new_raw_download_files": 0,
+    "encoded_windows": 504,
+    "training_fits": 0,
+    "gpu_used": false,
+    "new_jobs": 0,
+    "submissions_created": 0,
+    "s3_writes": 0
+  },
+  "public_score_snapshot": {
+    "utc": "2026-09-22T02:06:36.151867+00:00",
+    "reference_ensemble_submission": "56442573",
+    "reference_ensemble_public_auc": 0.933,
+    "highest_returned_page_auc": 0.958,
+    "comparable_gap": 0.025,
+    "independent_model_submission": "56441830",
+    "independent_model_status": "COMPLETE",
+    "independent_model_public_score": null
+  },
+  "notebook_scope": "Executed public aggregate replay; original MRI execution is evidenced by the private source return.",
+  "public_exclusions": [
+    "study identifiers",
+    "per-study labels and predictions",
+    "report text",
+    "DICOM pixels",
+    "feature arrays",
+    "checkpoint bytes",
+    "credentials",
+    "private workspace logs"
+  ]
+}

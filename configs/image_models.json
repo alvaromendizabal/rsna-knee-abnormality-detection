@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "primary_candidate": "blend_full90_dino10",
+  "secondary_candidate": "blend_fluid90_dino10",
+  "baseline": "raptor_fluid24",
+  "raptor_weight": 0.9,
+  "dino_weight": 0.1,
+  "promotion_auc_delta": 0.002,
+  "kill_auc_delta": -0.002,
+  "maximum_brier_deterioration": 0.01,
+  "all_targets_required": 12,
+  "minimum_studies": 6,
+  "automatic_submission": false,
+  "automatic_training": false
+}
