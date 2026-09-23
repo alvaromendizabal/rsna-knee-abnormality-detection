@@ -1,45 +1,60 @@
 # RSNA Knee Abnormality Detection
 
-**Image-model research, reproducible MRI inference, and evidence-led ensemble validation.**
+**MRI image-model research, reproducible deployment validation, and a data-complete training frontier.**
 
-A notebook-first machine-learning project by **Alvaro Mendizabal**. The system predicts 12 knee MRI findings from images; reports are a training-supervision resource, not a test-time input. Work spans representation engineering, weak supervision, DINOv2 transfer learning, a public CoAtNet/Raptor transfer, and controlled heterogeneous-ensemble experiments.
+A notebook-first machine-learning project by **Alvaro Mendizabal** for twelve knee-MRI findings. Reports are used only as training-supervision evidence; test-time prediction is image-only. The project spans protocol/geometry research, weak supervision, DINOv2 transfer learning, public CoAtNet/Raptor reproduction, heterogeneous ensembles, deployment-parity testing, and a scanner-grouped full-data training roadmap.
 
-> **Latest published milestone: Stage 27, September 22, 2026 UTC.** The experiment and its evidence are complete. The primary blend was rejected. Competitive development remains active; this repository does not claim a winning model or clinical readiness.
+> **Latest published milestone: Stage 32 · September 23, 2026 UTC.** Stage 31 completed a hermetic CPU shadow, offline Tesla T4 preview, and one guarded candidate submission. Stage 32 then verified that the candidate was still pending, current competition metadata matched the accepted AWS copy, and only **960 / 4,407 training studies (21.8%)** were present in the exact-window cache. The next competitive step is therefore complete-data grouped training—not another deployment repair or exposed-cohort blend sweep.
 
 ## Start here
 
-Open **[06 — Image models and replication](notebooks/06_image_models_and_replication.ipynb)** for the current research story, saved inline Plotly figures, exact evaluation boundaries, and the decision to stop a blend that failed replication. Then read the [technical research record](docs/IMAGE_MODELS.md) for architecture, provenance, resource use, and the remaining submission gates.
+Open **[07 — Deployment and training frontier](notebooks/07_deployment_and_training_frontier.ipynb)** for the current research story: official-score boundaries, CPU/GPU parity, cache coverage, and the ranked ceiling-escape backlog.
 
-## Results that must not be conflated
+Then read **[Training frontier](docs/TRAINING_FRONTIER.md)** for the next modeling decision and **[Image-model research record](docs/IMAGE_MODELS.md)** for architecture, ablations, provenance, and limitations.
 
-| Evaluation setting | System | Macro-AUROC |
+## Current evidence
+
+| Evaluation setting | System / evidence | Result |
 |---|---|---:|
-| Official public leaderboard, recorded September 22 at 02:06 UTC | Reproduced **public multi-model reference ensemble**, submission 56442573 | **0.933** |
+| Official public leaderboard, verified return | Reproduced public multi-model reference ensemble, submission `56442573` | **0.933** |
 | Same returned leaderboard page | Highest listed score | **0.958** |
-| Twelve-study development pilot | Fluid-only Raptor | **0.937315** |
-| Twelve different development studies | Fluid-only Raptor | **0.922410** |
-| Same replication cohort | Preregistered 90% full Raptor + 10% DINOv2 | **0.919150 — rejected** |
-| Same replication cohort, predefined secondary arm | 90% fluid-only Raptor + 10% DINOv2 | **0.926383 — unconfirmed candidate** |
+| Exact Stage-31 release candidate | 90% fluid-only Raptor + 10% DINOv2, submission `56476938` | **Pending in Stage-32 evidence** |
+| Offline Tesla T4 preview | Maximum DINO CPU/GPU difference | **1.043e-6** |
+| Offline Tesla T4 preview | Maximum Raptor CPU/GPU difference | **5.960e-7** |
+| Offline Tesla T4 preview | Maximum blend CPU/GPU difference | **5.782e-7** |
+| Training readiness | Accepted exact-window cache | **960 / 4,407 studies (21.8%)** |
 
-The **0.025 public-leaderboard gap** is a dated, comparable difference. Local cohort scores are not leaderboard scores. The 0.933 result is attributed to the public reference ensemble, not an independently trained winning system or standalone Raptor. Submission 56441830 was complete but its score field was blank in the last receipt.
+The **0.025 leaderboard gap** is a dated, comparable difference between the 0.933 scored reference and the 0.958 returned leader. The pending candidate has no published score in the Stage-32 evidence, so it is not counted as an improvement. Deployment parity proves implementation fidelity, not predictive superiority.
 
 ## What the project demonstrates
 
-- **Data and supervision:** 4,407 training studies, 24,371 series, and 58 structured-label studies; unknown labels are not silently treated as negatives. Earlier work includes 130 protocol/acquisition columns, 140 per-series image descriptors, and 423 plane-preserving study columns.
-- **Learned models and input fidelity:** a trained DINOv2 checkpoint; strict transfer of a 73.1-million-parameter CoAtNet/Raptor checkpoint; complete real-DICOM decoding and exact reference parity for a 64-image representation and 42 windows.
-- **Efficient experiments:** global attention preserved across encoding microbatches; checksum-bound cached features; a four-arm window experiment without new image encoding; cached DINO predictions reused for separate-cohort ensemble replication.
-- **Scientific judgment:** negative results remain visible. Lower Brier error did not rescue a failed AUROC hypothesis. Secondary results are not relabeled as primary confirmations.
+- **Leakage-aware validation:** scanner-group reasoning, sealed expert-audit rows, explicit promotion/kill thresholds, and preservation of negative results.
+- **MRI representation engineering:** physical field-of-view cropping, true contiguous slice triplets, plane/contrast selection, target-specific attention, missing-view handling, and real-DICOM parity checks.
+- **Modern transfer learning:** an independently trained DINOv2 branch plus strict reproduction of a 73.1M-parameter CoAtNet/Raptor branch.
+- **Scientific ensembling:** screening, disjoint-cohort replication, rejection of a failed primary blend, and a guarded secondary release whose score remains pending.
+- **Deployment rigor:** hermetic CPU shadow inference, strict checkpoint loading, explicit numerical contracts, offline T4 execution, and component-level CPU/GPU parity before submission.
+- **Data-centric ceiling escape:** Stage 32 identified incomplete training-data coverage and missing fold-complete OOF evidence as the current bottleneck.
 
 ## Notebook guide
 
-[01 — Metadata](notebooks/01_metadata_and_representation_audit.ipynb), [02 — Protocol features](notebooks/02_protocol_feature_investigation.ipynb), [03 — Image context](notebooks/03_image_context_feature_investigation.ipynb), [04 — Supervision](notebooks/04_supervision_and_validation.ipynb), and [05 — Teacher feasibility](notebooks/05_multilingual_teacher_pilot.ipynb) preserve the earlier research checkpoint. Notebook 05 intentionally records a stopped synthetic canary, not completed report inference. [06 — Image models](notebooks/06_image_models_and_replication.ipynb) is the current entry point.
+- [01 — Metadata and representation audit](notebooks/01_metadata_and_representation_audit.ipynb)
+- [02 — Protocol feature investigation](notebooks/02_protocol_feature_investigation.ipynb)
+- [03 — Image-context feature investigation](notebooks/03_image_context_feature_investigation.ipynb)
+- [04 — Supervision and validation](notebooks/04_supervision_and_validation.ipynb)
+- [05 — Multilingual teacher feasibility](notebooks/05_multilingual_teacher_pilot.ipynb)
+- [06 — Image models and replication](notebooks/06_image_models_and_replication.ipynb)
+- **[07 — Deployment and training frontier](notebooks/07_deployment_and_training_frontier.ipynb)** — current entry point
 
-## Reproduce the public analysis
-
-Public tests require only Python 3.12 or later: `python -m unittest discover -s tests -p 'test_image_models.py'` and `python tools/public_quality.py`. To rerun notebook 06, install `ipython`, `nbformat`, `nbclient`, and `ipykernel` in a separate environment, open it from this checkout, and run all cells. Its Plotly MIME outputs include embedded SVG fallbacks. It replays published aggregate evidence; it does not rerun private MRI inference.
+Notebook 07 replays verified aggregate evidence only. It does not access AWS, rerun MRI inference, poll Kaggle, or claim completion of the next data-build stage.
 
 ## Public repository versus AWS workspace
 
-**GitHub is the curated review and reproducibility layer. AWS is the canonical research workspace.** The public tree contains aggregate evidence, executed analysis, small tested analytical primitives, configurations, and documentation. Raw MRI, report text, study identifiers, per-study predictions, model weights, environments, credentials, private logs, and full return bundles remain outside Git.
+**GitHub is the curated review and reproducibility layer. AWS remains the canonical research workspace.** This public repository intentionally excludes raw MRI, reports, study identifiers, row-level predictions, model weights, private logs, credentials, environments, and full return bundles.
 
-See [current status](docs/PROJECT_STATUS.md), [data access](docs/DATA_ACCESS.md), and [source attribution and limitations](docs/IMAGE_MODELS.md). No diagnostic or clinical use is claimed.
+Public checks use synthetic or aggregate evidence only:
+
+`python -m unittest discover -s tests`
+
+`python tools/public_quality.py`
+
+See [current status](docs/PROJECT_STATUS.md), [training frontier](docs/TRAINING_FRONTIER.md), [data access](docs/DATA_ACCESS.md), and [research sources](docs/SOURCES.md). No diagnostic or clinical use is claimed.
