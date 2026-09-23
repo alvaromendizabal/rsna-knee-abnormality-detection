@@ -1,19 +1,48 @@
 # Project status
 
-Updated from the verified Stage-27 return, completed **2026-09-22 02:06:39 UTC**.
+Updated from verified Stage-31 and Stage-32 returns through **2026-09-23 00:52 UTC**.
 
-## Completed publication milestone
+## Stage 31 — deployment fidelity and guarded release
 
-Stage 27 executed 32 successful gates and 278 regression tests on 12 studies disjoint from the original twelve-study pilot. Runtime was 649.953 seconds. All 1,769 DICOM inputs were reused from local storage; 504 Raptor windows were newly encoded. There were no training fits, GPU launches, new cloud jobs, package installations, submissions, or S3 writes.
+The frozen **90% fluid-only Raptor + 10% DINOv2** candidate completed a hermetic local shadow and an offline Tesla T4 preview. Both actual checkpoints loaded strictly and all three visible test studies executed.
 
-**Experiment outcome: STOP_FIXED_BLEND_DIRECTION.** The primary full-Raptor/DINO blend lost 0.003260 AUROC against fluid-only Raptor. Its lower Brier score does not change that decision. The predefined fluid-Raptor/DINO secondary arm gained 0.003974 AUROC, but selecting it now is exploratory and requires a new, fixed-cohort test.
+Maximum AWS-versus-T4 probability differences were:
 
-## Competition state
+- DINOv2: **1.043e-6** (limit 1e-3)
+- Raptor: **5.960e-7** (limit 1e-4)
+- fixed blend: **5.782e-7** (limit 1e-4)
 
-The last recorded public score is **0.933** for the reproduced public reference ensemble (submission 56442573), compared with **0.958** on the same returned leaderboard page. Snapshot: 2026-09-22 02:06 UTC. Submission 56441830 was complete with a blank score. Neither result should be resubmitted merely to refresh its status.
+The preview took **39.87 seconds**. Exactly one guarded candidate submission was requested: **56476938**. Stage 31 performed no training fits and did not repeat the existing scored reference submission.
 
-## Next decision
+## Stage 32 — score reconciliation and ceiling-escape audit
 
-Freeze the 90% fluid-Raptor / 10% DINO candidate and test it on eligible structured-label studies not used in either preceding cohort. Do not tune new weights or pool cohorts to rescue a failed primary result. Qualification still requires adequate class support, compatible end-to-end inference, missing-view handling, exact model provenance, competition-rule checks, and one guarded submission identity.
+All eight read-only gates passed. Submission 56476938 remained **pending** through the returned score-poll window. The scored incumbent remained the reproduced public multi-model reference ensemble at **0.933**, versus **0.958** on the same returned leaderboard page.
 
-The publication milestone is complete; the competitive research program and submission qualification are not. See [the current notebook](../notebooks/06_image_models_and_replication.ipynb) and [research record](IMAGE_MODELS.md).
+Stage 32 also established the current training bottleneck:
+
+- official training studies: **4,407**
+- accepted exact-window cache: **960**
+- coverage: **21.8%**
+- remaining studies: **3,447**
+- completed cache shards: **3 / 14**
+- current official metadata matched the accepted AWS copies
+- recent release stages used frozen checkpoints; **no current full-data retraining has been verified**
+
+This changes the research priority. Deployment fidelity is no longer the main missing capability. Complete-data, scanner-grouped validation and fold-complete OOF predictions are.
+
+## Next gate — not yet completed
+
+The next data-readiness milestone is prepared outside the public repository: finish the exact-window cache, build a scanner-group catalog, freeze leakage-safe grouped folds, and smoke-test the cache/fold join before a new model fit.
+
+**This repository does not claim that Stage 33 completed.** An earlier preflight exposed a local-path assumption and a corrected handoff was prepared; only executed, returned evidence will be promoted into the public record.
+
+## Current competitive state
+
+- Scored reference: **0.933 public macro-ROC-AUC**
+- Returned leader: **0.958**
+- Comparable dated gap: **0.025**
+- Candidate 56476938: **pending in Stage-32 evidence**
+- Stage-31 release branch: engineering-complete, score unresolved
+- Next score-moving program: complete-data grouped training and OOF evaluation
+
+See [Notebook 07](../notebooks/07_deployment_and_training_frontier.ipynb), [Training frontier](TRAINING_FRONTIER.md), and [Image-model record](IMAGE_MODELS.md).
