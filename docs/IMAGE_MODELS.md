@@ -1,64 +1,75 @@
 # Image-model research record
 
-## Objective and execution boundary
+## Objective and evaluation boundary
 
-Predict twelve MRI findings with image-only inference and macro-ROC-AUC as the competition objective. Brier score is a probability-error diagnostic, not a substitute objective. AWS holds the research workspace and large immutable assets; GitHub contains the curated public evidence. The original AWS workspace is an exported source tree without Git metadata. Publishing this record does not initialize, reset, relocate, or mirror that workspace.
+The competition objective is macro-ROC-AUC across twelve MRI findings. Brier score is used only as a probability-error diagnostic. AWS holds the private research workspace and large immutable artifacts; GitHub contains curated aggregate evidence.
 
-## Architecture and provenance
+## Model families and provenance
 
-The independent DINOv2 system uses plane-preserving MRI windows and target-specific aggregation. Its previously completed 58-study diagnostic predictions, using `uniform24`, were reused rather than running the encoder again. Historical gold-data exposure limits subsequent validation claims.
+The independent DINOv2 system uses plane-preserving MRI windows, a DINOv2-Small backbone, and target-specific aggregation. Its historical diagnostic predictions are development evidence, not untouched validation.
 
-The public Raptor branch uses `coatnet_rmlp_2_rw_384.sw_in12k_ft_in1k`, 1,024-dimensional window features, layer normalization, a 256-unit target-attention network, and twelve target-specific classifier vectors. Images are encoded in small batches; normalized features are concatenated before target-wise softmax over the entire study. Independent microbatch softmax would change the model. The public audit module demonstrates the pooling and fixed-blending contracts; it is not presented as the full private training pipeline.
+The public Raptor branch uses a CoAtNet/RMLP backbone with 1,024-dimensional window features, target-attention pooling, and twelve target-specific outputs. The transferred checkpoint contains about 73.1 million parameters. The public source and weight dataset are attributed in [SOURCES.md](SOURCES.md); training-membership and model-selection claims from those sources are not treated as independently verified facts.
 
-Checkpoint: `raptor_ft_coatnet_v4_full.pt`, 292,829,402 bytes, 73,136,096 parameters. SHA-256: `89606f05849838529e1b4658d28fb049623205d9853371548403bca460361ded`. Dataset: `dreaddevelopment/raptor-knee-widedense`; source notebook: `hdhsjdjd/rsna-knee-raptor-coatnet`. The author's dataset metadata reports CC0 and exclusion of the 58 structured-label studies from fitting; those are source claims, not independently verified training-membership or selection-exposure guarantees. The Stage-22 preview did not record weight bytes, so byte identity between that preview and the later AWS download remains unproven.
+## Input fidelity and ablations
 
-## Input-fidelity and ablation results
+Stage 24 reconstructed a complete real study, verified DICOM identifiers/order/spacing/decoding, and reproduced the public 64-image / 42-window representation. Later stages reused encoded features to evaluate fluid-only, within-series, boundary-window, and full-input variants without unnecessary re-encoding.
 
-Stage 23 verified strict checkpoint loading and synthetic inference. Stage 24 subsequently reconstructed one complete real study from 98 DICOM files, verified identifiers, ordering, spacing, integrity, and decoding, and matched the reference's 64-image stack and 42 image windows exactly. A version-bound range reader avoided a full approximately 265 GB archive download. Stage 24's microbatch probability discrepancy was approximately 6e-8. That was an engineering test, not an accuracy result.
+Stage 25 found that full input did not outperform the fluid-only ablation on the first development cohort. Stage 26 found no macro-AUC gain from removing only boundary-crossing windows. Those branches were not expanded.
 
-The representation allocates slice ranges of 18, 14, 12, 8, and 12 to five source-selected MRI series. Forty-two triplets divide into 24 purely fluid-sensitive windows, 12 purely non-fluid windows, and six mixed-series boundary windows. The 30-window arm includes mixed pixels and is not a fluid-only model.
+## Heterogeneous ensemble research
 
-Stage 25 compared full versus fluid-only inference on twelve labeled studies. Stage 26 reused the cached features to separate contrasts from boundary windows. Removing only boundary windows did not improve AUROC: full42 and within36 both scored 0.934711. The branch was stopped rather than expanding the dataset on a weak result.
+A 90/10 full-Raptor/DINO mixture screened positively on the original development pilot but **failed** on a separate cohort: macro-AUC fell from 0.922410 for fluid-only Raptor to 0.919150. The failed primary result remains part of the public record.
 
-## Heterogeneous ensemble: screening versus replication
+A predefined 90% fluid-only Raptor + 10% DINOv2 secondary arm scored 0.926383 on that replication cohort and later passed a separate development qualification gate. Because the weight was not learned from fold-complete OOF predictions, this evidence remained developmental rather than final.
 
-Sixteen combinations were retrospectively screened on the original twelve studies. A 90/10 full-Raptor/DINO mixture reached 0.942041 versus 0.937315 for fluid-only Raptor. The weight was selected after reviewing those results; the pilot is not independent evidence.
+## Stage 31 — deployment fidelity
 
-Stage 27 froze that primary recipe and used twelve different eligible studies, selected by fixed identifier-hash order with explicit file-size bounds. All labels were complete, and all twelve targets contained both classes. No blend weights were fitted on replication rows. The primary recipe scored 0.919150 versus 0.922410 for fluid-only Raptor and crossed its -0.002 AUROC kill threshold. It was rejected even though Brier improved by 0.007190.
+The fixed fluid-Raptor/DINO candidate was converted into a deterministic offline inference package. After earlier packaging problems were diagnosed and corrected, the final release required a hermetic local shadow before any remote update.
 
-The predefined secondary fluid-Raptor/DINO blend scored 0.926383 with Brier 0.178305. Its +0.003974 AUROC signal is hypothesis-generating; it is not a successful primary confirmation. A further fixed-cohort evaluation, not another weight sweep, is the next limited test.
+The accepted offline Tesla T4 preview completed all three visible studies in **39.87 seconds**. Maximum AWS-versus-GPU differences were:
 
-## Statistical limitations
+| Component | Max absolute difference | Acceptance limit |
+|---|---:|---:|
+| DINOv2 | 1.043e-6 | 1e-3 |
+| Raptor | 5.960e-7 | 1e-4 |
+| 90/10 blend | 5.782e-7 | 1e-4 |
 
-Both cohorts are selected small development subsets with complete five-view inputs. They do not represent every acquisition pattern. Public-checkpoint fitting membership and best-epoch selection exposure are not independently established. DINO gold-data use also prevents untouched-holdout claims. There are no OOF or clinical-validation claims.
+Both actual checkpoints loaded strictly. The release produced one guarded candidate submission, **56476938**. The numerical agreement establishes implementation fidelity—not an AUC improvement.
 
-For the failed primary comparison, 1,000 paired study bootstrap draws produced only 464 defined twelve-target macro-AUC values; 536 lacked both classes for at least one target and were counted as undefined. The retained-draw AUC interval was [-0.034449, 0.028723]. This is conditional within-cohort sensitivity, not a confidence guarantee adjusted for historical model selection. Rare-target class support must remain visible.
+## Stage 32 — bottleneck moved to training
+
+The candidate remained pending in the returned Stage-32 score evidence. The scored reference remained **0.933**, versus **0.958** on the same returned leaderboard page.
+
+More importantly, the training-frontier audit found that the accepted exact-window cache covered only **960 / 4,407 studies (21.8%)**. Current official metadata matched the accepted AWS copies, but recent release work used frozen checkpoints. A current full-data retraining result does not yet exist.
 
 ## Leading-system reproduction matrix
 
-| Component | Verified scope | Remaining gap |
+| Capability | Verified scope | Remaining gap |
 |---|---|---|
-| Public multi-model ensemble containing Raptor | Inference preview and official public score 0.933 | Ensemble training not recreated; not standalone Raptor |
-| Raptor CoAtNet on AWS | Strict loading, complete real-input parity, global attention, labeled ablations | Broader/missing-view validation and training reproduction |
-| Independent DINOv2 | Existing trained checkpoint and diagnostic predictions | Competitive multi-fold training and independent OOF complementarity |
-| Window-mask variants | Four arms evaluated from cached features | No AUROC improvement for the primary boundary-removal candidate; stopped |
-| Full-Raptor/DINO blend | Pilot screen followed by disjoint-cohort development replication | Failed primary replication; stopped |
-| Fluid-Raptor/DINO blend | Predefined secondary arm with gains in both observed cohorts | New fixed-cohort confirmation and end-to-end submission qualification |
+| Public multi-model reference ensemble | Official public score 0.933; inference reproduced | Independent ensemble training not recreated |
+| Raptor on AWS/Kaggle | Strict loading, real-input parity, missing-view execution, CPU/GPU parity | Strong grouped training reproduction absent |
+| Independent DINOv2 | Existing trained checkpoint and verified deployment parity | Fold-complete grouped training / OOF absent |
+| Window variants | Controlled cached ablations | No primary macro-AUC gain; stopped |
+| Full-Raptor/DINO primary blend | Pilot + disjoint-cohort replication | Failed replication; stopped |
+| Fluid-Raptor/DINO candidate | Separate qualification + deterministic release | Official score pending in Stage-32 evidence |
+| Complete-data training system | Partial cache only | 3,447 studies still outside accepted cache |
+| OOF ensemble | Not established | Requires grouped fold-complete predictions |
 
-## Submission gate and prioritized backlog
+## Prioritized research decision
 
-1. Finish the fixed secondary-candidate confirmation without revisiting the 24 exposed studies. Require all twelve evaluable targets and at least six studies; otherwise record insufficient support. No automatic submission.
-2. Before any new entry, bind exact checkpoints, inference strategy, preprocessing, target order, missing-view behavior, and output identifiers to a deterministic submission manifest. Validate the deployed system rather than assuming cached diagnostic predictions reproduce the existing reference ensemble.
-3. The larger competitive capability gap is a strong independently trained, grouped/multi-fold image system with comparable OOF predictions and stronger supervision. That gap is not solved by a positive twelve-study diagnostic or by polishing documentation.
+The next credible score-moving program is:
 
-The dated public-leaderboard target is 0.958 versus the reference ensemble's 0.933. No public evidence establishes that the proposed blend exceeds either. Preserve both accepted submissions; status reads do not require repeat submissions.
+1. complete current-data cache coverage;
+2. freeze scanner-grouped folds with expert studies audit-only;
+3. reproduce a strong grouped baseline;
+4. test one structurally new training mechanism at a time;
+5. escalate only when the official local objective improves materially;
+6. learn ensemble weights from OOF predictions.
 
-## Sources
+This is a ceiling-escape decision: deployment plumbing is no longer allowed to substitute for a stronger learned system.
 
-- Competition and metric: https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/overview/evaluation
-- Raptor source: https://www.kaggle.com/code/hdhsjdjd/rsna-knee-raptor-coatnet
-- Author checkpoint dataset: https://www.kaggle.com/datasets/dreaddevelopment/raptor-knee-widedense
-- DINOv2: https://arxiv.org/abs/2304.07193
-- Attention-based multiple-instance learning: https://proceedings.mlr.press/v80/ilse18a.html
+## Sources and limitations
 
-Run receipts and aggregate calculations are indexed in `reports/image_models/results.json`. Private source returns, raw images, reports, study IDs, feature arrays, and weight bytes are deliberately not redistributed.
+See [SOURCES.md](SOURCES.md) for competition, DINOv2, Raptor, and participant-research references. Participant write-ups are treated as hypotheses to reproduce, not as our experimental results.
+
+Run receipts and aggregate calculations for the current publication are indexed in `reports/training_frontier/results.json`. Raw images, reports, study IDs, row-level predictions, checkpoints, and private cloud logs are deliberately not redistributed.
