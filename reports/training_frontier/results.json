@@ -1,61 +1,121 @@
 {
-  "as_of_utc": "2026-09-23T00:52:09Z",
-  "evaluation_boundary": "Verified Stage-31 deployment fidelity and Stage-32 read-only training-frontier audit; no Stage-33 completion claim.",
+  "as_of_utc": "2026-09-24T02:47:36Z",
+  "evaluation_boundary": "Verified through the completed Stage-33 full-cache/grouped-fold gate, Stage-34 matched one-fold training pilot, and Stage-36 official code-submission score. Stage-37/38 results are not claimed here.",
   "leaderboard": {
     "reference_submission": "56442573",
     "reference_public_auc": 0.933,
     "highest_returned_page_auc": 0.958,
     "dated_gap": 0.025,
-    "candidate_submission": "56476938",
-    "candidate_recipe": "90% fluid-only Raptor + 10% DINOv2",
-    "candidate_public_auc": null,
-    "candidate_status": "pending_in_stage32_return"
+    "stage36_submission": "56507693",
+    "stage36_recipe": "independently trained DINOv2-Small epoch-3 baseline",
+    "stage36_public_auc": 0.82,
+    "stage36_status": "complete",
+    "stage31_submission": "56476938",
+    "stage31_public_auc": null,
+    "stage31_status": "complete_score_unavailable"
   },
   "deployment": {
     "visible_test_studies": 3,
-    "t4_preview_seconds": 39.871466409,
-    "cpu_gpu_max_abs_diff": {
-      "dino": 0.000001043081283569336,
-      "raptor": 0.0000005960464477539062,
-      "blend": 0.0000005781650542768801
-    },
-    "parity_tolerances": {
-      "dino": 0.001,
-      "raptor": 0.0001,
-      "blend": 0.0001
-    },
-    "strict_checkpoint_loads": 2,
-    "guarded_submission_requests": 1,
-    "training_fits": 0
+    "t4_preview_seconds": 641.564939763,
+    "mean_visible_study_seconds": 3.25896461133334,
+    "max_visible_study_seconds": 6.372319886000014,
+    "projected_1300_studies_seconds": 4236.653994733342,
+    "strict_checkpoint_load": true,
+    "dynamic_test_rows": true,
+    "decode_failures": 0,
+    "submission_requests": 1
   },
   "training_data": {
     "train_studies": 4407,
-    "cached_studies": 960,
-    "remaining_studies": 3447,
-    "coverage_fraction": 0.2178352620830497,
-    "completed_shards": 3,
+    "cached_studies": 4407,
+    "remaining_studies": 0,
+    "coverage_fraction": 1,
+    "completed_shards": 14,
     "planned_shards": 14,
-    "current_official_metadata_matches_aws": true,
-    "latest_full_data_training_performed": false
+    "cache_gib": 69.14,
+    "unexpected_decode_failures": 0,
+    "accepted_reference_mask_windows": 1,
+    "pixel_payload_transform_changed": false
   },
-  "stage32": {
-    "gates_passed": 8,
-    "remote_writes": 0,
-    "training_fits": 0,
-    "submissions": 0,
-    "conclusion": "Move from deployment work to complete-data scanner-grouped training and OOF evidence."
+  "grouped_validation": {
+    "scanner_groups": 59,
+    "folds": 5,
+    "fold_studies": [
+      870,
+      870,
+      870,
+      870,
+      869
+    ],
+    "fold_scanners": [
+      11,
+      11,
+      12,
+      13,
+      12
+    ],
+    "non_gold_rows": 4349,
+    "gold_audit_rows": 58,
+    "gold_optimizer_rows": 0,
+    "group_leakage": false,
+    "unknown_scanner_rows": 0
   },
-  "ranked_backlog": [
-    {"rank": 1, "capability": "Complete exact-window training cache", "status": "960/4407 studies (21.8%)", "priority": 9.8},
-    {"rank": 2, "capability": "Scanner-grouped five-fold OOF baseline", "status": "not yet established", "priority": 9.5},
-    {"rank": 3, "capability": "Training-label lineage and soft-label audit", "status": "current public labels verified; full training lineage incomplete", "priority": 9.2},
-    {"rank": 4, "capability": "Geometry and slice-selection ablation", "status": "partially represented; no full-data matched OOF comparison", "priority": 8.6},
-    {"rank": 5, "capability": "Target-specific spatial / ROI modeling", "status": "not yet implemented for weak target families", "priority": 8.1},
-    {"rank": 6, "capability": "OOF heterogeneous ensemble", "status": "absent; prior blend weight came from exposed development cohorts", "priority": 7.9}
+  "stage34": {
+    "fold": 0,
+    "train_non_gold": 3479,
+    "silver_val_non_gold": 870,
+    "starting_epoch": 2,
+    "starting_macro_auc": 0.7602655715392667,
+    "baseline_epoch": 3,
+    "baseline_macro_auc": 0.7637618665674922,
+    "consistency_epoch": 3,
+    "consistency_macro_auc": 0.7629688105245118,
+    "consistency_minus_baseline": -0.0007930560429804112,
+    "decision": "STOP_SUPERVISION_CONSISTENCY",
+    "gold_used_for_model_selection": false,
+    "gold_optimizer_rows": 0
+  },
+  "research_backlog": [
+    {
+      "rank": 1,
+      "capability": "Cache-vs-direct model-logit equivalence",
+      "status": "required before cache-backed five-fold training",
+      "priority": 9.8
+    },
+    {
+      "rank": 2,
+      "capability": "Trainable-depth capacity decision",
+      "status": "last-4 versus last-6 DINO blocks; no public result claimed yet",
+      "priority": 9.5
+    },
+    {
+      "rank": 3,
+      "capability": "Scanner-grouped five-fold OOF baseline",
+      "status": "data and folds ready; training not yet complete",
+      "priority": 9.5
+    },
+    {
+      "rank": 4,
+      "capability": "Geometry and slice-selection upgrade",
+      "status": "next structural family if capacity change is insufficient",
+      "priority": 9
+    },
+    {
+      "rank": 5,
+      "capability": "Target-specific spatial / ROI modeling",
+      "status": "not yet implemented for weak target families",
+      "priority": 8.3
+    },
+    {
+      "rank": 6,
+      "capability": "OOF heterogeneous ensemble",
+      "status": "deferred until fold-complete predictions exist",
+      "priority": 8.1
+    }
   ],
   "next_gate": {
-    "name": "Complete exact-window cache and freeze scanner-grouped folds",
-    "status": "PREPARED_NOT_YET_COMPLETED",
-    "note": "A corrected Stage-33 handoff exists outside GitHub, but this publication does not claim its execution or result."
+    "name": "Validate cache logits, resolve trainable depth, then train the full five-fold OOF system",
+    "status": "ACTIVE_RESEARCH_NOT_YET_PROMOTED",
+    "note": "The public repository records only completed aggregate evidence. In-flight remote experiments are not promoted as results."
   }
 }

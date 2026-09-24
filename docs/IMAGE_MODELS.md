@@ -4,9 +4,11 @@
 
 The competition objective is macro-ROC-AUC across twelve MRI findings. Brier score is used only as a probability-error diagnostic. AWS holds the private research workspace and large immutable artifacts; GitHub contains curated aggregate evidence.
 
+Local scanner-grouped AUC, expert-audit diagnostics, and public leaderboard AUC are reported as distinct evaluation settings. They are not substituted for one another.
+
 ## Model families and provenance
 
-The independent DINOv2 system uses plane-preserving MRI windows, a DINOv2-Small backbone, and target-specific aggregation. Its historical diagnostic predictions are development evidence, not untouched validation.
+The independent DINOv2 system uses plane-preserving MRI windows, a DINOv2-Small backbone, and target-specific aggregation. The current public record includes a matched epoch-3 training result and an official image-only code-submission score.
 
 The public Raptor branch uses a CoAtNet/RMLP backbone with 1,024-dimensional window features, target-attention pooling, and twelve target-specific outputs. The transferred checkpoint contains about 73.1 million parameters. The public source and weight dataset are attributed in [SOURCES.md](SOURCES.md); training-membership and model-selection claims from those sources are not treated as independently verified facts.
 
@@ -24,23 +26,42 @@ A predefined 90% fluid-only Raptor + 10% DINOv2 secondary arm scored 0.926383 on
 
 ## Stage 31 — deployment fidelity
 
-The fixed fluid-Raptor/DINO candidate was converted into a deterministic offline inference package. After earlier packaging problems were diagnosed and corrected, the final release required a hermetic local shadow before any remote update.
+The fixed fluid-Raptor/DINO candidate was converted into a deterministic offline inference package. The accepted offline Tesla T4 preview completed all three visible studies in **39.87 seconds**, and CPU/GPU prediction differences were far below the predefined numerical tolerances.
 
-The accepted offline Tesla T4 preview completed all three visible studies in **39.87 seconds**. Maximum AWS-versus-GPU differences were:
+The numerical agreement established implementation fidelity—not an AUC improvement. The associated Stage-31 submission completed without a published score in the evidence retained here.
 
-| Component | Max absolute difference | Acceptance limit |
-|---|---:|---:|
-| DINOv2 | 1.043e-6 | 1e-3 |
-| Raptor | 5.960e-7 | 1e-4 |
-| 90/10 blend | 5.782e-7 | 1e-4 |
+## Stage 33 — complete data and grouped folds
 
-Both actual checkpoints loaded strictly. The release produced one guarded candidate submission, **56476938**. The numerical agreement establishes implementation fidelity—not an AUC improvement.
+The exact-window cache now covers **4,407 / 4,407 studies across 14 / 14 shards**. Stage 33 also froze a five-fold scanner-group split:
 
-## Stage 32 — bottleneck moved to training
+- 59 scanner groups;
+- fold sizes 870 / 870 / 870 / 870 / 869;
+- 4,349 non-gold rows assigned to folds;
+- 58 expert rows held audit-only;
+- zero gold optimizer rows;
+- zero scanner-group leakage.
 
-The candidate remained pending in the returned Stage-32 score evidence. The scored reference remained **0.933**, versus **0.958** on the same returned leaderboard page.
+This changes the interpretation of later model experiments: the project can now move from partial-data diagnostics toward fold-complete OOF training.
 
-More importantly, the training-frontier audit found that the accepted exact-window cache covered only **960 / 4,407 studies (21.8%)**. Current official metadata matched the accepted AWS copies, but recent release work used frozen checkpoints. A current full-data retraining result does not yet exist.
+## Stage 34 — matched continuation and a stopped supervision hypothesis
+
+Both Stage-34 arms began from the same DINOv2 epoch-2 checkpoint and used the same scanner-grouped fold-0 split.
+
+| System | Grouped fold-0 macro-AUC |
+|---|---:|
+| Epoch-2 starting checkpoint | 0.760266 |
+| Matched epoch-3 baseline | **0.763762** |
+| Agreement-weighted epoch-3 candidate | 0.762969 |
+
+The baseline improved by about **0.00350** versus the starting checkpoint. The agreement-weighted candidate trailed the matched baseline by **0.000793**, so that supervision-consistency direction was stopped. Gold audit rows were not used for model selection.
+
+## Stage 36 — official image-only score
+
+The retained epoch-3 baseline was packaged for dynamic code-competition inference with strict checkpoint loading, finite/range checks, schema validation, missing-view handling, and runtime projection. The visible three-study T4 preview completed without decode failures.
+
+Submission **56507693** then scored **0.820 public AUC**.
+
+That official score is the strongest evidence that the independently trained DINO branch, in its current form, is not close to the project’s reproduced **0.933** multi-model reference. The result motivates structural changes and fold-complete training rather than additional deployment tuning.
 
 ## Leading-system reproduction matrix
 
@@ -48,28 +69,26 @@ More importantly, the training-frontier audit found that the accepted exact-wind
 |---|---|---|
 | Public multi-model reference ensemble | Official public score 0.933; inference reproduced | Independent ensemble training not recreated |
 | Raptor on AWS/Kaggle | Strict loading, real-input parity, missing-view execution, CPU/GPU parity | Strong grouped training reproduction absent |
-| Independent DINOv2 | Existing trained checkpoint and verified deployment parity | Fold-complete grouped training / OOF absent |
-| Window variants | Controlled cached ablations | No primary macro-AUC gain; stopped |
-| Full-Raptor/DINO primary blend | Pilot + disjoint-cohort replication | Failed replication; stopped |
-| Fluid-Raptor/DINO candidate | Separate qualification + deterministic release | Official score pending in Stage-32 evidence |
-| Complete-data training system | Partial cache only | 3,447 studies still outside accepted cache |
-| OOF ensemble | Not established | Requires grouped fold-complete predictions |
+| Independent DINOv2 | New epoch-3 weights, grouped fold result, official 0.820 code-submission score | Full five-fold OOF and stronger representation absent |
+| Exact-window cache | 4,407 / 4,407 studies | Cache-vs-direct model-logit equivalence still required |
+| Scanner-grouped validation | Five folds, 59 scanner groups, no group leakage | Fold-complete model predictions not yet produced |
+| Agreement-weighted supervision | Matched one-fold test | Underperformed; stopped |
+| OOF ensemble | Not established | Requires fold-complete predictions from promoted families |
 
 ## Prioritized research decision
 
 The next credible score-moving program is:
 
-1. complete current-data cache coverage;
-2. freeze scanner-grouped folds with expert studies audit-only;
-3. reproduce a strong grouped baseline;
-4. test one structurally new training mechanism at a time;
-5. escalate only when the official local objective improves materially;
-6. learn ensemble weights from OOF predictions.
+1. prove cache-versus-direct model-logit equivalence;
+2. resolve trainable-depth capacity under a matched single-fold test;
+3. train a five-fold grouped OOF baseline on all non-gold rows;
+4. test geometry / slice-selection and target-specific spatial mechanisms against that baseline;
+5. learn heterogeneous ensemble weights from OOF predictions only.
 
-This is a ceiling-escape decision: deployment plumbing is no longer allowed to substitute for a stronger learned system.
+This is a ceiling-escape decision: complete data are now available, so infrastructure work must translate into stronger learned systems and stronger OOF evidence.
 
 ## Sources and limitations
 
 See [SOURCES.md](SOURCES.md) for competition, DINOv2, Raptor, and participant-research references. Participant write-ups are treated as hypotheses to reproduce, not as our experimental results.
 
-Run receipts and aggregate calculations for the current publication are indexed in `reports/training_frontier/results.json`. Raw images, reports, study IDs, row-level predictions, checkpoints, and private cloud logs are deliberately not redistributed.
+Raw images, reports, study IDs, scanner assignments, row-level predictions, checkpoints, cache shards, and private cloud logs are deliberately not redistributed.

@@ -11,8 +11,8 @@ spec.loader.exec_module(m)
 
 
 class TrainingFrontierTests(unittest.TestCase):
-    def test_coverage(self):
-        self.assertAlmostEqual(m.coverage_fraction(960, 4407), 960 / 4407)
+    def test_full_coverage(self):
+        self.assertEqual(m.coverage_fraction(4407, 4407), 1.0)
 
     def test_bad_coverage(self):
         with self.assertRaises(ValueError):
@@ -25,24 +25,30 @@ class TrainingFrontierTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             m.leaderboard_gap(1.2, 0.9)
 
-    def test_dino_parity_ratio(self):
-        self.assertLess(m.parity_ratio(1.043081283569336e-6, 0.001), 0.002)
+    def test_stage34_gain(self):
+        self.assertAlmostEqual(
+            m.score_delta(0.7637618665674922, 0.7602655715392667),
+            0.0034962950282255,
+        )
 
-    def test_raptor_parity_ratio(self):
-        self.assertLess(m.parity_ratio(5.960464477539062e-7, 0.0001), 0.01)
+    def test_consistency_delta(self):
+        self.assertLess(
+            m.score_delta(0.7629688105245118, 0.7637618665674922),
+            0.0,
+        )
 
-    def test_bad_tolerance(self):
+    def test_bad_score_delta(self):
         with self.assertRaises(ValueError):
-            m.parity_ratio(0.0, 0.0)
+            m.score_delta(-0.1, 0.5)
 
-    def test_pending(self):
-        self.assertEqual(m.candidate_state(None, 0.933), "PENDING")
+    def test_unscored(self):
+        self.assertEqual(m.candidate_state(None, 0.933), "UNSCORED")
 
     def test_above(self):
         self.assertEqual(m.candidate_state(0.94, 0.933), "ABOVE_INCUMBENT")
 
-    def test_at_or_below(self):
-        self.assertEqual(m.candidate_state(0.90, 0.933), "AT_OR_BELOW_INCUMBENT")
+    def test_stage36_below_incumbent(self):
+        self.assertEqual(m.candidate_state(0.820, 0.933), "AT_OR_BELOW_INCUMBENT")
 
 
 if __name__ == "__main__":

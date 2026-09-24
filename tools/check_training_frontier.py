@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Audit the curated Stage-31/32 publication using aggregate evidence only."""
+"""Audit the curated full-data training-frontier publication using aggregate evidence only."""
 from pathlib import Path
 import json
 import math
@@ -11,25 +11,44 @@ ROOT = Path(__file__).resolve().parents[1]
 D = json.loads((ROOT / "reports/training_frontier/results.json").read_text())
 N = json.loads((ROOT / "notebooks/07_deployment_and_training_frontier.ipynb").read_text())
 
-assert D["leaderboard"]["reference_public_auc"] == 0.933
-assert D["leaderboard"]["highest_returned_page_auc"] == 0.958
-assert D["leaderboard"]["candidate_public_auc"] is None
-assert math.isclose(D["leaderboard"]["dated_gap"], 0.025, abs_tol=1e-12)
+L = D["leaderboard"]
+assert L["reference_public_auc"] == 0.933
+assert L["highest_returned_page_auc"] == 0.958
+assert L["stage36_public_auc"] == 0.820
+assert L["stage36_status"] == "complete"
+assert math.isclose(L["dated_gap"], 0.025, abs_tol=1e-12)
 
 T = D["training_data"]
-assert T["cached_studies"] == 960 and T["train_studies"] == 4407
-assert T["remaining_studies"] == 3447
-assert math.isclose(T["coverage_fraction"], 960 / 4407, abs_tol=1e-15)
-assert T["latest_full_data_training_performed"] is False
+assert T["cached_studies"] == T["train_studies"] == 4407
+assert T["remaining_studies"] == 0
+assert T["completed_shards"] == T["planned_shards"] == 14
+assert math.isclose(T["coverage_fraction"], 1.0, abs_tol=1e-15)
+assert T["unexpected_decode_failures"] == 0
+assert T["pixel_payload_transform_changed"] is False
+
+G = D["grouped_validation"]
+assert G["scanner_groups"] == 59
+assert G["folds"] == 5
+assert G["fold_studies"] == [870, 870, 870, 870, 869]
+assert G["non_gold_rows"] == 4349
+assert G["gold_audit_rows"] == 58
+assert G["gold_optimizer_rows"] == 0
+assert G["group_leakage"] is False
+
+S = D["stage34"]
+assert S["baseline_macro_auc"] > S["starting_macro_auc"]
+assert S["consistency_macro_auc"] < S["baseline_macro_auc"]
+assert S["decision"] == "STOP_SUPERVISION_CONSISTENCY"
+assert S["gold_used_for_model_selection"] is False
+assert S["gold_optimizer_rows"] == 0
 
 P = D["deployment"]
-for key in ("dino", "raptor", "blend"):
-    assert P["cpu_gpu_max_abs_diff"][key] <= P["parity_tolerances"][key]
+assert P["strict_checkpoint_load"] is True
+assert P["dynamic_test_rows"] is True
+assert P["decode_failures"] == 0
+assert P["submission_requests"] == 1
 
-assert D["stage32"]["gates_passed"] == 8
-assert D["stage32"]["remote_writes"] == 0
-assert D["stage32"]["training_fits"] == 0
-assert D["next_gate"]["status"] == "PREPARED_NOT_YET_COMPLETED"
+assert D["next_gate"]["status"] == "ACTIVE_RESEARCH_NOT_YET_PROMOTED"
 
 cells = [c for c in N["cells"] if c["cell_type"] == "code"]
 assert [c.get("execution_count") for c in cells] == list(range(1, 7))
@@ -40,7 +59,7 @@ assert len(plots) == 3
 assert all("image/svg+xml" in p for p in plots)
 assert all(p["application/vnd.plotly.v1+json"]["layout"]["width"] >= 950 for p in plots)
 assert any(
-    "RSNA_TRAINING_FRONTIER_PUBLICATION_COMPLETE" in "".join(o.get("text", []))
+    "RSNA_FULL_DATA_FRONTIER_PUBLICATION_COMPLETE" in "".join(o.get("text", []))
     for o in outputs
 )
 
@@ -82,6 +101,6 @@ subprocess.run(
     check=True,
 )
 print(
-    "TRAINING_FRONTIER_PUBLICATION_PASSED: aggregate score state, GPU parity, "
-    "cache coverage, notebook outputs, privacy scan, 10 synthetic tests"
+    "TRAINING_FRONTIER_PUBLICATION_PASSED: full cache, grouped folds, Stage-34 matched training, "
+    "Stage-36 official score, notebook outputs, privacy scan, 10 synthetic tests"
 )
