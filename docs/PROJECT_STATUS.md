@@ -1,48 +1,66 @@
 # Project status
 
-Updated from verified Stage-31 and Stage-32 returns through **2026-09-23 00:52 UTC**.
+Updated from verified returned evidence through **2026-09-24 02:47 UTC**.
 
-## Stage 31 — deployment fidelity and guarded release
+## Stage 33 — full cache and grouped-fold contract complete
 
-The frozen **90% fluid-only Raptor + 10% DINOv2** candidate completed a hermetic local shadow and an offline Tesla T4 preview. Both actual checkpoints loaded strictly and all three visible test studies executed.
-
-Maximum AWS-versus-T4 probability differences were:
-
-- DINOv2: **1.043e-6** (limit 1e-3)
-- Raptor: **5.960e-7** (limit 1e-4)
-- fixed blend: **5.782e-7** (limit 1e-4)
-
-The preview took **39.87 seconds**. Exactly one guarded candidate submission was requested: **56476938**. Stage 31 performed no training fits and did not repeat the existing scored reference submission.
-
-## Stage 32 — score reconciliation and ceiling-escape audit
-
-All eight read-only gates passed. Submission 56476938 remained **pending** through the returned score-poll window. The scored incumbent remained the reproduced public multi-model reference ensemble at **0.933**, versus **0.958** on the same returned leaderboard page.
-
-Stage 32 also established the current training bottleneck:
+The training-data bottleneck identified in Stage 32 is closed.
 
 - official training studies: **4,407**
-- accepted exact-window cache: **960**
-- coverage: **21.8%**
-- remaining studies: **3,447**
-- completed cache shards: **3 / 14**
-- current official metadata matched the accepted AWS copies
-- recent release stages used frozen checkpoints; **no current full-data retraining has been verified**
+- accepted exact-window cache: **4,407 / 4,407 (100%)**
+- completed cache shards: **14 / 14**
+- accepted cache size: **69.14 GiB**
+- unexpected decode failures: **0**
+- scanner groups: **59**
+- grouped folds: **5**
+- non-gold rows assigned to folds: **4,349**
+- fold sizes: **870 / 870 / 870 / 870 / 869**
+- expert audit rows: **58**
+- gold optimizer rows: **0**
+- scanner-group leakage: **false**
 
-This changes the research priority. Deployment fidelity is no longer the main missing capability. Complete-data, scanner-grouped validation and fold-complete OOF predictions are.
+The cache/fold loader smoke test passed. Raw cache shards, study identifiers, scanner catalog rows, and fold-row assignments remain private.
 
-## Next gate — not yet completed
+## Stage 34 — matched one-fold training advancement
 
-The next data-readiness milestone is prepared outside the public repository: finish the exact-window cache, build a scanner-group catalog, freeze leakage-safe grouped folds, and smoke-test the cache/fold join before a new model fit.
+Stage 34 was the first new-weight training milestone after the earlier Stage-11 checkpoint. Both arms began from the same epoch-2 checkpoint and used the same finalized scanner-grouped fold-0 split.
 
-**This repository does not claim that Stage 33 completed.** An earlier preflight exposed a local-path assumption and a corrected handoff was prepared; only executed, returned evidence will be promoted into the public record.
+| System | Grouped fold-0 macro-AUC |
+|---|---:|
+| Stage-11 epoch-2 start | 0.760266 |
+| Matched epoch-3 baseline | **0.763762** |
+| Agreement-weighted epoch-3 candidate | 0.762969 |
+
+The agreement-weighted candidate trailed the matched baseline by **0.000793**, so the supervision-consistency direction was stopped. Gold audit rows were not used for model selection and contributed zero optimizer rows.
+
+## Stage 36 — official code-submission result
+
+The retained epoch-3 baseline was packaged as dynamic image-only code inference, passed strict checkpoint/schema/range/runtime gates, and produced one guarded submission: **56507693**.
+
+Its official public score completed at **0.820**.
+
+This result is materially below both the reproduced public multi-model reference at **0.933** and the **0.958** leader on the returned leaderboard context. It therefore does not replace the 0.933 reference as the project’s best scored system.
 
 ## Current competitive state
 
-- Scored reference: **0.933 public macro-ROC-AUC**
+- Reproduced public reference: **0.933 public macro-ROC-AUC**
 - Returned leader: **0.958**
-- Comparable dated gap: **0.025**
-- Candidate 56476938: **pending in Stage-32 evidence**
-- Stage-31 release branch: engineering-complete, score unresolved
-- Next score-moving program: complete-data grouped training and OOF evaluation
+- Comparable reference-to-leader gap: **0.025**
+- Independent DINOv2 epoch-3 official score: **0.820**
+- Full exact-window data contract: **complete**
+- Scanner-grouped fold contract: **complete**
+- Fold-complete OOF training: **not yet complete**
+
+## Active frontier
+
+The next score-moving program is deliberately structural rather than cosmetic:
+
+1. prove cached-versus-direct model-logit equivalence before relying on the 69 GiB cache for five-fold fitting;
+2. resolve whether increasing trainable DINO depth improves the matched grouped baseline;
+3. train a scanner-grouped five-fold OOF baseline on all 4,349 non-gold studies;
+4. test stronger geometry / slice-selection families against that OOF baseline;
+5. learn heterogeneous ensemble weights only from fold-complete OOF predictions.
+
+In-flight Stage-37/38 work is not promoted here as a result until returned evidence passes its gates.
 
 See [Notebook 07](../notebooks/07_deployment_and_training_frontier.ipynb), [Training frontier](TRAINING_FRONTIER.md), and [Image-model record](IMAGE_MODELS.md).

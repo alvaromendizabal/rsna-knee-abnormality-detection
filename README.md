@@ -1,39 +1,41 @@
 # RSNA Knee Abnormality Detection
 
-**MRI image-model research, reproducible deployment validation, and a data-complete training frontier.**
+**MRI image-model research, reproducible deployment validation, and a complete scanner-grouped training frontier.**
 
-A notebook-first machine-learning project by **Alvaro Mendizabal** for twelve knee-MRI findings. Reports are used only as training-supervision evidence; test-time prediction is image-only. The project spans protocol/geometry research, weak supervision, DINOv2 transfer learning, public CoAtNet/Raptor reproduction, heterogeneous ensembles, deployment-parity testing, and a scanner-grouped full-data training roadmap.
+A notebook-first machine-learning project by **Alvaro Mendizabal** for twelve knee-MRI findings. Reports are used only as training-supervision evidence; test-time prediction is image-only. The project spans MRI protocol/geometry research, weak supervision, DINOv2 transfer learning, public CoAtNet/Raptor reproduction, heterogeneous ensembles, code-competition deployment, and leakage-aware grouped validation.
 
-> **Latest published milestone: Stage 32 · September 23, 2026 UTC.** Stage 31 completed a hermetic CPU shadow, offline Tesla T4 preview, and one guarded candidate submission. Stage 32 then verified that the candidate was still pending, current competition metadata matched the accepted AWS copy, and only **960 / 4,407 training studies (21.8%)** were present in the exact-window cache. The next competitive step is therefore complete-data grouped training—not another deployment repair or exposed-cohort blend sweep.
+> **Latest published milestone: Stages 33–36 · September 24, 2026 UTC.** The exact-window cache now covers **4,407 / 4,407 training studies across 14 / 14 shards**. A scanner catalog produced **59 scanner groups** and a leakage-safe five-fold split of **870 / 870 / 870 / 870 / 869** non-gold validation studies, while all **58 expert studies remain audit-only**. A matched Stage-34 training pilot improved the independent DINOv2 branch from **0.760266 to 0.763762 grouped macro-AUC**; an agreement-weighted supervision variant underperformed and was stopped. The Stage-36 image-only code submission then scored **0.820 public AUC**, establishing that the standalone DINO branch remains well below the reproduced **0.933** reference ensemble and the **0.958** returned leader.
 
 ## Start here
 
-Open **[07 — Deployment and training frontier](notebooks/07_deployment_and_training_frontier.ipynb)** for the current research story: official-score boundaries, CPU/GPU parity, cache coverage, and the ranked ceiling-escape backlog.
+Open **[07 — Full-data training frontier](notebooks/07_deployment_and_training_frontier.ipynb)** for the current research story: complete-data readiness, grouped validation, the Stage-34 controlled training result, the Stage-36 official score, and the next ceiling-escape gates.
 
-Then read **[Training frontier](docs/TRAINING_FRONTIER.md)** for the next modeling decision and **[Image-model research record](docs/IMAGE_MODELS.md)** for architecture, ablations, provenance, and limitations.
+Then read **[Training frontier](docs/TRAINING_FRONTIER.md)** for the ranked research backlog and **[Image-model research record](docs/IMAGE_MODELS.md)** for architecture, ablations, provenance, and negative results.
 
 ## Current evidence
 
 | Evaluation setting | System / evidence | Result |
 |---|---|---:|
-| Official public leaderboard, verified return | Reproduced public multi-model reference ensemble, submission `56442573` | **0.933** |
-| Same returned leaderboard page | Highest listed score | **0.958** |
-| Exact Stage-31 release candidate | 90% fluid-only Raptor + 10% DINOv2, submission `56476938` | **Pending in Stage-32 evidence** |
-| Offline Tesla T4 preview | Maximum DINO CPU/GPU difference | **1.043e-6** |
-| Offline Tesla T4 preview | Maximum Raptor CPU/GPU difference | **5.960e-7** |
-| Offline Tesla T4 preview | Maximum blend CPU/GPU difference | **5.782e-7** |
-| Training readiness | Accepted exact-window cache | **960 / 4,407 studies (21.8%)** |
+| Official public leaderboard | Reproduced public multi-model reference ensemble, submission `56442573` | **0.933** |
+| Same returned leaderboard context | Highest listed score | **0.958** |
+| Official public leaderboard | Independently trained DINOv2-Small epoch-3 code submission `56507693` | **0.820** |
+| Scanner-grouped fold 0 | Stage-11 epoch-2 starting checkpoint | **0.760266** |
+| Scanner-grouped fold 0 | Matched epoch-3 baseline | **0.763762** |
+| Scanner-grouped fold 0 | Agreement-weighted epoch-3 candidate | **0.762969** |
+| Training readiness | Exact-window cache | **4,407 / 4,407 studies (100%)** |
+| Validation readiness | Scanner-grouped split | **5 folds, 59 scanner groups, 0 cross-fold group leakage** |
 
-The **0.025 leaderboard gap** is a dated, comparable difference between the 0.933 scored reference and the 0.958 returned leader. The pending candidate has no published score in the Stage-32 evidence, so it is not counted as an improvement. Deployment parity proves implementation fidelity, not predictive superiority.
+The **0.025 gap** remains the comparable difference between the 0.933 scored reference and the 0.958 returned leader. The independent DINO result is reported separately because it is a different system and scored substantially lower. Local grouped AUC is not presented as a substitute for leaderboard AUC.
 
 ## What the project demonstrates
 
-- **Leakage-aware validation:** scanner-group reasoning, sealed expert-audit rows, explicit promotion/kill thresholds, and preservation of negative results.
-- **MRI representation engineering:** physical field-of-view cropping, true contiguous slice triplets, plane/contrast selection, target-specific attention, missing-view handling, and real-DICOM parity checks.
+- **End-to-end experimental ownership:** data contracts, validation design, training, deployment, score reconciliation, and explicit promotion/kill decisions are connected in one reproducible research program.
+- **Leakage-aware validation:** scanner-group isolation, 58 sealed expert-audit studies, five balanced folds, zero gold optimizer rows, and explicit non-promotion of exposed audit evidence.
+- **MRI representation engineering:** physical field-of-view cropping, contiguous slice triplets, plane/contrast selection, laterality normalization, missing-view handling, and exact-window caching.
 - **Modern transfer learning:** an independently trained DINOv2 branch plus strict reproduction of a 73.1M-parameter CoAtNet/Raptor branch.
-- **Scientific ensembling:** screening, disjoint-cohort replication, rejection of a failed primary blend, and a guarded secondary release whose score remains pending.
-- **Deployment rigor:** hermetic CPU shadow inference, strict checkpoint loading, explicit numerical contracts, offline T4 execution, and component-level CPU/GPU parity before submission.
-- **Data-centric ceiling escape:** Stage 32 identified incomplete training-data coverage and missing fold-complete OOF evidence as the current bottleneck.
+- **Scientific negative results:** the primary heterogeneous blend failed replication; agreement-weighted supervision underperformed a matched baseline; both directions were stopped instead of rationalized.
+- **Deployment rigor:** strict checkpoint loading, dynamic hidden-test handling, offline T4 execution, schema/range checks, and one guarded code-competition submission.
+- **Data-complete frontier:** the project has moved from partial-cache infrastructure into cache-equivalence, trainable-depth, full five-fold OOF training, geometry, and OOF ensembling research.
 
 ## Notebook guide
 
@@ -43,13 +45,13 @@ The **0.025 leaderboard gap** is a dated, comparable difference between the 0.93
 - [04 — Supervision and validation](notebooks/04_supervision_and_validation.ipynb)
 - [05 — Multilingual teacher feasibility](notebooks/05_multilingual_teacher_pilot.ipynb)
 - [06 — Image models and replication](notebooks/06_image_models_and_replication.ipynb)
-- **[07 — Deployment and training frontier](notebooks/07_deployment_and_training_frontier.ipynb)** — current entry point
+- **[07 — Full-data training frontier](notebooks/07_deployment_and_training_frontier.ipynb)** — current entry point
 
-Notebook 07 replays verified aggregate evidence only. It does not access AWS, rerun MRI inference, poll Kaggle, or claim completion of the next data-build stage.
+Notebook 07 replays verified aggregate evidence only. It does not access AWS, poll Kaggle, expose study identifiers, or claim results from in-flight stages.
 
 ## Public repository versus AWS workspace
 
-**GitHub is the curated review and reproducibility layer. AWS remains the canonical research workspace.** This public repository intentionally excludes raw MRI, reports, study identifiers, row-level predictions, model weights, private logs, credentials, environments, and full return bundles.
+**GitHub is the curated review and reproducibility layer. AWS remains the canonical private research workspace.** This repository intentionally excludes raw MRI, report text, study identifiers, row-level predictions, cache shards, model weights, private logs, credentials, environments, and full return bundles.
 
 Public checks use synthetic or aggregate evidence only:
 

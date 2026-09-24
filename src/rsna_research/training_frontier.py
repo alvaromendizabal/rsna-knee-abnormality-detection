@@ -1,4 +1,4 @@
-"""Small public analytical helpers for the Stage-32 training frontier."""
+"""Small public analytical helpers for the current RSNA training frontier."""
 from __future__ import annotations
 
 from math import isfinite
@@ -17,15 +17,15 @@ def leaderboard_gap(reference: float, leader: float) -> float:
     return leader - reference
 
 
-def parity_ratio(observed: float, tolerance: float) -> float:
-    if not isfinite(observed) or observed < 0 or not isfinite(tolerance) or tolerance <= 0:
-        raise ValueError("invalid parity values")
-    return observed / tolerance
+def score_delta(candidate: float, baseline: float) -> float:
+    if not all(isfinite(x) and 0.0 <= x <= 1.0 for x in (candidate, baseline)):
+        raise ValueError("scores must be finite probabilities")
+    return candidate - baseline
 
 
 def candidate_state(score: Optional[float], incumbent: float) -> str:
     if score is None:
-        return "PENDING"
+        return "UNSCORED"
     if not isfinite(score) or not 0.0 <= score <= 1.0:
         raise ValueError("invalid candidate score")
     if not isfinite(incumbent) or not 0.0 <= incumbent <= 1.0:
