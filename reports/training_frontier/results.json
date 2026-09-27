@@ -15,7 +15,10 @@
     "completed_shards": 14,
     "planned_shards": 14,
     "cache_gib": 69.14,
-    "unexpected_decode_failures": 0
+    "unexpected_decode_failures": 0,
+    "remaining_studies": 0,
+    "accepted_reference_mask_windows": 1,
+    "pixel_payload_transform_changed": false
   },
   "grouped_validation": {
     "scanner_groups": 59,
@@ -90,6 +93,46 @@
   ],
   "next_gate": {
     "name": "Recover the complete scored-reference identity, freeze an honest integration, and complete test-like offline validation before another submission.",
-    "submission_ready": false
+    "submission_ready": false,
+    "status": "ACTIVE_RESEARCH_NOT_YET_PROMOTED"
+  },
+  "leaderboard": {
+    "reference_submission": "56442573",
+    "reference_public_auc": 0.933,
+    "highest_returned_page_auc": 0.958,
+    "dated_gap": 0.025,
+    "stage36_submission": "56507693",
+    "stage36_recipe": "independently trained DINOv2-Small epoch-3 baseline",
+    "stage36_public_auc": 0.82,
+    "stage36_status": "complete",
+    "stage31_submission": "56476938",
+    "stage31_public_auc": null,
+    "stage31_status": "complete_score_unavailable"
+  },
+  "deployment": {
+    "visible_test_studies": 3,
+    "t4_preview_seconds": 641.564939763,
+    "mean_visible_study_seconds": 3.25896461133334,
+    "max_visible_study_seconds": 6.372319886000014,
+    "projected_1300_studies_seconds": 4236.653994733342,
+    "strict_checkpoint_load": true,
+    "dynamic_test_rows": true,
+    "decode_failures": 0,
+    "submission_requests": 1
+  },
+  "stage34": {
+    "fold": 0,
+    "train_non_gold": 3479,
+    "silver_val_non_gold": 870,
+    "starting_epoch": 2,
+    "starting_macro_auc": 0.7602655715392667,
+    "baseline_epoch": 3,
+    "baseline_macro_auc": 0.7637618665674922,
+    "consistency_epoch": 3,
+    "consistency_macro_auc": 0.7629688105245118,
+    "consistency_minus_baseline": -0.0007930560429804112,
+    "decision": "STOP_SUPERVISION_CONSISTENCY",
+    "gold_used_for_model_selection": false,
+    "gold_optimizer_rows": 0
   }
 }
