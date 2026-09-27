@@ -1,77 +1,115 @@
 # Training frontier
 
-## Why the frontier moved again
+## Why the frontier moved
 
-Stage 32 identified incomplete training-data coverage as the highest-value blocker. Stage 33 closed that blocker: the exact-window cache now covers all **4,407 training studies**, and the project has a frozen five-fold scanner-group contract with **59 scanner groups**, **4,349 non-gold optimization rows**, and **58 expert audit-only rows**.
+The project is no longer blocked by missing cache coverage or incomplete OOF infrastructure.
 
-Stage 34 then showed that the existing DINO branch can still improve under matched continuation training, but only modestly: grouped macro-AUC increased from **0.760266** at epoch 2 to **0.763762** at epoch 3. A supervision-consistency weighting hypothesis scored **0.762969** and was stopped.
+The exact-window cache covers all **4,407 studies**. Scanner grouping supplies five leakage-aware folds across **4,349 non-gold rows**, with **58 expert studies retained for audit only**.
 
-Stage 36 supplied the most important external calibration: the independently trained epoch-3 DINO system scored **0.820 public AUC**. That result is far below the reproduced **0.933** multi-model reference, so small continuation gains alone are not a credible route to the top of the leaderboard.
+The research frontier then advanced in three material steps:
+
+1. **Stage 43:** complete five-fold DINO OOF at **0.786557**.
+2. **Stage 47:** a heterogeneous MaxViT complement improved the selected cross-fitted ensemble to **0.791208**.
+3. **Stage 50:** a frozen MCL + Lateral Meniscus expert overlay improved three untouched confirmation folds from **0.795488 to 0.798017**.
+
+Stage 54 then rejected a depth-position correction under a matched-control experiment. That direction is closed unless materially new evidence appears.
 
 ## Current best and gap
 
-**Current scored incumbent:** reproduced public reference ensemble, **0.933 public macro-ROC-AUC**.
+**Current strongest owned internal system:** Stage 50 two-target overlay.
 
-**Returned leaderboard leader:** **0.958** on the same dated leaderboard context.
+- independent three-fold confirmation macro-AUC: **0.798017**
+- confirmation delta versus frozen Stage-47 baseline: **+0.002529**
+- descriptive five-fold grouped OOF: **0.793687**
 
-**Comparable gap:** **0.025**.
+**Historically scored public reference:** **0.933 public macro-ROC-AUC**.
 
-**Independent DINOv2 code submission:** **0.820** (`56507693`). It is a useful measurement of the independently trained branch, not an improvement over the incumbent.
+**Last verified leader in the same returned leaderboard context:** **0.958**.
 
-## Data and validation readiness
+**Comparable historical public gap:** **0.025**.
+
+Grouped OOF and public leaderboard AUC are different evaluation settings and are not compared numerically as if they were the same metric sample.
+
+## Data, validation, and deployment readiness
 
 | Capability | Verified state |
 |---|---|
-| Exact-window cache | **4,407 / 4,407 studies, 14 / 14 shards** |
-| Cache size | **69.14 GiB** |
-| Unexpected decode failures | **0** |
+| Exact-window cache | **4,407 / 4,407 studies** |
 | Scanner groups | **59** |
 | Grouped folds | **5** |
 | Fold sizes | **870 / 870 / 870 / 870 / 869** |
-| Non-gold optimization rows | **4,349** |
+| Non-gold OOF rows | **4,349** |
 | Expert audit-only rows | **58** |
 | Gold optimizer rows | **0** |
-| Scanner-group leakage | **0 groups crossing folds** |
+| Stage-43 five-fold DINO OOF | **complete** |
+| Stage-47 heterogeneous OOF | **complete and promoted** |
+| Stage-50 independent confirmation | **complete and passed** |
+| Owned checkpoint sampled replay | **15 / 15 model checkpoints covered** |
+| Archived probability comparisons | **10,080 passed** |
+| Exact sampled raw-image parity | **3 / 3 complete canary studies** |
+| Raw-input owned-ensemble smoke | **passed on two complete studies** |
+| Scored-reference identity/integration | **open** |
+| Full test-like offline runtime/schema gate | **open** |
 
-This is now a data-complete training program. The remaining gap is model quality and OOF evidence, not missing cache coverage.
+## Ranked backlog
 
-## Ranked research backlog
+The backlog is ordered by expected decision value and score relevance.
 
-The backlog is ordered by expected information and score value, not convenience:
-
-| Rank | Capability | Current state | Priority |
-|---:|---|---|---:|
-| 1 | Cache-vs-direct model-logit equivalence | Required before cache-backed five-fold training | 9.8 |
-| 2 | Trainable-depth capacity decision | Last-4 versus last-6 DINO blocks; no public result claimed yet | 9.5 |
-| 3 | Scanner-grouped five-fold OOF baseline | Data/folds ready; fold-complete training not yet finished | 9.5 |
-| 4 | Geometry and slice-selection upgrade | Next structural family if capacity change is insufficient | 9.0 |
-| 5 | Target-specific spatial / ROI modeling | Not yet implemented for weak target families | 8.3 |
-| 6 | OOF heterogeneous ensemble | Deferred until fold-complete predictions exist | 8.1 |
+| Rank | Capability | Current state | Why it matters |
+|---:|---|---|---|
+| 1 | Scored-reference identity + integration | **Open** | The 0.933 reference is still the strongest historically scored system; Stage 50 should complement it rather than blindly replace it. |
+| 2 | Complete test-like inference gate | **Open** | Series selection, whole-cohort ranking, output schema, determinism, and runtime must be validated before another submission. |
+| 3 | Target-specific ROI / localization model | **Not yet implemented as a materially new capability** | Weak targets may need local anatomical evidence rather than another global-head adjustment. |
+| 4 | Multi-acquisition / richer multi-plane representation | **Open research direction** | The current three-slot representation may leave complementary acquisitions unused. |
+| 5 | Stronger medical-imaging pretraining / foundation transfer | **Open research direction** | Generic ImageNet/DINO priors may leave domain-specific representation quality on the table. |
+| 6 | Leakage-safe residual ensemble against the scored-reference family | **Blocked on reference OOF/identity** | The remaining public gap is most plausibly attacked through complementary errors, not blind averaging. |
 
 ## Promotion logic
 
-1. Require cached-versus-direct numerical equivalence before training from cached tensors at scale.
-2. Keep single-variable capacity tests matched to the existing grouped fold and promote only material gains.
-3. Train all five scanner-group folds once the representation contract is cleared.
-4. Save fold-complete OOF predictions for every promoted model family.
-5. Compare geometry, slice-selection, ROI, and supervision changes against the same grouped OOF boundary.
-6. Learn ensemble weights only from OOF predictions; do not reuse exposed development cohorts as an optimization target.
-7. Treat the 0.933 and 0.958 public scores as leaderboard evidence, not as interchangeable with local grouped AUC.
+1. Preserve Stage 50 as the confirmed owned incumbent until a materially stronger candidate passes the same scanner-grouped evidence boundary.
+2. Do not learn blend weights from the public leaderboard or test set.
+3. Recover reference OOF or an equivalent leakage-safe comparison before claiming learned reference + Stage-50 weights.
+4. Require new model research to introduce a meaningful capability and evaluate it with controlled ablations.
+5. Keep gold/expert rows audit-only unless a separately justified experiment changes that contract.
+6. Preserve negative experiments and stop directions that fail prespecified gates.
+7. Require complete offline schema/runtime/lineage validation before the next submission boundary.
 
-## What is explicitly stopped
+## Explicitly closed directions
 
-- agreement-weighted pseudo-label confidence after its matched Stage-34 loss;
-- the failed primary full-Raptor/DINO blend from the earlier disjoint-cohort replication;
-- more deployment-only work as a substitute for model advancement;
-- duplicate submissions of already-scored or unresolved releases.
+- raw-float inference as a substitute for the cache-aligned uint8 contract;
+- agreement-weighted supervision from Stage 34;
+- the Stage-44 spatial direction in its tested form;
+- Stage-46 ConvNeXt complement;
+- the Stage-49 four-target weak-expert blend;
+- ACL and Synovitis expert overlays from Stage 49;
+- Stage-54 corrected depth-position head replacement;
+- heavy multiprocessing and /dev/shm-dependent Studio input pipelines;
+- Kaggle-hosted research/development.
+
+## Stage 54 as a model-research example
+
+Stage 54 used a frozen feature bank and controlled only the depth-position representation.
+
+- reused training features: **2,048 rows**
+- new held-out features: **870 rows**
+- matched head fits: **2**
+- epochs per head: **6**
+- encoder backprop steps: **0**
+- legacy head fold-0 AUC: **0.748827**
+- corrected-depth head fold-0 AUC: **0.748599**
+- decision: **reject early on a required per-fold condition**
+
+The failure of the hypothesis is useful evidence: the next experiment should not be another small depth-coordinate adjustment.
 
 ## Public-repository boundary
 
-The public repository records aggregate metrics, methodology, tests, and decisions. Raw MRI, report text, study identifiers, scanner assignments, row-level predictions, cache shards, model checkpoints, private service logs, and cloud credentials stay outside Git history.
+The public repository records aggregate metrics, methodology, tests, and decisions. Raw MRI, report text, study identifiers, scanner assignments, row-level predictions, cache shards, feature banks, model checkpoints, private service logs, cloud credentials, and full return bundles stay outside Git history.
 
 ## What is not claimed
 
-- The 0.820 DINO leaderboard score is **not** compared directly to local grouped AUC as if they were the same evaluation.
-- The 0.933 public reference is **not** claimed as independently trained by this project.
-- Stage-37/38 outcomes are **not** claimed until their returned evidence passes validation.
+- Internal grouped OOF is not a leaderboard score.
+- The 0.933 public reference is not claimed as independently trained by this project.
+- The bounded raw-image canaries do not prove whole-test preprocessing coverage.
+- The two-study raw-input smoke does not prove hidden-test runtime.
+- Stage 54 did not improve the incumbent.
 - No clinical or diagnostic claim is made.
