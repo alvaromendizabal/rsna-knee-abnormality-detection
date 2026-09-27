@@ -1,6 +1,101 @@
 {
-  "as_of_utc": "2026-09-24T02:47:36Z",
-  "evaluation_boundary": "Verified through the completed Stage-33 full-cache/grouped-fold gate, Stage-34 matched one-fold training pilot, and Stage-36 official code-submission score. Stage-37/38 results are not claimed here.",
+  "as_of_utc": "2026-09-27T05:19:07Z",
+  "evaluation_boundary": "Verified aggregate evidence through Stage 54. Public-safe summary only; no study identifiers, row-level predictions, feature banks, checkpoints, or private return artifacts.",
+  "leaderboard_historical": {
+    "reference_public_auc": 0.933,
+    "highest_returned_page_auc": 0.958,
+    "dated_gap": 0.025,
+    "independent_stage36_dino_public_auc": 0.82,
+    "note": "Historical public-score context; refresh required before a future submission."
+  },
+  "training_data": {
+    "train_studies": 4407,
+    "cached_studies": 4407,
+    "coverage_fraction": 1.0,
+    "completed_shards": 14,
+    "planned_shards": 14,
+    "cache_gib": 69.14,
+    "unexpected_decode_failures": 0,
+    "remaining_studies": 0,
+    "accepted_reference_mask_windows": 1,
+    "pixel_payload_transform_changed": false
+  },
+  "grouped_validation": {
+    "scanner_groups": 59,
+    "folds": 5,
+    "fold_studies": [870, 870, 870, 870, 869],
+    "non_gold_rows": 4349,
+    "gold_audit_rows": 58,
+    "gold_optimizer_rows": 0,
+    "group_leakage": false
+  },
+  "stage43": {
+    "system": "five-fold DINO incumbent",
+    "grouped_oof_macro_auc": 0.7865573869
+  },
+  "stage47": {
+    "system": "DINO + MaxViT cross-fitted heterogeneous blend",
+    "grouped_oof_macro_auc": 0.7912075115,
+    "delta_vs_stage43": 0.0046501246,
+    "fold_wins": 5,
+    "status": "PROMOTED"
+  },
+  "stage50": {
+    "system": "MCL + Lateral Meniscus expert overlay on Stage 47",
+    "confirmation_folds": [1, 3, 4],
+    "confirmation_rows": 2609,
+    "confirmation_baseline_macro_auc": 0.7954877271,
+    "confirmation_candidate_macro_auc": 0.7980169941,
+    "confirmation_delta": 0.002529267,
+    "confirmation_fold_deltas": {"1": 0.0020505557, "3": 0.0049880294, "4": 0.001427697},
+    "descriptive_five_fold_macro_auc": 0.7936872288,
+    "protected_targets_changed": 0,
+    "status": "CONFIRMED_FOR_AWS_INFERENCE_VALIDATION"
+  },
+  "deployment_validation": {
+    "owned_checkpoint_families": ["DINO", "MaxViT", "target experts"],
+    "owned_checkpoints": 15,
+    "sampled_archived_probability_comparisons": 10080,
+    "sampled_raw_parity_complete_studies": 3,
+    "sampled_raw_parity_exact_uint8": true,
+    "raw_input_smoke_studies": 2,
+    "raw_input_probability_values": 1080,
+    "whole_cohort_rank_repeat_exact": true,
+    "hidden_test_runtime_verified": false,
+    "scored_reference_integrated": false
+  },
+  "stage54": {
+    "experiment": "matched legacy versus corrected relative-depth head on frozen features",
+    "fold": 0,
+    "train_rows": 2048,
+    "heldout_rows": 870,
+    "head_fits": 2,
+    "epochs_per_head": 6,
+    "encoder_backprop_steps": 0,
+    "frozen_macro_auc": 0.7477983416,
+    "legacy_macro_auc": 0.7488270839,
+    "corrected_macro_auc": 0.7485985661,
+    "incumbent_overlay_macro_auc": 0.7880454991,
+    "legacy_overlay_macro_auc": 0.7879493146,
+    "corrected_overlay_macro_auc": 0.7880827269,
+    "decision": "REJECT_DEPTH_HEAD_REPLACEMENT_EARLY",
+    "incumbent_modified": false,
+    "process_seconds": 601.6868421,
+    "process_estimate_usd": 0.467978655
+  },
+  "research_backlog": [
+    {"rank": 1, "capability": "Scored-reference identity and scientifically justified integration", "status": "open"},
+    {"rank": 2, "capability": "Complete test-like offline inference/schema/runtime gate", "status": "open"},
+    {"rank": 3, "capability": "Target-specific ROI/localization model", "status": "not yet implemented as a materially new capability"},
+    {"rank": 4, "capability": "Multi-acquisition / richer multi-plane representation", "status": "open research direction"},
+    {"rank": 5, "capability": "Stronger medical-imaging pretraining / foundation transfer", "status": "open research direction"},
+    {"rank": 6, "capability": "Leakage-safe residual ensemble against scored-reference family", "status": "blocked on reference identity/OOF"}
+  ],
+  "next_gate": {
+    "name": "Recover the complete scored-reference identity, freeze an honest integration, and complete test-like offline validation before another submission.",
+    "submission_ready": false,
+    "status": "ACTIVE_RESEARCH_NOT_YET_PROMOTED"
+  },
   "leaderboard": {
     "reference_submission": "56442573",
     "reference_public_auc": 0.933,
@@ -25,41 +120,6 @@
     "decode_failures": 0,
     "submission_requests": 1
   },
-  "training_data": {
-    "train_studies": 4407,
-    "cached_studies": 4407,
-    "remaining_studies": 0,
-    "coverage_fraction": 1,
-    "completed_shards": 14,
-    "planned_shards": 14,
-    "cache_gib": 69.14,
-    "unexpected_decode_failures": 0,
-    "accepted_reference_mask_windows": 1,
-    "pixel_payload_transform_changed": false
-  },
-  "grouped_validation": {
-    "scanner_groups": 59,
-    "folds": 5,
-    "fold_studies": [
-      870,
-      870,
-      870,
-      870,
-      869
-    ],
-    "fold_scanners": [
-      11,
-      11,
-      12,
-      13,
-      12
-    ],
-    "non_gold_rows": 4349,
-    "gold_audit_rows": 58,
-    "gold_optimizer_rows": 0,
-    "group_leakage": false,
-    "unknown_scanner_rows": 0
-  },
   "stage34": {
     "fold": 0,
     "train_non_gold": 3479,
@@ -74,48 +134,5 @@
     "decision": "STOP_SUPERVISION_CONSISTENCY",
     "gold_used_for_model_selection": false,
     "gold_optimizer_rows": 0
-  },
-  "research_backlog": [
-    {
-      "rank": 1,
-      "capability": "Cache-vs-direct model-logit equivalence",
-      "status": "required before cache-backed five-fold training",
-      "priority": 9.8
-    },
-    {
-      "rank": 2,
-      "capability": "Trainable-depth capacity decision",
-      "status": "last-4 versus last-6 DINO blocks; no public result claimed yet",
-      "priority": 9.5
-    },
-    {
-      "rank": 3,
-      "capability": "Scanner-grouped five-fold OOF baseline",
-      "status": "data and folds ready; training not yet complete",
-      "priority": 9.5
-    },
-    {
-      "rank": 4,
-      "capability": "Geometry and slice-selection upgrade",
-      "status": "next structural family if capacity change is insufficient",
-      "priority": 9
-    },
-    {
-      "rank": 5,
-      "capability": "Target-specific spatial / ROI modeling",
-      "status": "not yet implemented for weak target families",
-      "priority": 8.3
-    },
-    {
-      "rank": 6,
-      "capability": "OOF heterogeneous ensemble",
-      "status": "deferred until fold-complete predictions exist",
-      "priority": 8.1
-    }
-  ],
-  "next_gate": {
-    "name": "Validate cache logits, resolve trainable depth, then train the full five-fold OOF system",
-    "status": "ACTIVE_RESEARCH_NOT_YET_PROMOTED",
-    "note": "The public repository records only completed aggregate evidence. In-flight remote experiments are not promoted as results."
   }
 }
