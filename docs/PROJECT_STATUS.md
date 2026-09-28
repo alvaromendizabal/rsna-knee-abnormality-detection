@@ -1,124 +1,97 @@
 # Project status
 
-Updated from verified returned evidence through **2026-09-27 05:19 UTC**.
+Updated from verified returned evidence through **Stage 63 · 2026-09-28 UTC**.
 
-## Current research boundary
+## Current boundary
 
-The project now has a complete scanner-grouped training/validation contract, a heterogeneous five-fold OOF ensemble, an independently confirmed two-target overlay, sampled checkpoint parity across all owned model families, and an exact sampled raw-input path.
+The historically best scored system remains the **0.933 public reference**. The project has now recovered and GPU-validated the assembled multi-branch reference runtime far enough to move from asset/runtime recovery into **real-image control reproduction**.
 
-The current strongest owned **internal** system is the Stage 50 two-target overlay. The strongest historically scored external/public reference remains 0.933. These numbers belong to different evaluation settings and are reported separately.
+No Stage 55–63 result is presented as an accuracy improvement. Their value is that the correct scored baseline is now the object being verified and optimized.
 
-## Stage 43 — five-fold DINO incumbent
+## Preserved model-research evidence
 
-The DINO branch reached a complete scanner-grouped five-fold OOF boundary:
+The owned research branch remains useful as complementary evidence and candidate components:
 
-- non-gold OOF rows: **4,349**
-- scanner-group folds: **5**
-- grouped OOF macro-AUC: **0.786557**
-- gold optimizer rows: **0**
+- Stage 43 five-fold DINO grouped OOF: **0.786557**;
+- Stage 47 DINO + MaxViT grouped OOF: **0.791208**, delta **+0.004650**, improving all five folds;
+- Stage 50 frozen MCL + Lateral Meniscus overlay: independent confirmation **0.795488 → 0.798017**, delta **+0.002529**, improving folds 1, 3, and 4;
+- Stage 54 corrected-depth head: **rejected** against its matched control; incumbent unchanged.
 
-This became the protected incumbent for heterogeneous complement research.
+These results do not establish a gain over the 0.933 public reference. Their transferable components are treated as future residual candidates against that full reference, not as replacements for it.
 
-## Stage 47 — heterogeneous MaxViT complement promoted
+## Stage 55–61 — reference-source and asset recovery
 
-A MaxViT/CoAtNet-style branch was weaker on its own but sufficiently complementary to DINO to improve the cross-fitted ensemble.
+The project recovered the scored-reference source/receipts, distinguished the reference from the weaker owned branch, assembled its required model-resource families, and moved approximately **3.28 GB across 36 selected asset paths** into a checksum-bound snapshot.
 
-| System | Five-fold grouped OOF macro-AUC |
-|---|---:|
-| Stage 43 DINO incumbent | 0.786557 |
-| Stage 47 selected DINO + MaxViT blend | **0.791208** |
-| Delta | **+0.004650** |
+Reference assets are kept private. The public record exposes only aggregate counts and engineering decisions.
 
-The blend improved all five folds, introduced no target collapse worse than 0.01, and retained nonzero MaxViT contribution on eight targets.
+The accepted CPU audit covered **32 weight files**. It used restricted checkpoint loading, tensor-finiteness checks, source-derived task-head checks, and version-aware runtime handling. No new training was performed.
 
-## Stage 50 — MCL + Lateral Meniscus overlay independently confirmed
+## Stage 63 — GPU reference readiness complete
 
-Stage 49 screened four targeted experts on folds 0 and 2. The full four-target blend was rejected, but MCL and Lateral Meniscus showed enough promise to freeze a narrower overlay before evaluating untouched folds 1, 3, and 4.
+Stage 63 reused the accepted CPU proofs and exercised the assembled reference models on one NVIDIA L40S.
 
-Frozen overlay:
+Verified aggregate result:
 
-- MCL: **30% expert / 70% Stage-47 incumbent**
-- Lateral Meniscus: **40% expert / 60% Stage-47 incumbent**
-- all other ten targets: **unchanged Stage-47 predictions**
-- confirmation epoch: fixed in advance
-- gold optimizer rows: **0**
+- reference weight files: **32**;
+- GPU checkpoint checks: **32 / 32 passed**;
+- stored native fingerprints checked where available: **20**;
+- device: **NVIDIA L40S**;
+- selected isolated runtime: **timm 1.0.20** with PyTorch **2.8.0**;
+- model fits: **0**;
+- complete real-image reference reproduction: **not yet complete**;
+- submission ready: **false**.
 
-Confirmation results:
+The runtime was isolated instead of hot-reloading incompatible library versions inside a process. This preserves the installed environment while allowing the recovered reference architectures to load reproducibly.
 
-| Confirmation setting | Macro-AUC |
-|---|---:|
-| Stage-47 baseline | 0.795488 |
-| Stage-50 candidate | **0.798017** |
-| Delta | **+0.002529** |
+## Reference-specific runtime optimization
 
-All three confirmation folds improved:
+A source-derived RadImageNet-head optimization removes five diagnostic-only head-prediction calls while preserving the contributing heads, calibration logic, and ranking path.
 
-- fold 1: **+0.002051**
-- fold 3: **+0.004988**
-- fold 4: **+0.001428**
+Stage 63 loaded **15 trained heads** and measured three controlled GPU trials:
 
-The descriptive five-fold Stage-50 OOF is **0.793687** versus **0.791208** for Stage 47. Because the five-fold value includes the two screening folds, it is not presented as a fully nested independent estimate.
+| Trial | Original head seconds | Candidate head seconds | Final output |
+|---:|---:|---:|---|
+| 1 | 0.026731 | 0.023506 | exact |
+| 2 | 0.026663 | 0.020932 | exact |
+| 3 | 0.026521 | 0.020787 | exact |
 
-## Stages 51–53 — inference and raw-input validation
+Median head-only speed ratio: **1.2738×**.
 
-Deployment work then moved from saved OOF evidence toward a reproducible AWS inference chain.
-
-Verified bounded evidence now includes:
-
-- **10,080 sampled archived-probability comparisons** across all 15 owned DINO / MaxViT / expert checkpoints;
-- complete saved-ensemble arithmetic reconstruction across **4,349** studies;
-- exact uint8 raw-image reconstruction on **3 / 3 complete canary studies**;
-- raw-input smoke through all **15 owned checkpoints** on two complete studies;
-- **1,080** raw-input probability values produced under whole-cohort ranking semantics;
-- protected-target invariance retained where required.
-
-These checks validate bounded samples. They do not establish hidden-test runtime, complete test-like series selection, or scored-reference integration.
-
-## Stage 54 — depth-position hypothesis rejected cleanly
-
-Stage 54 resumed 2,048 previously extracted feature rows, completed the remaining 870 validation rows, and trained two matched six-epoch heads. The image encoder was frozen and received zero optimizer steps.
-
-| Fold-0 system | Macro-AUC |
-|---|---:|
-| Frozen parent head | 0.747798 |
-| Matched legacy-depth head | **0.748827** |
-| Corrected relative-depth head | 0.748599 |
-| Stage-50 incumbent boundary | 0.788045 |
-| Legacy-depth 10% overlay | 0.787949 |
-| Corrected-depth 10% overlay | 0.788083 |
-
-The corrected head failed a condition required to hold on every screening fold: it did not beat the matched legacy-depth control. The experiment therefore ended with a **valid early rejection** rather than spending another fold of GPU time. The incumbent was not modified.
-
-The run completed in approximately **10.0 minutes** on one NVIDIA L40S and recorded about **$0.47** of process-time compute at the contemporaneous SageMaker JupyterLab rate. This is a project estimate, not an AWS invoice.
+This is **not** an end-to-end notebook speed claim. Encoder features and upstream predictions were synthetic in this benchmark, real-image parity is still open, and the optimization is not automatically activated.
 
 ## Historical public-score context
 
-- reproduced public reference: **0.933 public macro-ROC-AUC**
-- last verified leader in the returned leaderboard context: **0.958**
-- comparable historical gap: **0.025**
-- independent Stage-36 DINO code submission: **0.820**
+- reproduced public reference: **0.933 public macro-ROC-AUC**;
+- last recorded leader in the same returned context: **0.958**;
+- historical comparable gap: **0.025**;
+- independent DINO public score: **0.820**.
 
-Internal grouped OOF and public leaderboard AUC are not treated as interchangeable.
+These figures are historical. A future submission requires a refreshed official-state check at the submission boundary.
 
 ## Current deployment gates
 
 Completed:
 
-- cache-aligned preprocessing contract;
-- all 15 owned checkpoint sampled parity checks;
-- sampled raw-image parity;
-- bounded raw-input owned-ensemble smoke.
+- assembled scored-reference asset snapshot;
+- accepted CPU audit across 32 reference weight files;
+- isolated GPU runtime selection;
+- 32 / 32 GPU checkpoint checks;
+- 20 stored native fingerprints checked where available;
+- trained-head differential benchmark with exact final output on controlled features.
 
 Still open:
 
-1. recover and verify the complete **0.933 scored-reference identity**;
-2. establish a leakage-safe or explicitly heuristic **reference + Stage-50 integration** and freeze it honestly;
-3. validate **test-like series selection** beyond bounded raw canaries;
-4. validate complete offline **output schema, cohort ranking, determinism, and runtime**;
-5. only then cross the final competition submission boundary.
+1. reproduce the complete calibrated reference on **real MRI inputs**;
+2. measure the Rad optimization on **real image features** and preserve exact final output;
+3. evaluate fixed reference-level candidate changes against the same complete reference control;
+4. validate the final offline wrapper: schema, whole-cohort ranking, determinism, lineage, runtime, and no silent fallbacks;
+5. only then cross the competition submission boundary.
 
-## Current research frontier
+## Next milestone — Stage 64
 
-The next modeling work should introduce a materially new capability rather than repeat the rejected depth-head adjustment. Highest-value candidates include target-specific ROI/localization or multi-acquisition representations that are meaningfully different from the previously rejected spatial/depth variants, stronger medical-imaging pretraining, and heterogeneous residual modeling evaluated against the same scanner-grouped OOF boundary.
+Stage 64 is **prepared but not yet executed**. Its job is to run the complete reference on the original visible MRI preview cases, require numerical reproduction of the saved control, time the head optimization on real features, and generate controlled Raptor-coverage diagnostics.
 
-See [Notebook 08](../notebooks/08_heterogeneous_ensemble_and_deployment_validation.ipynb) and [Training frontier](TRAINING_FRONTIER.md).
+Three preview cases are a regression/deployment gate, not an accuracy evaluation. No improvement over 0.933 is claimed until comparable scored evidence exists.
+
+See [Scored-reference frontier](SCORED_REFERENCE_FRONTIER.md), [Notebook 09](../notebooks/09_scored_reference_recovery_and_runtime.ipynb), and [Training frontier](TRAINING_FRONTIER.md).
