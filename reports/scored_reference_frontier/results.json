@@ -1,0 +1,58 @@
+{
+  "as_of_utc": "2026-09-28T05:39:00Z",
+  "evaluation_boundary": "Verified aggregate evidence through Stage 63. Stage 64 is prepared but not yet executed.",
+  "historical_public": {
+    "reference_auc": 0.933,
+    "leader_auc": 0.958,
+    "gap": 0.025,
+    "independent_dino_auc": 0.82,
+    "freshness": "historical_not_refreshed"
+  },
+  "scored_reference": {
+    "reference_family": "multi-branch MRI ensemble",
+    "asset_snapshot_bytes": 3280355598,
+    "asset_paths": 36,
+    "weight_files": 32,
+    "cpu_proofs_reused": 32,
+    "gpu_checkpoint_checks_passed": 32,
+    "stored_native_fingerprints_checked": 20,
+    "gpu_device": "NVIDIA L40S",
+    "gpu_runtime": {
+      "python": "3.12.14",
+      "torch": "2.8.0",
+      "numpy": "1.26.4",
+      "timm_selected": "1.0.20"
+    },
+    "complete_real_image_forward_reproduced": false,
+    "historical_binary_identity_fully_proven": false,
+    "submission_ready": false
+  },
+  "runtime_optimization": {
+    "scope": "RadImageNet trained-head stage only",
+    "baseline_head_calls": 20,
+    "candidate_head_calls": 15,
+    "call_reduction_fraction": 0.25,
+    "trained_heads_loaded": 15,
+    "trials": 3,
+    "baseline_seconds": [0.02673059500011732, 0.026663292000193906, 0.0265207500001452],
+    "candidate_seconds": [0.02350604199978079, 0.020931547000145656, 0.02078682299952561],
+    "median_head_only_speed_ratio": 1.2738328418825595,
+    "final_csv_exact_all_trials": true,
+    "real_image_parity_verified": false,
+    "end_to_end_speedup_verified": false,
+    "candidate_activated": false
+  },
+  "closed_or_preserved": {
+    "preserve_owned_mcl_lateral_experts": true,
+    "preserve_owned_maxvit_complement": true,
+    "blind_transfer_of_old_blend_weights": false,
+    "rejected_depth_head_reopened": false,
+    "rejected_encode_once_reopened": false
+  },
+  "next_milestone": {
+    "stage": 64,
+    "name": "complete scored-reference real-MRI replay and controlled coverage candidates",
+    "status": "PREPARED_NOT_EXECUTED",
+    "accuracy_claim_allowed": false
+  }
+}
