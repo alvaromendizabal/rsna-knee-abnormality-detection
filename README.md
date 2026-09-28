@@ -1,59 +1,44 @@
 # RSNA Knee Abnormality Detection
 
-**MRI image-model research, heterogeneous ensembling, leakage-aware validation, and deployment parity engineering.**
+**MRI image-model research, heterogeneous ensembling, leakage-aware validation, and scored-reference deployment engineering.**
 
-A notebook-first machine-learning project by **Alvaro Mendizabal** for twelve knee-MRI findings. Reports are used only as training-supervision evidence; test-time prediction is image-only. AWS/SageMaker is the canonical research environment, while this public repository is the curated employer-facing record.
+A notebook-first machine-learning project by **Alvaro Mendizabal** for twelve knee-MRI findings. Reports are used only as training-supervision evidence; test-time prediction is image-only. AWS/SageMaker is the canonical private research environment, while this public repository is the curated employer-facing record.
 
-> **Latest published milestone: Stage 54 · September 27, 2026 UTC.** The project progressed from a complete scanner-grouped DINO baseline to a heterogeneous DINO + MaxViT ensemble, then confirmed a targeted MCL + Lateral Meniscus expert overlay on three untouched folds. Subsequent deployment work reproduced all 15 owned checkpoints on bounded samples, established exact sampled raw-image parity, and exercised the raw-input ensemble end to end. Stage 54 then completed a controlled depth-position experiment and rejected the proposed representation change under its prespecified fold-level gate.
+> **Latest published milestone: Stage 63 · September 28, 2026 UTC.** The project has moved back onto the historically best **0.933** scored reference as the control. The assembled multi-branch reference snapshot now has **32 audited weight files**, **32 / 32 GPU checkpoint checks passed**, and **20 stored native-model fingerprints verified where available**. A trained Rad-head optimization reduced the relevant head-prediction calls from **20 to 15** and measured a **1.274× head-only speed ratio** with exact final CSV bytes on its controlled GPU trial. Complete real-image reproduction of the historical reference remains the next gate; no new leaderboard improvement is claimed.
 
 ## Start here
 
-Open **[08 — Heterogeneous ensemble and deployment validation](notebooks/08_heterogeneous_ensemble_and_deployment_validation.ipynb)** for the current research story: OOF progression, independent confirmation, deployment parity, raw-input validation, and the latest controlled negative experiment.
+Open **[09 — Scored-reference recovery and runtime frontier](notebooks/09_scored_reference_recovery_and_runtime.ipynb)** for the current story: why the project returned to the strongest scored reference, how its model assets and runtime were recovered safely, what GPU checks now pass, and which speed optimization is ready for real-image validation.
 
-Then read **[Current project status](docs/PROJECT_STATUS.md)** and **[Training frontier](docs/TRAINING_FRONTIER.md)** for the evidence boundary, closed directions, and next high-value research/deployment gates.
+Then read **[Scored-reference frontier](docs/SCORED_REFERENCE_FRONTIER.md)**, **[Current project status](docs/PROJECT_STATUS.md)**, and **[Training frontier](docs/TRAINING_FRONTIER.md)** for the evidence boundary and next score-moving milestones.
 
 ## Current evidence
 
 | Evaluation setting | System / evidence | Result |
 |---|---|---:|
-| Scanner-grouped five-fold OOF | Stage 43 DINO incumbent | **0.786557** |
-| Scanner-grouped five-fold OOF | Stage 47 DINO + MaxViT cross-fitted blend | **0.791208** |
-| Independent confirmation folds 1, 3, 4 | Stage 47 baseline | **0.795488** |
-| Independent confirmation folds 1, 3, 4 | Stage 50 MCL + Lateral Meniscus overlay | **0.798017** |
-| Independent confirmation delta | Stage 50 versus frozen baseline | **+0.002529** |
-| Five-fold descriptive OOF | Stage 50 selected system | **0.793687** |
 | Official public leaderboard, historical | Reproduced public multi-model reference | **0.933** |
 | Same returned leaderboard context, historical | Highest listed score | **0.958** |
-| Deployment validation | Sampled archived-probability replay | **10,080 comparisons passed** |
-| Raw preprocessing validation | Complete canary studies | **3 / 3 exact at uint8 pixel level** |
-| Stage 54 controlled experiment | Corrected-depth head versus matched legacy head, fold 0 | **Rejected** |
+| Historical public gap | Reference to last recorded leader | **0.025** |
+| Official public leaderboard, historical | Independent DINO submission | **0.820** |
+| Scanner-grouped five-fold OOF | Stage 47 DINO + MaxViT cross-fitted blend | **0.791208** |
+| Independent confirmation folds 1, 3, 4 | Stage 50 MCL + Lateral Meniscus overlay | **0.798017** |
+| Scored-reference recovery | Weight files audited | **32** |
+| Scored-reference GPU readiness | Checkpoints passing GPU probes | **32 / 32** |
+| Native-model verification | Stored fingerprints checked | **20** |
+| Rad runtime experiment | Head-prediction calls | **20 → 15** |
+| Rad runtime experiment | Head-only speed ratio | **1.274×** |
 
-The **0.025 public gap** is the historically comparable difference between the 0.933 scored reference and the 0.958 returned leader. Internal grouped OOF values are model-selection evidence and are **not** presented as substitutes for leaderboard AUC.
+The public 0.933 and 0.958 scores are historical and are not treated as interchangeable with scanner-grouped internal OOF. Stage 63 establishes reference-loader/runtime readiness for the assembled snapshot, **not** a new accuracy result.
 
 ## What the project demonstrates
 
-- **End-to-end experimental ownership:** data contracts, scanner-group validation, training, model selection, deployment parity, cost control, and explicit promotion/kill decisions are connected in one research program.
-- **Leakage-aware validation:** 59 scanner groups, five group-isolated folds, 4,349 non-gold OOF rows, 58 expert audit-only studies, and zero gold optimizer rows.
-- **Heterogeneous model research:** a DINOv2 image branch was complemented by a weaker standalone MaxViT branch whose prediction diversity produced a material OOF ensemble gain.
-- **Independent confirmation:** the Stage 50 two-target overlay was frozen using screening folds 0 and 2, then improved all three untouched confirmation folds.
-- **Scientific negative results:** ConvNeXt complement, four-target weak-expert blending, agreement weighting, and the Stage 54 depth-position change were stopped when their gates failed.
-- **Deployment rigor:** exact cache-aligned uint8 preprocessing, strict checkpoint lineage, sampled replay across all 15 owned checkpoints, exact raw-image canaries, and whole-cohort ranking semantics.
-- **Efficiency engineering:** resumable feature banks, same-process threaded I/O, bounded GPU work, checkpoint reuse, and explicit compute-cost accounting.
-
-## Latest controlled negative result
-
-Stage 54 compared two six-epoch heads on the same frozen feature bank, initialization, optimizer rows, seed, and held-out fold:
-
-| Fold-0 system | Macro-AUC |
-|---|---:|
-| Frozen parent head | 0.747798 |
-| Matched legacy-depth head | **0.748827** |
-| Corrected relative-depth head | 0.748599 |
-| Stage-50 incumbent overlay boundary | 0.788045 |
-| Legacy-depth 10% research overlay | 0.787949 |
-| Corrected-depth 10% research overlay | 0.788083 |
-
-The corrected head did not beat the matched legacy control, so a condition required to hold on every screening fold failed. The experiment was closed before spending another fold of GPU time. The incumbent was not modified.
+- **Scored-system discipline:** the strongest known scored reference is now the baseline for deployment and improvement work rather than a weaker standalone branch.
+- **Model provenance and runtime recovery:** a multi-branch reference was reconstructed across versioned assets, checkpoint identities, isolated runtime dependencies, and strict loader checks without publishing the private weights.
+- **GPU validation:** 32 reference checkpoints passed GPU construction/probe checks; 20 stored native fingerprints were verified where available.
+- **Performance engineering with correctness gates:** a RadImageNet-head optimization removed diagnostic-only calls while requiring exact final values and CSV bytes before promotion to real-image testing.
+- **Leakage-aware research:** scanner-group isolation, audit-only expert studies, independent confirmation, and explicit separation of public-score evidence from internal OOF evidence.
+- **Scientific negative results:** weak complements and representation changes are closed when their preregistered gates fail rather than rationalized after the fact.
+- **Restartable cloud engineering:** checksum-bound assets, resumable transfers, bounded execution, duplicate-process prevention, and explicit compute-cost accounting.
 
 ## Notebook guide
 
@@ -64,18 +49,19 @@ The corrected head did not beat the matched legacy control, so a condition requi
 - [05 — Multilingual teacher feasibility](notebooks/05_multilingual_teacher_pilot.ipynb)
 - [06 — Image models and replication](notebooks/06_image_models_and_replication.ipynb)
 - [07 — Full-data training frontier](notebooks/07_deployment_and_training_frontier.ipynb)
-- **[08 — Heterogeneous ensemble and deployment validation](notebooks/08_heterogeneous_ensemble_and_deployment_validation.ipynb)** — current entry point
+- [08 — Heterogeneous ensemble and deployment validation](notebooks/08_heterogeneous_ensemble_and_deployment_validation.ipynb)
+- **[09 — Scored-reference recovery and runtime frontier](notebooks/09_scored_reference_recovery_and_runtime.ipynb)** — current entry point
 
-Notebook 08 contains aggregate evidence only. It does not access AWS, expose study identifiers, publish row-level predictions, or include model weights.
+Notebook 09 contains aggregate evidence only. It does not access AWS, expose patient/study identifiers, publish row-level predictions, reveal model weights, or include the private reference implementation.
 
 ## Public repository versus AWS workspace
 
-**GitHub is the curated review and reproducibility layer. AWS remains the canonical private research workspace.** This repository intentionally excludes raw MRI, report text, study identifiers, row-level predictions, cache shards, model weights, private logs, credentials, environments, and full return bundles.
+**GitHub is the curated review and semi-reproducible engineering layer. AWS remains the canonical private research workspace.** This repository intentionally excludes raw MRI, report text, identifiers, scanner assignments, row-level predictions, cache shards, model weights, private logs, credentials, environments, return bundles, and source-specific implementation details that would reproduce the private competition stack verbatim.
 
 Public checks use synthetic or aggregate evidence only:
 
-python -m unittest discover -s tests
+`python -m unittest discover -s tests`
 
-python tools/public_quality.py
+`python tools/public_quality.py`
 
-See [current status](docs/PROJECT_STATUS.md), [training frontier](docs/TRAINING_FRONTIER.md), [data access](docs/DATA_ACCESS.md), and [research sources](docs/SOURCES.md). No diagnostic or clinical use is claimed.
+See [current status](docs/PROJECT_STATUS.md), [scored-reference frontier](docs/SCORED_REFERENCE_FRONTIER.md), [training frontier](docs/TRAINING_FRONTIER.md), [data access](docs/DATA_ACCESS.md), and [research sources](docs/SOURCES.md). No diagnostic or clinical use is claimed.
