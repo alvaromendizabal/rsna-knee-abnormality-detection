@@ -1,44 +1,44 @@
 # RSNA Knee Abnormality Detection
 
-**MRI image-model research, heterogeneous ensembling, leakage-aware validation, and scored-reference deployment engineering.**
+**MRI image-model research, scored-reference deployment engineering, and leakage-aware residual modeling.**
 
 A notebook-first machine-learning project by **Alvaro Mendizabal** for twelve knee-MRI findings. Reports are used only as training-supervision evidence; test-time prediction is image-only. AWS/SageMaker is the canonical private research environment, while this public repository is the curated employer-facing record.
 
-> **Latest published milestone: Stage 63 · September 28, 2026 UTC.** The project has moved back onto the historically best **0.933** scored reference as the control. The assembled multi-branch reference snapshot now has **32 audited weight files**, **32 / 32 GPU checkpoint checks passed**, and **20 stored native-model fingerprints verified where available**. A trained Rad-head optimization reduced the relevant head-prediction calls from **20 to 15** and measured a **1.274× head-only speed ratio** with exact final CSV bytes on its controlled GPU trial. Complete real-image reproduction of the historical reference remains the next gate; no new leaderboard improvement is claimed.
+> **Latest published state: verified execution evidence through Stage 69; Stage 70 prepared, not executed.** The historically best **0.933** scored reference remains the mandatory public control. A user-supplied September 29 leaderboard snapshot shows **0.961** at the top, a public-score gap of **0.028**. After reference-runtime recovery succeeded, development-time preview acquisition was closed when competition-data access was unavailable in AWS. The project then pivoted to an AWS-only, leakage-aware residual-model program using the existing grouped folds and exact-window cache. Two engineering failures exposed and hardened important assumptions: the canonical cache lives in object storage, and its tensor layout is **NCHW**, not NHWC. No new accuracy result is claimed from these stages.
 
 ## Start here
 
-Open **[09 — Scored-reference recovery and runtime frontier](notebooks/09_scored_reference_recovery_and_runtime.ipynb)** for the current story: why the project returned to the strongest scored reference, how its model assets and runtime were recovered safely, what GPU checks now pass, and which speed optimization is ready for real-image validation.
+Open **[10 — AWS-only residual frontier](notebooks/10_aws_only_residual_frontier.ipynb)** for the current story: the 0.933 control, the source-access decision, canonical cache contract, failure-driven hardening, and the prepared ResNet34/224 screening experiment.
 
-Then read **[Scored-reference frontier](docs/SCORED_REFERENCE_FRONTIER.md)**, **[Current project status](docs/PROJECT_STATUS.md)**, and **[Training frontier](docs/TRAINING_FRONTIER.md)** for the evidence boundary and next score-moving milestones.
+Then read **[AWS residual frontier](docs/AWS_RESIDUAL_FRONTIER.md)**, **[Scored-reference frontier](docs/SCORED_REFERENCE_FRONTIER.md)**, **[Project status](docs/PROJECT_STATUS.md)**, and **[Training frontier](docs/TRAINING_FRONTIER.md)**.
 
 ## Current evidence
 
-| Evaluation setting | System / evidence | Result |
-|---|---|---:|
-| Official public leaderboard, historical | Reproduced public multi-model reference | **0.933** |
-| Same returned leaderboard context, historical | Highest listed score | **0.958** |
-| Historical public gap | Reference to last recorded leader | **0.025** |
-| Official public leaderboard, historical | Independent DINO submission | **0.820** |
-| Scanner-grouped five-fold OOF | Stage 47 DINO + MaxViT cross-fitted blend | **0.791208** |
-| Independent confirmation folds 1, 3, 4 | Stage 50 MCL + Lateral Meniscus overlay | **0.798017** |
-| Scored-reference recovery | Weight files audited | **32** |
-| Scored-reference GPU readiness | Checkpoints passing GPU probes | **32 / 32** |
-| Native-model verification | Stored fingerprints checked | **20** |
-| Rad runtime experiment | Head-prediction calls | **20 → 15** |
-| Rad runtime experiment | Head-only speed ratio | **1.274×** |
+| Evidence boundary | Result |
+|---|---:|
+| Historical scored reference | **0.933 public macro-ROC-AUC** |
+| User-supplied 2026-09-29 leaderboard snapshot | **0.961 leader** |
+| Public-score gap | **0.028** |
+| Reference GPU checkpoint checks | **32 / 32 passed** |
+| Stored native-model fingerprints checked | **20** |
+| Controlled Rad-head benchmark | **1.274× head-only speed ratio** |
+| Canonical exact-window cache | **4,407 studies / 69.14 GiB** |
+| Leakage-aware grouped research rows | **4,349 non-gold / 58 audit-only gold** |
+| Stage 67 development preview path | **closed after source-access block** |
+| Stage 68 model fits | **0 — source-location failure** |
+| Stage 69 model fits | **0 — cache-layout failure** |
+| Stage 70 | **prepared, not executed** |
 
-The public 0.933 and 0.958 scores are historical and are not treated as interchangeable with scanner-grouped internal OOF. Stage 63 establishes reference-loader/runtime readiness for the assembled snapshot, **not** a new accuracy result.
+Internal grouped metrics are model-selection evidence and are **not** presented as substitutes for public leaderboard AUC.
 
 ## What the project demonstrates
 
-- **Scored-system discipline:** the strongest known scored reference is now the baseline for deployment and improvement work rather than a weaker standalone branch.
-- **Model provenance and runtime recovery:** a multi-branch reference was reconstructed across versioned assets, checkpoint identities, isolated runtime dependencies, and strict loader checks without publishing the private weights.
-- **GPU validation:** 32 reference checkpoints passed GPU construction/probe checks; 20 stored native fingerprints were verified where available.
-- **Performance engineering with correctness gates:** a RadImageNet-head optimization removed diagnostic-only calls while requiring exact final values and CSV bytes before promotion to real-image testing.
-- **Leakage-aware research:** scanner-group isolation, audit-only expert studies, independent confirmation, and explicit separation of public-score evidence from internal OOF evidence.
-- **Scientific negative results:** weak complements and representation changes are closed when their preregistered gates fail rather than rationalized after the fact.
-- **Restartable cloud engineering:** checksum-bound assets, resumable transfers, bounded execution, duplicate-process prevention, and explicit compute-cost accounting.
+- **Scored-baseline discipline:** the 0.933 system remains the control for public-score improvement work.
+- **Failure-driven engineering:** environment, source, storage, and tensor-layout assumptions are converted into explicit regression gates rather than patched ad hoc.
+- **AWS-first research:** canonical data, folds, labels, training, validation, checkpoints, and experiment state remain on AWS; Kaggle is reserved for the final submission boundary.
+- **Leakage-aware model development:** 59 scanner groups, 4,349 non-gold research rows, 58 audit-only expert rows, and zero gold optimizer rows.
+- **Residual-model strategy:** new branches are judged for complementary signal rather than standalone score alone.
+- **Semi-reproducible public layer:** aggregate evidence, layout contracts, experiment state, notebooks, and tests are public; private weights, MRI, row-level predictions, and exact competition glue remain private.
 
 ## Notebook guide
 
@@ -50,13 +50,14 @@ The public 0.933 and 0.958 scores are historical and are not treated as intercha
 - [06 — Image models and replication](notebooks/06_image_models_and_replication.ipynb)
 - [07 — Full-data training frontier](notebooks/07_deployment_and_training_frontier.ipynb)
 - [08 — Heterogeneous ensemble and deployment validation](notebooks/08_heterogeneous_ensemble_and_deployment_validation.ipynb)
-- **[09 — Scored-reference recovery and runtime frontier](notebooks/09_scored_reference_recovery_and_runtime.ipynb)** — current entry point
+- [09 — Scored-reference recovery and runtime frontier](notebooks/09_scored_reference_recovery_and_runtime.ipynb)
+- **[10 — AWS-only residual frontier](notebooks/10_aws_only_residual_frontier.ipynb)** — current entry point
 
-Notebook 09 contains aggregate evidence only. It does not access AWS, expose patient/study identifiers, publish row-level predictions, reveal model weights, or include the private reference implementation.
+Notebook 10 contains aggregate/synthetic evidence only. It does not access AWS, expose identifiers, publish row-level predictions, reveal weights, or include the private competition stack.
 
 ## Public repository versus AWS workspace
 
-**GitHub is the curated review and semi-reproducible engineering layer. AWS remains the canonical private research workspace.** This repository intentionally excludes raw MRI, report text, identifiers, scanner assignments, row-level predictions, cache shards, model weights, private logs, credentials, environments, return bundles, and source-specific implementation details that would reproduce the private competition stack verbatim.
+**GitHub is the curated review and semi-reproducible engineering layer. AWS remains the canonical private research workspace.** Raw MRI, report text, identifiers, scanner assignments, row-level predictions, cache shards, model weights, credentials, return bundles, and source-specific competition implementation details stay outside Git history.
 
 Public checks use synthetic or aggregate evidence only:
 
@@ -64,4 +65,4 @@ Public checks use synthetic or aggregate evidence only:
 
 `python tools/public_quality.py`
 
-See [current status](docs/PROJECT_STATUS.md), [scored-reference frontier](docs/SCORED_REFERENCE_FRONTIER.md), [training frontier](docs/TRAINING_FRONTIER.md), [data access](docs/DATA_ACCESS.md), and [research sources](docs/SOURCES.md). No diagnostic or clinical use is claimed.
+No diagnostic or clinical use is claimed.
