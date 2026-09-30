@@ -1,97 +1,91 @@
 # Project status
 
-Updated from verified returned evidence through **Stage 63 · 2026-09-28 UTC**.
+Updated from verified returned evidence through **Stage 69 · 2026-09-29 UTC**. **Stage 70 is prepared but not yet executed.**
 
 ## Current boundary
 
-The historically best scored system remains the **0.933 public reference**. The project has now recovered and GPU-validated the assembled multi-branch reference runtime far enough to move from asset/runtime recovery into **real-image control reproduction**.
+The historically best scored system remains the **0.933 public reference**. A user-supplied September 29 leaderboard screenshot shows **0.961** at the top, giving a public-score gap of **0.028**.
 
-No Stage 55–63 result is presented as an accuracy improvement. Their value is that the correct scored baseline is now the object being verified and optimized.
+No Stage 64–70 result is presented as an accuracy improvement. The work since Stage 63 has clarified the deployment boundary, closed an inappropriate development-time data-access path, and hardened the AWS-only residual-model pipeline.
 
-## Preserved model-research evidence
+## Preserved reference-runtime evidence
 
-The owned research branch remains useful as complementary evidence and candidate components:
+The Stage-63 reference result remains valid and preserved:
 
-- Stage 43 five-fold DINO grouped OOF: **0.786557**;
-- Stage 47 DINO + MaxViT grouped OOF: **0.791208**, delta **+0.004650**, improving all five folds;
-- Stage 50 frozen MCL + Lateral Meniscus overlay: independent confirmation **0.795488 → 0.798017**, delta **+0.002529**, improving folds 1, 3, and 4;
-- Stage 54 corrected-depth head: **rejected** against its matched control; incumbent unchanged.
+- **32 / 32** GPU checkpoint checks passed;
+- **20** stored native fingerprints checked where available;
+- controlled trained-head optimization preserved exact final output;
+- median **1.2738× head-only speed ratio** on the bounded benchmark;
+- complete real-image historical reference replay remains unproven.
 
-These results do not establish a gain over the 0.933 public reference. Their transferable components are treated as future residual candidates against that full reference, not as replacements for it.
+The 0.933 reference remains the mandatory scored control for future public-score claims.
 
-## Stage 55–61 — reference-source and asset recovery
+## Stages 64–67 — reference preview path closed during development
 
-The project recovered the scored-reference source/receipts, distinguished the reference from the weaker owned branch, assembled its required model-resource families, and moved approximately **3.28 GB across 36 selected asset paths** into a checksum-bound snapshot.
+The project attempted to turn the recovered reference into a real-image regression check. The important outcomes were engineering and process decisions, not model results.
 
-Reference assets are kept private. The public record exposes only aggregate counts and engineering decisions.
+- Stage 65 stopped during packaged tests before inference.
+- Stage 66 repaired reader dependencies but exposed an import-shadowing issue in the live Python environment.
+- Stage 67 passed **284 self-tests**, reused the recovered reference assets, and reached the first competition-data request.
+- That request was denied; **0 bytes** of competition preview data were downloaded and **0 model fits** ran.
 
-The accepted CPU audit covered **32 weight files**. It used restricted checkpoint loading, tensor-finiteness checks, source-derived task-head checks, and version-aware runtime handling. No new training was performed.
+Because AWS is canonical and Kaggle is reserved for the submission boundary, the development-time preview-acquisition path is now closed rather than repeatedly retried.
 
-## Stage 63 — GPU reference readiness complete
+## Stages 68–70 — AWS-only residual-model transition
 
-Stage 63 reused the accepted CPU proofs and exercised the assembled reference models on one NVIDIA L40S.
+The next strategy is to produce a small, efficient candidate branch whose purpose is **complementarity with the 0.933 program**, while keeping validation leakage-aware.
 
-Verified aggregate result:
+### Stage 68
 
-- reference weight files: **32**;
-- GPU checkpoint checks: **32 / 32 passed**;
-- stored native fingerprints checked where available: **20**;
-- device: **NVIDIA L40S**;
-- selected isolated runtime: **timm 1.0.20** with PyTorch **2.8.0**;
+Prepared a ResNet34/224 screen on scanner-grouped folds. It failed before training because the runner assumed the exact-window cache was a local filesystem tree. The canonical cache is in object storage.
+
 - model fits: **0**;
-- complete real-image reference reproduction: **not yet complete**;
-- submission ready: **false**.
+- failure class: **SOURCE_STATE**;
+- scientific hypothesis: **not evaluated**.
 
-The runtime was isolated instead of hot-reloading incompatible library versions inside a process. This preserves the installed environment while allowing the recovered reference architectures to load reproducibly.
+### Stage 69
 
-## Reference-specific runtime optimization
+Added an S3-derived-cache bridge. It failed during the first cache pilot because the canonical image array is stored as **NCHW**, while the runner assumed NHWC.
 
-A source-derived RadImageNet-head optimization removes five diagnostic-only head-prediction calls while preserving the contributing heads, calibration logic, and ranking path.
+- model fits: **0**;
+- failure class: **SCHEMA**;
+- scientific hypothesis: **not evaluated**.
 
-Stage 63 loaded **15 trained heads** and measured three controlled GPU trials:
+### Stage 70
 
-| Trial | Original head seconds | Candidate head seconds | Final output |
-|---:|---:|---:|---|
-| 1 | 0.026731 | 0.023506 | exact |
-| 2 | 0.026663 | 0.020932 | exact |
-| 3 | 0.026521 | 0.020787 | exact |
+Prepared a source-layout recovery that accepts the canonical **(N, 3, H, W)** contract and normalizes it internally without changing pixel values. The scientific screen remains frozen: ResNet34, 224px, folds 0 and 2, fixed epochs, accepted report labels, zero gold optimizer rows.
 
-Median head-only speed ratio: **1.2738×**.
+**Stage 70 has not run yet.** No candidate AUC, complementarity gain, or submission claim exists.
 
-This is **not** an end-to-end notebook speed claim. Encoder features and upstream predictions were synthetic in this benchmark, real-image parity is still open, and the optimization is not automatically activated.
+## Canonical AWS research boundary
 
-## Historical public-score context
+- exact-window cache: **4,407 studies / 69.14 GiB**;
+- cache tensor layout: **NCHW**;
+- grouped non-gold rows: **4,349**;
+- gold audit rows: **58**;
+- scanner groups: **59**;
+- gold optimizer rows: **0**.
 
-- reproduced public reference: **0.933 public macro-ROC-AUC**;
-- last recorded leader in the same returned context: **0.958**;
-- historical comparable gap: **0.025**;
-- independent DINO public score: **0.820**.
+The public repository exposes these contracts and aggregate decisions, not identifiers, cache shards, row-level predictions, or weights.
 
-These figures are historical. A future submission requires a refreshed official-state check at the submission boundary.
-
-## Current deployment gates
+## Current deployment and modeling gates
 
 Completed:
 
-- assembled scored-reference asset snapshot;
-- accepted CPU audit across 32 reference weight files;
-- isolated GPU runtime selection;
-- 32 / 32 GPU checkpoint checks;
-- 20 stored native fingerprints checked where available;
-- trained-head differential benchmark with exact final output on controlled features.
+- scored-reference asset/runtime recovery;
+- bounded GPU reference checkpoint validation;
+- scanner-grouped research folds;
+- accepted report-label lineage;
+- AWS-only residual-model protocol;
+- canonical cache location/layout hardening.
 
-Still open:
+Open:
 
-1. reproduce the complete calibrated reference on **real MRI inputs**;
-2. measure the Rad optimization on **real image features** and preserve exact final output;
-3. evaluate fixed reference-level candidate changes against the same complete reference control;
-4. validate the final offline wrapper: schema, whole-cohort ranking, determinism, lineage, runtime, and no silent fallbacks;
-5. only then cross the competition submission boundary.
+1. execute Stage 70 and obtain the first actual small-CNN screening result;
+2. confirm only if the frozen screen passes its complementarity gates;
+3. compare preserved MCL/Lateral and MaxViT components only under reference-aware, leakage-safe logic;
+4. freeze one materially distinct candidate;
+5. validate complete AWS inference/schema/lineage/runtime;
+6. enter Kaggle only at the actual submission boundary.
 
-## Next milestone — Stage 64
-
-Stage 64 is **prepared but not yet executed**. Its job is to run the complete reference on the original visible MRI preview cases, require numerical reproduction of the saved control, time the head optimization on real features, and generate controlled Raptor-coverage diagnostics.
-
-Three preview cases are a regression/deployment gate, not an accuracy evaluation. No improvement over 0.933 is claimed until comparable scored evidence exists.
-
-See [Scored-reference frontier](SCORED_REFERENCE_FRONTIER.md), [Notebook 09](../notebooks/09_scored_reference_recovery_and_runtime.ipynb), and [Training frontier](TRAINING_FRONTIER.md).
+See [AWS residual frontier](AWS_RESIDUAL_FRONTIER.md), [Scored-reference frontier](SCORED_REFERENCE_FRONTIER.md), and [Notebook 10](../notebooks/10_aws_only_residual_frontier.ipynb).

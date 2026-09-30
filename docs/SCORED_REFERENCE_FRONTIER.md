@@ -2,81 +2,47 @@
 
 ## Objective
 
-The current deployment and improvement program is anchored to the historically best scored RSNA system in this project: a **0.933 public macro-ROC-AUC multi-branch reference**. The historical leader in the last recorded comparable leaderboard context is **0.958**.
+The project remains anchored to the historically best scored RSNA system: **0.933 public macro-ROC-AUC**. A user-supplied September 29 leaderboard snapshot shows **0.961** at the top.
 
-The purpose of the reference-recovery program is not to publish private competition assets. It is to make the strongest scored system auditable, testable, restartable, and fast enough to serve as the control for new experiments.
+The recovered reference is kept as the mandatory public control. The public repository documents aggregate readiness and engineering decisions without publishing the private weights or full submission stack.
 
-## Architecture boundary
+## Verified reference readiness
 
-The private reference combines multiple MRI representation families rather than a single network. The public repository intentionally summarizes these only at a high level:
-
-- transformer-based MRI members;
-- an additional multi-fold image family;
-- a RadImageNet-based branch with calibration;
-- a convolutional/attention-based Raptor branch;
-- final rank-based aggregation.
-
-Exact private checkpoints, source-specific paths, calibration assets, and proprietary competition glue remain outside Git history.
-
-## Recovery milestones
-
-### Source and provenance
-
-The reference source and historical score receipts were recovered first, making it possible to distinguish the 0.933 stack from the weaker owned branch and to identify its model-resource families without executing unsafe fallbacks.
-
-### Asset assembly and CPU audit
-
-The assembled snapshot contains **36 selected asset paths** and **32 weight files**, totaling about **3.28 GB**. CPU-side restricted-loading checks verified checkpoint structure and tensor sanity without changing the model weights.
-
-### GPU runtime isolation
-
-The recovered reference requires a newer model registry than the installed environment provides. Instead of upgrading the canonical environment or hot-reloading incompatible packages inside one process, the GPU continuation selects a pinned runtime in isolation.
-
-Stage 63 then passed **32 / 32 GPU checkpoint checks** and checked **20 stored native fingerprints** where available.
-
-This establishes loader/runtime readiness for the assembled snapshot. It does not prove that every historical scored-run byte has been recovered, and it does not yet reproduce the full calibrated reference on real MRI inputs.
-
-## Runtime optimization evidence
-
-A source-derived optimization removes five diagnostic-only head-prediction calls in the RadImageNet stage while retaining the heads that contribute to final predictions.
-
-- original head calls: **20**;
-- candidate head calls: **15**;
-- trained heads loaded: **15**;
-- measured GPU trials: **3**;
-- exact final values and CSV bytes: **yes, all trials**;
+- assembled reference snapshot: **36 selected asset paths**;
+- audited weight files: **32**;
+- GPU checkpoint checks: **32 / 32 passed**;
+- stored native fingerprints checked where available: **20**;
+- bounded trained-head optimization: exact final output on all controlled trials;
 - median head-only speed ratio: **1.2738×**;
-- real-image feature parity: **not yet verified**;
-- end-to-end notebook speedup: **not yet verified**;
-- activated in the incumbent: **no**.
+- complete real-image historical replay: **not established**.
 
-This is a correctness-gated optimization candidate, not a production-speed claim.
+## Development-time real-image replay decision
+
+Stages 64–67 attempted to create a real-image regression gate for the historical reference. Stage 67 reached the first competition-data request with its software gates passing, but source access was denied and no preview bytes were retrieved.
+
+The project therefore closed development-time competition preview acquisition. AWS remains the canonical research environment, and Kaggle remains reserved for the final submission/inference boundary.
+
+This means the reference is currently used in two distinct ways:
+
+1. **mandatory scored control** for all public claims;
+2. **recovered deployment/runtime system** whose bounded model identity and loader behavior are preserved.
+
+The project does **not** invent a complete reference OOF lineage that has not been proven.
 
 ## Reusing earlier model research
 
-Earlier work is retained as candidate evidence rather than discarded:
+The following work remains preserved for later reference-level comparison:
 
-- the independently confirmed MCL and Lateral Meniscus experts remain potential residual additions;
-- the MaxViT branch remains a potential heterogeneous residual complement;
-- denser anatomical coverage is being transferred as a controlled change to the original reference’s Raptor branch;
-- the existing ranking, checkpoint, resume, and protected-target tests are reused.
+- MCL and Lateral Meniscus experts with independent confirmation evidence;
+- heterogeneous MaxViT complementarity;
+- Raptor coverage hypothesis;
+- whole-cohort ranking and protected-target tests;
+- trained-head inference pruning under exact-output gates.
 
-Old blend weights are **not** copied onto the 0.933 reference. They were selected against another baseline and require new reference-level evidence.
+Old blend weights are not copied automatically onto the 0.933 reference.
 
-## Next reproducibility gate
+## Next reference-level evidence
 
-Stage 64 is prepared to replay the complete reference on the original visible MRI preview cases. Acceptance requires numerical reproduction of the saved control before candidate outputs are interpreted.
+The immediate AWS task is not another preview-recovery attempt. It is to produce a strong, leakage-aware residual candidate, confirm it across grouped folds, freeze an integration policy, and then validate the complete offline submission wrapper before the final Kaggle boundary.
 
-The preview cohort is a deployment regression gate, not an accuracy benchmark. It cannot establish an AUC improvement or justify a leaderboard claim.
-
-## Public reproducibility boundary
-
-This repository makes the following aspects reproducible with aggregate/synthetic evidence:
-
-- score-boundary arithmetic;
-- recovery/readiness counts;
-- head-call reduction and timing calculations;
-- quality checks for persisted notebooks and public artifacts;
-- privacy scans and source-code syntax checks.
-
-It deliberately does **not** publish the private checkpoint files, patient data, row-level predictions, exact private assembly paths, or enough competition-specific source to clone the full submission stack verbatim.
+Until an official submission produces a comparable score, **0.933 remains the project’s best scored result**.
