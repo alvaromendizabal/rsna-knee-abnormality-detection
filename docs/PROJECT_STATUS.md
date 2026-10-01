@@ -1,12 +1,12 @@
 # Project status
 
-Updated from verified returned evidence through **Stage 69 · 2026-09-29 UTC**. **Stage 70 is prepared but not yet executed.**
+Updated from verified returned evidence through **Stage 72 · 2026-10-01 UTC**.
 
 ## Current boundary
 
 The historically best scored system remains the **0.933 public reference**. A user-supplied September 29 leaderboard screenshot shows **0.961** at the top, giving a public-score gap of **0.028**.
 
-No Stage 64–70 result is presented as an accuracy improvement. The work since Stage 63 has clarified the deployment boundary, closed an inappropriate development-time data-access path, and hardened the AWS-only residual-model pipeline.
+Stages 70–71 are internal grouped model-selection evidence, not substitutes for the public score. Stage 72 is submission-boundary engineering; no new leaderboard result is claimed until Kaggle returns one.
 
 ## Preserved reference-runtime evidence
 
@@ -16,46 +16,69 @@ The Stage-63 reference result remains valid and preserved:
 - **20** stored native fingerprints checked where available;
 - controlled trained-head optimization preserved exact final output;
 - median **1.2738× head-only speed ratio** on the bounded benchmark;
-- complete real-image historical reference replay remains unproven.
+- complete historical binary identity remains unproven.
 
-The 0.933 reference remains the mandatory scored control for future public-score claims.
+The 0.933 reference remains the mandatory scored control for public-score claims.
 
-## Stages 64–67 — reference preview path closed during development
+## Stages 64–69 — development boundary and failure-driven hardening
 
-The project attempted to turn the recovered reference into a real-image regression check. The important outcomes were engineering and process decisions, not model results.
+The reference-preview path was closed during development after source access was unavailable in AWS. The project then moved entirely onto the private AWS cache/fold boundary.
 
-- Stage 65 stopped during packaged tests before inference.
-- Stage 66 repaired reader dependencies but exposed an import-shadowing issue in the live Python environment.
-- Stage 67 passed **284 self-tests**, reused the recovered reference assets, and reached the first competition-data request.
-- That request was denied; **0 bytes** of competition preview data were downloaded and **0 model fits** ran.
+- Stage 67 passed **284 self-tests** and reached the competition-data boundary, then stopped without downloading competition preview data.
+- Stage 68 stopped before fitting because the cache location assumption was wrong.
+- Stage 69 stopped before fitting because the canonical cache tensor layout was **NCHW**, not NHWC.
 
-Because AWS is canonical and Kaggle is reserved for the submission boundary, the development-time preview-acquisition path is now closed rather than repeatedly retried.
+Those failures became regression gates rather than ad-hoc patches.
 
-## Stages 68–70 — AWS-only residual-model transition
+## Stage 70 — residual screen passed
 
-The next strategy is to produce a small, efficient candidate branch whose purpose is **complementarity with the 0.933 program**, while keeping validation leakage-aware.
+Stage 70 executed the frozen ResNet34/224 screen on grouped folds 0 and 2.
 
-### Stage 68
+Aggregate result:
 
-Prepared a ResNet34/224 screen on scanner-grouped folds. It failed before training because the runner assumed the exact-window cache was a local filesystem tree. The canonical cache is in object storage.
+- candidate mean fold macro-AUC: **0.766232**;
+- grouped control mean: **0.787827**;
+- fixed blend mean: **0.789156**;
+- fixed blend delta: **+0.001329**;
+- paired bootstrap positive fraction: **0.9633**;
+- median Spearman correlation: **0.8177**;
+- worst aggregate target delta: **-0.002620**.
 
-- model fits: **0**;
-- failure class: **SOURCE_STATE**;
-- scientific hypothesis: **not evaluated**.
+All frozen screening gates passed, so the exact configuration advanced to untouched confirmation folds 1, 3, and 4.
 
-### Stage 69
+## Stage 71 — independent confirmation completed
 
-Added an S3-derived-cache bridge. It failed during the first cache pilot because the canonical image array is stored as **NCHW**, while the runner assumed NHWC.
+Stage 71 completed the same frozen configuration on folds 1, 3, and 4.
 
-- model fits: **0**;
-- failure class: **SCHEMA**;
-- scientific hypothesis: **not evaluated**.
+Aggregate result:
 
-### Stage 70
+- candidate mean fold macro-AUC: **0.772648**;
+- grouped control mean: **0.797936**;
+- fixed blend mean: **0.800373**;
+- mean fixed-blend delta: **+0.002437**;
+- fold deltas: **+0.002300, -0.000085, +0.005097**;
+- paired bootstrap positive fraction: **1.000**;
+- median Spearman correlation: **0.6981**;
+- worst aggregate target delta: **-0.001501**.
 
-Prepared a source-layout recovery that accepts the canonical **(N, 3, H, W)** contract and normalizes it internally without changing pixel values. The scientific screen remains frozen: ResNet34, 224px, folds 0 and 2, fixed epochs, accepted report labels, zero gold optimizer rows.
+Five of six confirmation gates passed. The preregistered rule required **every confirmation fold to be nonnegative**. Fold 3 missed that requirement by roughly 8.5e-5, so the ResNet34 branch was **not promoted**.
 
-**Stage 70 has not run yet.** No candidate AUC, complementarity gain, or submission claim exists.
+This is treated as a valid scientific negative result: the aggregate signal is interesting, but the frozen promotion contract takes precedence over post-hoc interpretation.
+
+## Stage 72 — submission boundary
+
+Stage 72 moved from research into submission engineering.
+
+The work hardened:
+
+- Kaggle CLI discovery/bootstrap;
+- OAuth authentication;
+- duplicate-submission checks;
+- code-competition kernel/version submission semantics;
+- bounded polling and resume behavior;
+- explicit separation between an external public control and user-owned model contributions.
+
+At the time of this publication, **no new Stage-72 official score has been produced**. The 0.933 scored reference remains the official best.
 
 ## Canonical AWS research boundary
 
@@ -66,26 +89,13 @@ Prepared a source-layout recovery that accepts the canonical **(N, 3, H, W)** co
 - scanner groups: **59**;
 - gold optimizer rows: **0**.
 
-The public repository exposes these contracts and aggregate decisions, not identifiers, cache shards, row-level predictions, or weights.
+The public repository exposes contracts, aggregate evidence, and decision logic—not identifiers, cache shards, row-level predictions, private sampling schedules, weights, or submission glue.
 
-## Current deployment and modeling gates
+## Current next step
 
-Completed:
+1. obtain a fresh official Kaggle score from the hardened submission boundary;
+2. keep the 0.933 control unchanged unless the official result improves it;
+3. prioritize already-confirmed target-specific residual evidence before starting another broad architecture search;
+4. continue to require leakage-safe grouped evidence before promoting new components.
 
-- scored-reference asset/runtime recovery;
-- bounded GPU reference checkpoint validation;
-- scanner-grouped research folds;
-- accepted report-label lineage;
-- AWS-only residual-model protocol;
-- canonical cache location/layout hardening.
-
-Open:
-
-1. execute Stage 70 and obtain the first actual small-CNN screening result;
-2. confirm only if the frozen screen passes its complementarity gates;
-3. compare preserved MCL/Lateral and MaxViT components only under reference-aware, leakage-safe logic;
-4. freeze one materially distinct candidate;
-5. validate complete AWS inference/schema/lineage/runtime;
-6. enter Kaggle only at the actual submission boundary.
-
-See [AWS residual frontier](AWS_RESIDUAL_FRONTIER.md), [Scored-reference frontier](SCORED_REFERENCE_FRONTIER.md), and [Notebook 10](../notebooks/10_aws_only_residual_frontier.ipynb).
+See [AWS residual frontier](AWS_RESIDUAL_FRONTIER.md), [Scored-reference frontier](SCORED_REFERENCE_FRONTIER.md), and [Notebook 11](../notebooks/11_residual_confirmation_and_submission_boundary.ipynb).
