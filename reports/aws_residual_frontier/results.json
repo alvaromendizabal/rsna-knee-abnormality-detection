@@ -1,20 +1,12 @@
 {
-  "as_of_utc": "2026-09-29T22:20:27Z",
-  "evidence_boundary": "Verified public-safe evidence through Stage 69; Stage 70 is prepared but not executed.",
+  "as_of_utc": "2026-10-01T06:30:00Z",
+  "evidence_boundary": "Verified public-safe evidence through Stage 72 submission-boundary hardening; no new official Stage-72 score is claimed.",
   "historical_public": {
     "reference_auc": 0.933,
     "leader_snapshot_auc": 0.961,
     "gap": 0.028,
     "leader_snapshot_source": "user-supplied 2026-09-29 leaderboard screenshot",
     "internal_metrics_directly_comparable": false
-  },
-  "scored_reference": {
-    "gpu_checkpoint_checks_passed": 32,
-    "stored_native_fingerprints_checked": 20,
-    "head_only_speed_ratio": 1.2738328418825595,
-    "complete_real_image_replay": false,
-    "development_preview_path": "deferred_to_submission_boundary_after_source_access_block",
-    "mandatory_control": 0.933
   },
   "aws_training_boundary": {
     "canonical_cache_studies": 4407,
@@ -30,39 +22,74 @@
     "status": "SOURCE_BLOCKED",
     "self_tests_passed": 284,
     "model_fits": 0,
-    "bytes_downloaded_from_competition": 0,
-    "decision": "close development-time competition preview acquisition"
+    "bytes_downloaded_from_competition": 0
   },
   "stage68": {
     "status": "EXECUTION_FAILURE",
     "model_fits": 0,
-    "failure_class": "SOURCE_STATE",
-    "lesson": "canonical cache is object storage, not an assumed local filesystem tree"
+    "failure_class": "SOURCE_STATE"
   },
   "stage69": {
     "status": "EXECUTION_FAILURE",
     "model_fits": 0,
-    "failure_class": "SCHEMA",
-    "lesson": "canonical cache tensor layout is NCHW"
+    "failure_class": "SCHEMA"
   },
   "stage70": {
-    "status": "PREPARED_NOT_EXECUTED",
+    "status": "SCREEN_PROMOTED_TO_CONFIRMATION",
     "architecture": "ResNet34",
     "resolution": 224,
     "screening_folds": [0, 2],
-    "fixed_epochs_per_fold": 2,
-    "model_fits_completed": 0,
-    "candidate_role": "residual/complement screen against the scored-reference program",
-    "derived_cache_theoretical_gib": 26.34,
-    "derived_cache_cap_gb": 34,
-    "kaggle_development_operations": 0
+    "candidate_mean_fold_macro_auc": 0.7662324468731795,
+    "reference_mean_fold_macro_auc": 0.7878272932063983,
+    "fixed_blend_mean_fold_macro_auc": 0.7891558134890007,
+    "mean_fold_blend_delta": 0.0013285202826023301,
+    "bootstrap_positive_fraction": 0.9633333333333334,
+    "median_spearman": 0.8176557722232383,
+    "worst_target_delta": -0.0026200070965126665,
+    "promote_to_confirmation_folds": true
+  },
+  "stage71": {
+    "status": "SCIENTIFIC_NEGATIVE_CONFIRMATION",
+    "confirmation_folds": [1, 3, 4],
+    "candidate_mean_fold_macro_auc": 0.7726475832913674,
+    "reference_mean_fold_macro_auc": 0.7979362002501319,
+    "fixed_blend_mean_fold_macro_auc": 0.8003733592238084,
+    "mean_fold_blend_delta": 0.0024371589736764676,
+    "fold_deltas": {
+      "1": 0.002299888073846512,
+      "3": -0.00008538643241529087,
+      "4": 0.005096975279598404
+    },
+    "bootstrap_positive_fraction": 1.0,
+    "median_spearman": 0.6980628021603761,
+    "worst_target_delta": -0.0015010533880218668,
+    "gates": {
+      "candidate_mean_fold_macro": true,
+      "fixed_blend_delta": true,
+      "all_confirmation_folds_nonnegative": false,
+      "worst_target_regression": true,
+      "bootstrap_positive_fraction": true,
+      "diversity": true
+    },
+    "promoted": false,
+    "decision_reason": "Frozen all-confirmation-folds-nonnegative rule failed."
+  },
+  "stage72": {
+    "status": "SUBMISSION_BOUNDARY_HARDENED_NOT_SCORED",
+    "new_official_score_claimed": false,
+    "official_best_remains": 0.933,
+    "submission_engineering": [
+      "Kaggle CLI bootstrap/discovery",
+      "OAuth authentication",
+      "duplicate-submission guard",
+      "version-pinned code-competition semantics",
+      "bounded polling and resume behavior"
+    ]
   },
   "mechanism_status": {
-    "reference_checkpoint_runtime": "recreated_and_validated_on_bounded_gpu_probes",
-    "real_image_reference_replay": "blocked_during_development_by_source_access_and_deferred",
-    "small_cnn_residual": "prepared_not_yet_validated",
-    "mcl_lateral_experts": "preserved_for_future_reference_level_comparison",
-    "maxvit_complement": "preserved_for_future_reference_level_comparison",
-    "test_time_augmentation": "not_yet_implemented"
+    "small_cnn_residual": "screen_positive_confirmation_not_promoted",
+    "mcl_lateral_experts": "preserved_confirmed_component",
+    "maxvit_complement": "preserved_confirmed_component",
+    "submission_boundary": "hardened_pending_new_official_score"
   }
 }
