@@ -21,6 +21,9 @@ model_weights/
 *.arrow
 *.pkl
 *.joblib
+*.pyz
+*_return*.zip
+*_return*.tar.gz
 
 # Environments and caches
 .venv/
