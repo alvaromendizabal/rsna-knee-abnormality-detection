@@ -21,6 +21,7 @@ model_weights/
 *.arrow
 *.pkl
 *.joblib
+*.mmap
 *.pyz
 *_return*.zip
 *_return*.tar.gz
@@ -33,6 +34,7 @@ __pycache__/
 .ruff_cache/
 .ipynb_checkpoints/
 *.pyc
+.rsna_*/
 
 # Credentials and local state
 .env

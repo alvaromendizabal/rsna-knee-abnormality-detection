@@ -1,89 +1,127 @@
-# AWS-only residual frontier
+# AWS-only residual and representation frontier
 
-## Why this frontier exists
+## Why the strategy evolved
 
-After the historically scored reference was recovered and validated on bounded GPU probes, development-time access to the original competition preview inputs was unavailable. Rather than move research back to Kaggle, the project preserved the reference and shifted model development entirely onto the existing AWS research boundary.
+The project began with scored-reference recovery and broad residual screening. As the validation system matured, the research strategy shifted toward **complementary target-specific signal** and then toward **representation diversity**.
 
-The goal is to create **residual candidates** that contribute complementary signal to a stronger parent while preserving leakage-aware validation.
+AWS/SageMaker remains the canonical environment for:
+
+- data and cache management;
+- feature extraction;
+- training;
+- grouped OOF validation;
+- checkpointing;
+- experiment state;
+- diagnostics;
+- executed notebooks.
+
+The external competition platform is not a development environment. It is reserved for a final score-producing submission.
 
 ## Canonical data contract
 
-The existing exact-window cache is the source of truth:
-
 - studies: **4,407**;
-- size: **69.14 GiB**;
+- cache size: **69.14 GiB**;
 - source resolution: **336 × 336**;
-- image tensor layout: **NCHW**;
+- tensor layout: **NCHW**;
 - grouped non-gold rows: **4,349**;
 - gold audit rows: **58**;
 - gold optimizer rows: **0**;
-- scanner groups: **59**.
+- scanner groups: **59**;
+- fold sizes: **870 / 870 / 870 / 870 / 869**;
+- cross-fold scanner leakage: **0**.
 
-The public helper module exposes only layout, size, and aggregate confirmation contracts. It does not publish study IDs, window-selection logic, row-level predictions, or the private cache.
+The public layer exposes aggregate contracts only. It does not publish study IDs, cache shards, row-level predictions, sampling schedules, checkpoints, or private inference glue.
 
-## Failure-driven hardening
+## Confirmed target-specific residual
 
-### Stage 68 — source location
+The most important progress since the previous publication is the independent confirmation of a narrow target-specific residual.
 
-The first ResNet34/224 runner assumed the exact-window cache existed as a local filesystem tree. The run stopped before fitting. The correction was to treat object storage as canonical and build a bounded local derived cache.
+Five-fold aggregate OOF:
 
-### Stage 69 — tensor layout
+- baseline: **0.791208**;
+- promoted blend: **0.793686**;
+- gain: **+0.002479**.
 
-The bridge encountered the canonical tensor shape **(N, 3, H, W)**. The runner had assumed NHWC and stopped before fitting.
+Target-specific evidence:
 
-Both failures are preserved as regression cases.
+- MCL: **+0.012874**;
+- Lateral Meniscus: **+0.016871**;
+- the remaining ten targets were protected exactly.
 
-## Stage 70 — frozen residual screen
+Every fold was positive. The component was promoted without relaxing the frozen gate.
 
-Stage 70 executed a deliberately small **ResNet34 at 224px** on grouped folds **0 and 2** with fixed epochs, accepted report-label lineage, and zero gold optimizer rows.
+The public repository intentionally omits its private checkpoint identities and exact blend implementation.
 
-Aggregate screen:
+## Stable public control
 
-- candidate mean fold macro-AUC: **0.766232**;
-- grouped control mean: **0.787827**;
-- fixed 10% blend mean: **0.789156**;
-- mean blend delta: **+0.001329**;
-- bootstrap positive fraction: **0.9633**;
-- median Spearman correlation: **0.8177**;
-- worst aggregate target delta: **-0.002620**.
+The project's current official public-score incumbent is **0.943 macro ROC-AUC**.
 
-The frozen screen passed its preregistered gates and advanced unchanged to confirmation.
+A user-supplied October 1 leaderboard snapshot shows a **0.961** leader, leaving a **0.018** public gap.
 
-## Stage 71 — untouched confirmation folds
+The exact current public control source was recovered into AWS and pinned privately. That lets the project keep a stable score reference while all scientific iteration stays on the grouped AWS validation system.
 
-The same configuration ran on folds **1, 3, and 4**.
+## Closed delivery-workflow detour
 
-Aggregate confirmation:
+Several stages tested score-delivery mechanics. They exposed brittle external orchestration and were closed without claiming a new score.
 
-- candidate mean fold macro-AUC: **0.772648**;
-- grouped control mean: **0.797936**;
-- fixed blend mean: **0.800373**;
-- mean blend delta: **+0.002437**;
-- fold deltas: **+0.002300, -0.000085, +0.005097**;
-- bootstrap positive fraction: **1.000**;
-- median Spearman correlation: **0.6981**;
-- worst aggregate target delta: **-0.001501**.
+The resulting policy is intentionally strict:
 
-Five of six gates passed. The failed gate was **all confirmation folds nonnegative**. The branch is therefore closed as a scientific negative result despite a positive aggregate mean.
+> complete the model on AWS first; use the score platform only for a final frozen submission.
 
-That distinction matters: the project does not weaken a preregistered decision rule after seeing the result.
+This prevents paid AWS instances from idling while debugging remote notebook state and keeps the scientific boundary auditable.
 
-## Stage 72 — submission engineering
+## Dense anatomy experiment
 
-Once Stage 71 closed, the project moved to the actual competition-submission boundary. The engineering work focused on authentication, version-pinned code-competition submission semantics, duplicate prevention, resume behavior, and preserving the distinction between public controls and user-owned contributions.
+A later branch tested whether spatially localized dense features would add complementary signal.
 
-**No new official score is claimed in this repository yet.**
+The branch executed successfully under the grouped screen:
+
+- baseline: **0.787494**;
+- candidate: **0.786693**;
+- delta: **−0.000801**;
+- bootstrap probability of positive improvement: **7.5%**.
+
+One target improved materially, but several others regressed enough that the aggregate branch did not justify confirmation.
+
+Decision: **scientific negative; close at screening**.
+
+The project does not weaken gates or add post-hoc tuning to rescue a branch after seeing the result.
+
+## Current representation-diversity frontier
+
+The next frontier is a frozen dense self-supervised representation plus a compact distillation head.
+
+The public design contract is deliberately broad:
+
+- frozen pretrained feature extractor;
+- dense local feature aggregation;
+- compact student/distillation bottleneck;
+- target-specific multi-plane prediction head;
+- fold 0/2 cross-fit screening;
+- residual/prediction correlation diagnostics;
+- untouched confirmation only if screening passes;
+- resumable feature cache.
+
+At this publication boundary the branch is **prepared, not executed**.
 
 ## Semi-reproducible public layer
 
-The repository includes public-safe helpers/tests for:
+Public artifacts include:
 
-- public-score gap arithmetic;
-- canonical NCHW/NHWC layout detection;
-- canonical shape normalization;
-- theoretical uint8 cache sizing;
-- preregistered confirmation-gate evaluation from aggregate metrics;
-- Stage 70 screen and Stage 71 confirmation state assertions;
-- executed Notebook 11 outputs and privacy scans.
+- aggregate score state;
+- validation/fold contracts;
+- promotion/closure decisions;
+- executed Notebook 12;
+- public helper functions;
+- unit tests;
+- privacy scans.
 
-Private sampling schedules, checkpoints, cache shards, row-level predictions, target-level private diagnostics, credentials, return bundles, PYZ runners, and competition-specific inference glue remain outside Git history.
+Private artifacts include:
+
+- raw MRI and reports;
+- identifiers and scanner assignments;
+- row-level predictions;
+- model weights;
+- cache shards and memmaps;
+- private runners/returns;
+- competition-specific inference and submission implementation.
