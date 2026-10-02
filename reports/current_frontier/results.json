@@ -1,0 +1,79 @@
+{
+  "as_of_utc": "2026-10-02T03:00:00Z",
+  "evidence_boundary": "Verified aggregate AWS research through Stage 80. Stage 81 is prepared but not executed.",
+  "public_score": {
+    "current_official_best": 0.943,
+    "leader_snapshot": 0.961,
+    "gap": 0.018,
+    "snapshot_source": "user-supplied 2026-10-01 leaderboard screenshot",
+    "internal_metrics_directly_comparable": false
+  },
+  "aws_validation": {
+    "canonical_cache_studies": 4407,
+    "canonical_cache_gib": 69.1424,
+    "canonical_cache_layout": "NCHW",
+    "canonical_cache_resolution": 336,
+    "grouped_non_gold_rows": 4349,
+    "gold_audit_rows": 58,
+    "gold_optimizer_rows": 0,
+    "scanner_groups": 59,
+    "fold_studies": [
+      870,
+      870,
+      870,
+      870,
+      869
+    ],
+    "cross_fold_scanner_groups": 0
+  },
+  "promoted_target_residual": {
+    "status": "PROMOTED",
+    "baseline_macro_auc": 0.7912075114786626,
+    "candidate_macro_auc": 0.7936862526975088,
+    "macro_gain": 0.00247874121884617,
+    "all_folds_positive": true,
+    "protected_target_count": 10,
+    "selected_target_gains": {
+      "MCL": 0.012874,
+      "Lateral Meniscus": 0.016871
+    }
+  },
+  "stage80_dense_anatomy": {
+    "status": "SCIENTIFIC_NEGATIVE_SCREEN",
+    "screening_folds": [
+      0,
+      2
+    ],
+    "baseline_macro_auc": 0.787493563188093,
+    "candidate_macro_auc": 0.7866927351477103,
+    "macro_gain": -0.0008008280403827,
+    "fold_gains": {
+      "0": 0.0002088,
+      "2": -0.0012338
+    },
+    "bootstrap_positive_fraction": 0.075,
+    "delta_interval95": [
+      -0.00208,
+      0.00035
+    ],
+    "selected_target_gains": {
+      "Lateral OA": 0.0053,
+      "Synovitis": -0.00783,
+      "Effusion": -0.00334,
+      "Lateral Meniscus": -0.00333
+    },
+    "decision": "CLOSE_AT_SCREEN"
+  },
+  "stage81": {
+    "status": "PREPARED_NOT_EXECUTED",
+    "public_description": "Dense self-supervised feature distillation with target-specific multi-plane aggregation and cross-fit grouped screening.",
+    "accuracy_claimed": false
+  },
+  "publication_policy": {
+    "aws_canonical": true,
+    "score_platform_final_submission_only": true,
+    "row_level_predictions_public": false,
+    "model_weights_public": false,
+    "private_runner_code_public": false
+  }
+}
