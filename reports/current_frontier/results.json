@@ -1,11 +1,10 @@
 {
-  "as_of_utc": "2026-10-02T03:00:00Z",
-  "evidence_boundary": "Verified aggregate AWS research through Stage 80. Stage 81 is prepared but not executed.",
+  "as_of_utc": "2026-10-03T04:37:35Z",
+  "evidence_boundary": "Verified aggregate AWS research through Stage 91 partial asset recovery. The next manifest-aware resume is prepared but not yet represented as an owner execution.",
   "public_score": {
-    "current_official_best": 0.943,
-    "leader_snapshot": 0.961,
-    "gap": 0.018,
-    "snapshot_source": "user-supplied 2026-10-01 leaderboard screenshot",
+    "verified_official_score": 0.943,
+    "metric": "unweighted_macro_roc_auc_12_targets",
+    "higher_is_better": true,
     "internal_metrics_directly_comparable": false
   },
   "aws_validation": {
@@ -17,63 +16,63 @@
     "gold_audit_rows": 58,
     "gold_optimizer_rows": 0,
     "scanner_groups": 59,
-    "fold_studies": [
-      870,
-      870,
-      870,
-      870,
-      869
-    ],
+    "fold_studies": [870, 870, 870, 870, 869],
     "cross_fold_scanner_groups": 0
   },
-  "promoted_target_residual": {
-    "status": "PROMOTED",
-    "baseline_macro_auc": 0.7912075114786626,
-    "candidate_macro_auc": 0.7936862526975088,
-    "macro_gain": 0.00247874121884617,
-    "all_folds_positive": true,
-    "protected_target_count": 10,
-    "selected_target_gains": {
-      "MCL": 0.012874,
-      "Lateral Meniscus": 0.016871
-    }
+  "retained_residual_evidence": {
+    "status": "RETAINED_POSITIVE_CHALLENGER",
+    "baseline_macro_auc": 0.7936872288001792,
+    "candidate_macro_auc": 0.7943833865949643,
+    "macro_gain": 0.0006961577947851,
+    "evaluation_setting": "grouped_internal_oof",
+    "public_score_comparable": false
   },
-  "stage80_dense_anatomy": {
+  "stage80_fixed_spatial": {
     "status": "SCIENTIFIC_NEGATIVE_SCREEN",
-    "screening_folds": [
-      0,
-      2
-    ],
-    "baseline_macro_auc": 0.787493563188093,
-    "candidate_macro_auc": 0.7866927351477103,
     "macro_gain": -0.0008008280403827,
-    "fold_gains": {
-      "0": 0.0002088,
-      "2": -0.0012338
-    },
     "bootstrap_positive_fraction": 0.075,
-    "delta_interval95": [
-      -0.00208,
-      0.00035
-    ],
-    "selected_target_gains": {
-      "Lateral OA": 0.0053,
-      "Synovitis": -0.00783,
-      "Effusion": -0.00334,
-      "Lateral Meniscus": -0.00333
-    },
-    "decision": "CLOSE_AT_SCREEN"
+    "decision": "CLOSE_TESTED_CONFIGURATION"
   },
-  "stage81": {
-    "status": "PREPARED_NOT_EXECUTED",
-    "public_description": "Dense self-supervised feature distillation with target-specific multi-plane aggregation and cross-fit grouped screening.",
-    "accuracy_claimed": false
+  "stage83_frozen_orthopedic_foundation": {
+    "status": "SCIENTIFIC_NEGATIVE_SCREEN",
+    "incumbent_macro_auc": 0.789873,
+    "candidate_blend_macro_auc": 0.789437,
+    "macro_gain": -0.000436,
+    "decision": "CLOSE_FROZEN_FEATURE_CONFIGURATION"
+  },
+  "parent_reconstruction": {
+    "rad_layouts_executed": 3,
+    "native_members_executed": 20,
+    "native_window_evaluations": 200,
+    "a5_folds_executed": 5,
+    "raptor_checkpoints_recovered": 3,
+    "coat_families_with_principal_assets": 3,
+    "private_assets_recovered_bytes": 2967474476,
+    "raptor_real_views_completed": 0,
+    "full_parent_parity_established": false
+  },
+  "stage91_recovery": {
+    "status": "BLOCKED_WITH_REUSABLE_RECOVERY",
+    "orchestration_milestones_completed": 11,
+    "orchestration_milestones_total": 11,
+    "new_private_objects": 160,
+    "reused_objects": 21,
+    "new_private_bytes": 2967474476,
+    "raw_acquisition_access_complete": false
+  },
+  "current_frontier": {
+    "primary_direction": "anatomy_localized_global_local_parent_residual",
+    "secondary_direction": "visibility_aware_auxiliary_supervision",
+    "tertiary_direction": "cross_plane_localization_consistency_and_uncertainty",
+    "generic_backbone_swap_is_primary": false
   },
   "publication_policy": {
     "aws_canonical": true,
-    "score_platform_final_submission_only": true,
+    "github_employer_facing": true,
     "row_level_predictions_public": false,
     "model_weights_public": false,
-    "private_runner_code_public": false
+    "raw_mri_public": false,
+    "private_runner_code_public": false,
+    "source_recovery_handles_public": false
   }
 }
