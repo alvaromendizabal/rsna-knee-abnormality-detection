@@ -1,21 +1,21 @@
 """Public-safe aggregate helpers for the current RSNA research frontier.
 
-The functions operate on aggregate metrics only. They intentionally do not expose
-study identifiers, predictions, private weights, cache shards, or submission logic.
+The functions operate on aggregate evidence only. They intentionally do not expose
+study identifiers, predictions, private weights, cache shards, source handles,
+cloud paths, or submission logic.
 """
 from __future__ import annotations
+
 from math import isfinite
 from typing import Mapping
 
-def public_score_gap(incumbent: float, leader: float) -> float:
-    if not all(isfinite(x) and 0.0 <= x <= 1.0 for x in (incumbent, leader)):
-        raise ValueError("scores must be finite probabilities")
-    return round(float(leader) - float(incumbent), 12)
 
 def aggregate_gain(candidate: float, baseline: float) -> float:
+    """Return candidate minus baseline after validating probability-like scores."""
     if not all(isfinite(x) and 0.0 <= x <= 1.0 for x in (candidate, baseline)):
         raise ValueError("scores must be finite probabilities")
     return float(candidate) - float(baseline)
+
 
 def screening_state(
     *,
@@ -25,6 +25,7 @@ def screening_state(
     minimum_macro_gain: float = 0.0,
     minimum_bootstrap: float = 0.5,
 ) -> str:
+    """Return ADVANCE or CLOSE for a bounded aggregate screening experiment."""
     values = [float(v) for v in fold_gains.values()]
     if not values:
         raise ValueError("fold_gains cannot be empty")
@@ -40,17 +41,43 @@ def screening_state(
         return "ADVANCE"
     return "CLOSE"
 
-def promoted_residual_summary(
-    *,
-    baseline: float,
-    candidate: float,
-    all_folds_positive: bool,
-    protected_target_count: int,
-) -> dict[str, object]:
+
+def retention_state(*, candidate: float, baseline: float, valid: bool = True) -> str:
+    """Classify aggregate evidence without treating every retained result as promoted."""
+    if not valid:
+        return "INVALID"
     gain = aggregate_gain(candidate, baseline)
+    if gain > 0.0:
+        return "RETAIN_POSITIVE"
+    if gain < 0.0:
+        return "SCIENTIFIC_NEGATIVE"
+    return "INCONCLUSIVE"
+
+
+def parent_reconstruction_summary(
+    *,
+    native_members: int,
+    native_windows: int,
+    a5_folds: int,
+    rad_layouts: int,
+    recovered_asset_bytes: int,
+) -> dict[str, int | bool]:
+    """Validate and summarize public-safe parent reconstruction counts."""
+    values = {
+        "native_members": int(native_members),
+        "native_windows": int(native_windows),
+        "a5_folds": int(a5_folds),
+        "rad_layouts": int(rad_layouts),
+        "recovered_asset_bytes": int(recovered_asset_bytes),
+    }
+    if any(v < 0 for v in values.values()):
+        raise ValueError("reconstruction counts must be non-negative")
     return {
-        "gain": gain,
-        "all_folds_positive": bool(all_folds_positive),
-        "protected_target_count": int(protected_target_count),
-        "promoted": gain > 0.0 and bool(all_folds_positive) and int(protected_target_count) >= 1,
+        **values,
+        "core_trained_branches_restored": (
+            values["native_members"] > 0
+            and values["native_windows"] > 0
+            and values["a5_folds"] == 5
+            and values["rad_layouts"] > 0
+        ),
     }
