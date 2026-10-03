@@ -1,127 +1,156 @@
-# AWS-only residual and representation frontier
+# AWS research frontier
 
-## Why the strategy evolved
+## Research boundary
 
-The project began with scored-reference recovery and broad residual screening. As the validation system matured, the research strategy shifted toward **complementary target-specific signal** and then toward **representation diversity**.
+AWS/SageMaker is the canonical environment for:
 
-AWS/SageMaker remains the canonical environment for:
-
-- data and cache management;
+- MRI data and cache management;
 - feature extraction;
-- training;
+- model training and inference;
 - grouped OOF validation;
-- checkpointing;
-- experiment state;
-- diagnostics;
-- executed notebooks.
+- checkpointing and artifact lineage;
+- diagnostics and profiling;
+- executed notebooks;
+- experiment state and return bundles.
 
-The external competition platform is not a development environment. It is reserved for a final score-producing submission.
+GitHub is the curated public engineering layer. Private MRI, identifiers, row-level predictions, checkpoints, recovery handles, cloud paths, and competition-specific inference remain outside Git history.
 
-## Canonical data contract
+## Canonical validation contract
 
-- studies: **4,407**;
-- cache size: **69.14 GiB**;
-- source resolution: **336 × 336**;
-- tensor layout: **NCHW**;
-- grouped non-gold rows: **4,349**;
-- gold audit rows: **58**;
-- gold optimizer rows: **0**;
-- scanner groups: **59**;
-- fold sizes: **870 / 870 / 870 / 870 / 869**;
-- cross-fold scanner leakage: **0**.
+The established research boundary includes:
 
-The public layer exposes aggregate contracts only. It does not publish study IDs, cache shards, row-level predictions, sampling schedules, checkpoints, or private inference glue.
+- **4,407 studies** in the canonical exact-window cache;
+- **69.14 GiB** cache size;
+- **4,349 grouped non-gold rows**;
+- **58 audit-only rows**;
+- **59 scanner groups**;
+- fold sizes **870 / 870 / 870 / 870 / 869**;
+- **zero scanner groups crossing folds**;
+- **zero audit-only rows used by the optimizer**.
 
-## Confirmed target-specific residual
+The grouped research score is a development metric. It is not presented as interchangeable with the external public score.
 
-The most important progress since the previous publication is the independent confirmation of a narrow target-specific residual.
+## Complementary residual modeling
 
-Five-fold aggregate OOF:
+The project moved away from one global ensemble policy and toward **target-specific complementary signal**.
 
-- baseline: **0.791208**;
-- promoted blend: **0.793686**;
-- gain: **+0.002479**.
+A narrow residual path was independently confirmed on the grouped boundary and later extended into a retained positive challenger.
 
-Target-specific evidence:
+The public lesson is methodological rather than implementation-specific:
 
-- MCL: **+0.012874**;
-- Lateral Meniscus: **+0.016871**;
-- the remaining ten targets were protected exactly.
+- identify residual headroom by finding;
+- require matched controls;
+- protect unaffected targets;
+- confirm on held-out development folds;
+- retain valid small aggregate gains as evidence;
+- use uncertainty and provenance for promotion decisions.
 
-Every fold was positive. The component was promoted without relaxing the frozen gate.
+Exact blend weights, row-level predictions, and private checkpoint identities remain private.
 
-The public repository intentionally omits its private checkpoint identities and exact blend implementation.
+## Representation-diversity program
 
-## Stable public control
+### Fixed spatial branch
+A dense spatial branch completed successfully but did not improve the aggregate grouped result.
 
-The project's current official public-score incumbent is **0.943 macro ROC-AUC**.
+Decision: **scientific negative; close the tested configuration**.
 
-A user-supplied October 1 leaderboard snapshot shows a **0.961** leader, leaving a **0.018** public gap.
+This is useful evidence because it separates generic spatial bias from the stronger hypothesis of supervised anatomical localization.
 
-The exact current public control source was recovered into AWS and pinned privately. That lets the project keep a stable score reference while all scientific iteration stays on the grouped AWS validation system.
+### Frozen orthopedic foundation-model route
+A musculoskeletal foundation model was integrated with complete checkpoint coverage, GPU throughput checks, resumable feature caching, and matched screening.
 
-## Closed delivery-workflow detour
+The tested frozen feature-transfer route was a scientific negative.
 
-Several stages tested score-delivery mechanics. They exposed brittle external orchestration and were closed without claiming a new score.
+Decision: **close the frozen-transfer configuration** rather than micro-tune it after observing the result.
 
-The resulting policy is intentionally strict:
+### Task-trained paired image models
+A matched task-trained pair completed as a valid research execution. The project then shifted back to the scored parent rather than continuing to optimize a surrogate system.
 
-> complete the model on AWS first; use the score platform only for a final frozen submission.
+## Parent-first strategy
 
-This prevents paid AWS instances from idling while debugging remote notebook state and keeps the scientific boundary auditable.
+The central strategy is now:
 
-## Dense anatomy experiment
+> **freeze the verified parent as the control, reconstruct its trained branches faithfully, and introduce one new capability at a time.**
 
-A later branch tested whether spatially localized dense features would add complementary signal.
+This makes attribution stronger and keeps the research tied to the system that actually produced the verified public result.
 
-The branch executed successfully under the grouped screen:
+The reconstructed parent currently includes validated execution paths for:
 
-- baseline: **0.787494**;
-- candidate: **0.786693**;
-- delta: **−0.000801**;
-- bootstrap probability of positive improvement: **7.5%**.
+- native multi-member DINO inference;
+- RadImageNet-family heads and layouts;
+- all five A5 folds;
+- recovered Raptor checkpoints;
+- recovered CoAt-family trained assets;
+- fitted numerical fusion/calibration logic.
 
-One target improved materially, but several others regressed enough that the aggregate branch did not justify confirmation.
+Full parent parity still depends on complete compatible inputs and remaining branch execution.
 
-Decision: **scientific negative; close at screening**.
+## Input signatures and resumability
 
-The project does not weaken gates or add post-hoc tuning to rescue a branch after seeing the result.
+Recent recovery work uncovered incomplete raw-acquisition coverage in the mirrored diagnostic population.
 
-## Current representation-diversity frontier
+The implementation therefore treats the input signature as part of model identity.
 
-The next frontier is a frozen dense self-supervised representation plus a compact distillation head.
+Rules:
 
-The public design contract is deliberately broad:
+- completed compatible outputs are reused;
+- missing acquisitions are never fabricated;
+- partial-input outputs are labeled as partial;
+- if recovered acquisitions change selected pixels, affected branches are recomputed;
+- unaffected components remain reusable;
+- checkpoints and large assets stream through bounded storage paths rather than being copied indiscriminately to Studio disk.
 
-- frozen pretrained feature extractor;
-- dense local feature aggregation;
-- compact student/distillation bottleneck;
-- target-specific multi-plane prediction head;
-- fold 0/2 cross-fit screening;
-- residual/prediction correlation diagnostics;
-- untouched confirmation only if screening passes;
-- resumable feature cache.
+## Failure-driven engineering
 
-At this publication boundary the branch is **prepared, not executed**.
+Recent stages hardened the pipeline around real failure modes:
 
-## Semi-reproducible public layer
+- isolated image-library dependencies;
+- immutable numerical-parity checks;
+- pandas copy-on-write behavior;
+- free-space budgeting with safety reserves;
+- deterministic checkpoint/fingerprint validation;
+- resumable multi-stage execution;
+- cached OAuth and browser-session handling;
+- sanitized access diagnostics;
+- private S3 destination verification;
+- manifest-role classification;
+- exact distinction between source inputs and generated outputs.
 
-Public artifacts include:
+Each avoidable failure became a regression test before the next cost-bearing run.
 
-- aggregate score state;
-- validation/fold contracts;
-- promotion/closure decisions;
-- executed Notebook 12;
-- public helper functions;
-- unit tests;
-- privacy scans.
+## Current scientific frontier
 
-Private artifacts include:
+The strongest new capability identified by the broader medical-imaging review is **supervised anatomy-aware evidence routing**.
 
-- raw MRI and reports;
-- identifiers and scanner assignments;
+The next work focuses on:
+
+- explicit localization or structure-aware region pooling;
+- local evidence combined with global context;
+- visibility-aware auxiliary objectives;
+- multi-plane anatomical consistency;
+- multiple plausible localization hypotheses.
+
+This direction complements the parent’s existing attention, medical pretraining, depth/position encoding, multi-plane fusion, and model diversity instead of duplicating them.
+
+See [Anatomy-aware transfer program](ANATOMY_AWARE_TRANSFER_PROGRAM.md).
+
+## Publication philosophy
+
+This repository is intentionally semi-reproducible.
+
+Public:
+- aggregate metrics and validation contracts;
+- architecture narratives;
+- experiment decisions;
+- public-safe helper functions and tests;
+- notebook history;
+- failure-mode and reproducibility practices.
+
+Private:
+- raw clinical/competition data;
+- identifiers;
 - row-level predictions;
-- model weights;
-- cache shards and memmaps;
-- private runners/returns;
-- competition-specific inference and submission implementation.
+- exact checkpoints and weights;
+- private source handles;
+- orchestration packages and return bundles;
+- exact competition inference/submission implementation.
