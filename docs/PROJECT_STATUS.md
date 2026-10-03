@@ -1,19 +1,20 @@
 # Project status
 
-Updated from verified aggregate evidence through **Stage 80 · 2026-10-02 UTC**. Stage 81 is prepared but has not been executed.
+Updated from verified aggregate AWS evidence through **Stage 91 asset recovery · 2026-10-03 UTC**.
 
 ## Current boundary
 
-The current official public-score incumbent is **0.943 macro ROC-AUC**. A user-supplied October 1 leaderboard snapshot shows **0.961** at the top, so the current public-score gap is **0.018**.
+The strongest verified public result is **0.943 macro ROC-AUC** across twelve knee-MRI targets.
 
-The current owned internal grouped OOF incumbent is **0.793686 macro ROC-AUC**. That number is internal model-selection evidence and is **not directly comparable** with the public 0.943.
+The current research program is no longer centered on building replacement systems around the internal weak-label OOF reference. The scored multi-branch parent is now the control, and new work is evaluated as a controlled addition to that system.
+
+Internal grouped metrics remain model-selection evidence and are **not directly interchangeable** with the public score.
 
 ## Validation contract
 
-The research boundary remains:
+The established research boundary includes:
 
 - canonical exact-window cache: **4,407 studies / 69.14 GiB**;
-- image cache layout: **NCHW**;
 - grouped non-gold rows: **4,349**;
 - audit-only gold rows: **58**;
 - scanner groups: **59**;
@@ -21,92 +22,128 @@ The research boundary remains:
 - scanner groups crossing folds: **0**;
 - gold optimizer rows: **0**.
 
-These contracts are unchanged by the later frontier work.
+A later source audit showed that some recovered parent-model components used the gold subset during historical checkpoint selection. Those rows are therefore not treated as untouched confirmation for those components.
 
-## Stages 73–74 — target-specific residual confirmed and promoted
+## Target-specific residual program
 
-The earlier broad residual branch had been closed under a preregistered gate. The next frontier narrowed the question to targets with reproducible residual headroom.
+The research program established that narrow, target-specific residual modeling can add complementary signal without forcing one blend policy across every finding.
 
-A current-hardware revalidation then independently confirmed the target-specific residual on all five folds. Aggregate full-OOF evidence:
+A later consolidated complement remained a **positive development challenger** on the grouped research boundary. It is retained as evidence rather than discarded solely because one fold moved slightly negative.
 
-- current internal baseline: **0.791208**;
-- promoted internal blend: **0.793686**;
-- full-OOF gain: **+0.002479**;
-- MCL gain: **+0.012874**;
-- Lateral Meniscus gain: **+0.016871**;
-- all five fold gains: **positive**;
-- all other ten targets: **protected exactly**.
+This changed the project’s promotion discipline:
 
-This component was promoted because it survived screening, untouched confirmation, bootstrap checks, and full-OOF reconstruction without relaxing the frozen decision rule.
+- valid positive aggregate movement is retained;
+- fold dispersion is inspected rather than converted into an automatic veto;
+- paired evidence and uncertainty determine promotion;
+- correctness or leakage failures invalidate a result regardless of score.
 
-The public repository records only aggregate evidence; row-level predictions, exact checkpoints, weights, and competition-specific inference remain private.
+Exact private blend implementation, row-level predictions, and model identities remain outside the public repository.
 
-## Stage 75 — public control source recovered into AWS
+## Representation-diversity results
 
-The exact current public control source corresponding to the **0.943** official incumbent was recovered and pinned inside the private AWS workspace.
+### Dense spatial attention
+A fixed dense spatial/anatomy branch executed successfully and produced a negative aggregate result. It was closed at screening.
 
-That recovery matters operationally because future model work can be compared against a stable external control without turning the score platform into the research environment.
+**Conclusion:** fixed generic regions were not a strong enough mechanism. This result does not reject supervised anatomical localization.
 
-The source binary identity and private integration details remain outside this repository.
+### Orthopedic foundation-model transfer
+A frozen musculoskeletal foundation-model feature route was implemented with complete checkpoint coverage and benchmarked on the project GPU.
 
-## Stages 76–79 — submission workflow closed and boundary tightened
+The resulting feature-transfer experiment was a valid scientific negative and was closed without post-hoc rescue tuning.
 
-Several delivery-engineering attempts exposed brittle assumptions around remote notebook and private-asset orchestration.
+**Conclusion:** domain pretraining alone was insufficient in the tested frozen-transfer configuration. The result strengthened the case for task-aligned spatial supervision instead of another frozen embedding path.
 
-Those attempts did **not** produce a new official score. They were closed, and the project boundary was tightened:
+### Task-trained paired image models
+A matched pair of task-trained spatial models completed successfully as an engineering/scientific experiment. The project subsequently moved away from replacement-model iteration and back to the actual scored parent.
 
-> substantive research stays on AWS; the external competition platform is reserved for a final score-producing submission only.
+## Parent reconstruction
 
-This is treated as an engineering lesson rather than a modeling result. The public repository intentionally omits platform credentials, private asset handles, runner internals, and submission glue.
+The most important engineering progress since the prior publication is the restoration of the parent system’s major trained branches.
 
-## Stage 80 — dense anatomy branch executed and closed negative
+### Rad branch
+The original trained RadImageNet-family execution path was restored across **three source layouts** with multiple trained heads. Serial and optimized batching paths passed numerical-parity checks.
 
-Stage 80 tested a new spatial/anatomy representation family on the grouped AWS boundary.
+### Native DINO branch
+The native branch restored:
 
-The experiment ran successfully after one implementation bug was converted into a regression test. Screening used folds 0 and 2 with cross-fit blend selection.
+- **20 trained members**;
+- **200 member/window evaluations**;
+- original parent preprocessing/inference behavior;
+- signature-aware caching and strict fingerprint checks.
 
-Aggregate result:
+### A5 branch
+All **5/5 trained A5 folds** were restored with strict state loading and bounded numerical-parity checks.
 
-- screening baseline: **0.787494**;
-- candidate blend: **0.786693**;
-- macro delta: **−0.000801**;
-- fold 0 delta: **+0.000209**;
-- fold 2 delta: **−0.001234**;
-- bootstrap positive fraction: **0.075**;
-- 95% delta interval: approximately **[−0.00208, +0.00035]**.
+### Raptor / CoAt recovery
+Stage 91 recovered the three Raptor checkpoints and the principal trained assets for three CoAt-family branches into encrypted private S3 storage.
 
-Selected target-level movement included:
+About **2.97 GB** of source/model assets were preserved without placing large private binaries in Git history.
 
-- Lateral OA: **+0.00530**;
-- Synovitis: **−0.00783**;
-- Effusion: **−0.00334**;
-- Lateral Meniscus: **−0.00333**.
+Remaining gaps include:
 
-Decision: **close the branch at screening**. Confirmation folds were not run.
+- unresolved source provenance for one repair-family branch;
+- denied access to missing raw acquisitions;
+- real Raptor execution under complete-input signatures;
+- reviewed CoAt execution;
+- complete-parent integration on a legitimate aligned evaluation population.
 
-This is a successful scientific execution with a negative result, not an execution failure.
+## Input-signature discipline
 
-## Stage 81 — next representation frontier prepared
+A raw-data coverage audit found that the currently mirrored diagnostic population is incomplete.
 
-The next AWS-only branch targets representation diversity rather than further tuning the closed Stage-80 idea.
+The project therefore enforces a strict rule:
 
-The public description is intentionally high-level:
+> partial-input predictions remain partial-input predictions.
 
-- frozen dense self-supervised image features;
-- compact distillation bottleneck;
-- target-specific multi-plane aggregation;
-- cross-fit screening before any confirmation spend;
-- prediction/residual correlation diagnostics against the current incumbent;
-- resumable feature caching.
+If later recovery changes selected source pixels, only affected branches are recomputed under a new signature. Existing unaffected outputs remain reusable.
 
-At this publication boundary Stage 81 is **prepared, tested, and not yet executed**. No accuracy claim is made.
+This avoids silently mixing incompatible parent states.
+
+## Anatomy-aware research frontier
+
+A cross-competition review of strong prior medical-imaging systems identified a recurring capability that is not yet established in the parent:
+
+**explicit anatomical localization and visibility-aware local/global evidence fusion.**
+
+The immediate research program prioritizes:
+
+1. anatomy-localized residual evidence attached to the existing parent;
+2. visibility-aware auxiliary supervision;
+3. cross-plane localization consistency and multiple plausible region hypotheses.
+
+The parent already contains strong attention, medical pretraining, multi-plane context, multi-resolution paths, and ensemble diversity. The next step is therefore **not** another generic attention block or backbone swap.
+
+See [Anatomy-aware transfer program](ANATOMY_AWARE_TRANSFER_PROGRAM.md).
+
+## Failure-driven engineering
+
+Recent stages converted several operational failures into reusable safeguards, including:
+
+- external dependency isolation;
+- pandas copy-on-write compatibility;
+- disk-budget accounting;
+- resumable checkpoint streaming;
+- exact input signatures;
+- OAuth/session handling;
+- cloud permission diagnostics;
+- manifest-role validation;
+- public/private artifact boundaries.
+
+Completed work is reused rather than recomputed when a later stage fails.
 
 ## Current next step
 
-1. execute Stage 81 entirely on AWS;
-2. if screening is scientifically negative, close it without micro-tuning;
-3. if it passes, complete untouched confirmation and five-fold OOF;
-4. retain only genuinely complementary target/model components;
-5. reserve the score platform for a final frozen candidate.
+1. resume the existing Stage 91 recovery state without repeating preserved downloads;
+2. complete useful Raptor execution under clearly labeled input scope;
+3. review and execute recovered CoAt-family runtime paths;
+4. assemble the complete parent under compatible input signatures;
+5. establish a legitimate aligned comparison population;
+6. begin the controlled anatomy-aware additions.
 
-See [AWS residual frontier](AWS_RESIDUAL_FRONTIER.md) and [Notebook 12](../notebooks/12_owned_residual_and_representation_frontier.ipynb).
+No public improvement is claimed from asset recovery or engineering parity alone.
+
+See:
+
+- [Parent reconstruction frontier](PARENT_RECONSTRUCTION_FRONTIER.md)
+- [Anatomy-aware transfer program](ANATOMY_AWARE_TRANSFER_PROGRAM.md)
+- [AWS research frontier](AWS_RESIDUAL_FRONTIER.md)
