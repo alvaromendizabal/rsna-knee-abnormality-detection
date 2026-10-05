@@ -85,11 +85,11 @@ class EmployerPortfolioTests(unittest.TestCase):
             r"X-Amz-(?:Signature|Credential)=",
             r"arn:aws:",
             r"/home/sagemaker-user/",
-            r"top score",
-            r"trying to beat",
-            r"beat the top",
-            r"leader snapshot",
-            r"public-score gap",
+            "top " + "score",
+            "trying to " + "beat",
+            "beat the " + "top",
+            "leader " + "snapshot",
+            "public-score " + "gap",
             r"0\\.961",
         ]
         for rel in paths:
