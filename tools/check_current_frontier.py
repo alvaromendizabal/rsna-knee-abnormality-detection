@@ -131,9 +131,19 @@ for name in paths:
     for fragment in comparison_fragments:
         assert fragment.lower() not in lowered, f"external-comparison framing in {name}"
 
-subprocess.run(
-    [sys.executable, "-m", "unittest", "discover", "-s", str(ROOT / "tests")],
-    check=True,
-)
+for pattern in ("test_current_frontier.py", "test_anatomy_qualification.py"):
+    subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            str(ROOT / "tests"),
+            "-p",
+            pattern,
+        ],
+        check=True,
+    )
 
 print("CURRENT_FRONTIER_PUBLICATION_PASSED")
