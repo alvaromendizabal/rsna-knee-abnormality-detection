@@ -1,6 +1,6 @@
 {
-  "as_of_utc": "2026-10-03T04:37:35Z",
-  "evidence_boundary": "Verified aggregate AWS research through Stage 91 partial asset recovery. The next manifest-aware resume is prepared but not yet represented as an owner execution.",
+  "as_of_utc": "2026-10-05T03:33:08Z",
+  "evidence_boundary": "Verified aggregate AWS research through Stage 96 anatomy qualification. Stage 97 reference/native anatomy inference is prepared privately but is not represented as completed.",
   "public_score": {
     "verified_official_score": 0.943,
     "metric": "unweighted_macro_roc_auc_12_targets",
@@ -13,10 +13,17 @@
     "canonical_cache_layout": "NCHW",
     "canonical_cache_resolution": 336,
     "grouped_non_gold_rows": 4349,
-    "gold_audit_rows": 58,
-    "gold_optimizer_rows": 0,
+    "fully_labeled_audit_rows": 58,
+    "audit_optimizer_rows": 0,
+    "fully_labeled_rows_outside_recovered_selection_lineage": 0,
     "scanner_groups": 59,
-    "fold_studies": [870, 870, 870, 870, 869],
+    "fold_studies": [
+      870,
+      870,
+      870,
+      870,
+      869
+    ],
     "cross_fold_scanner_groups": 0
   },
   "retained_residual_evidence": {
@@ -46,24 +53,89 @@
     "native_window_evaluations": 200,
     "a5_folds_executed": 5,
     "raptor_checkpoints_recovered": 3,
-    "coat_families_with_principal_assets": 3,
-    "private_assets_recovered_bytes": 2967474476,
-    "raptor_real_views_completed": 0,
+    "raptor_diagnostic_views_completed": 4,
+    "coat_source_checkpoint_gates_completed": 8,
+    "coat_trained_predictions_completed": 7,
+    "joint_diagnostic_bank_created": true,
+    "complete_input_views": 0,
     "full_parent_parity_established": false
   },
-  "stage91_recovery": {
-    "status": "BLOCKED_WITH_REUSABLE_RECOVERY",
-    "orchestration_milestones_completed": 11,
-    "orchestration_milestones_total": 11,
-    "new_private_objects": 160,
-    "reused_objects": 21,
-    "new_private_bytes": 2967474476,
-    "raw_acquisition_access_complete": false
+  "stage93_validation_acquisition_audit": {
+    "status": "SUCCESS",
+    "units_completed": 7,
+    "units_total": 7,
+    "declared_series": 152,
+    "present_series": 77,
+    "absent_series": 75,
+    "explicit_missing_dicoms": 53,
+    "fully_labeled_studies": 58,
+    "untouched_fully_labeled_studies": 0
   },
+  "stage94_source_recovery": {
+    "status": "BLOCKED_RESOURCE_AUTHORIZATION",
+    "raw_files_downloaded": 0,
+    "model_forwards": 0,
+    "automatic_bypass_attempted": false
+  },
+  "stage95_geometry_audit": {
+    "status": "SUCCESS_NEGATIVE_HYPOTHESIS",
+    "headers_inspected": 2287,
+    "series_inspected": 77,
+    "studies_inspected": 26,
+    "local_images_decoded": 93,
+    "geometry_flags": 0,
+    "unevaluable_series": 0,
+    "decision": "CLOSE_GEOMETRY_DEFECT_HYPOTHESIS_FOR_INSPECTED_SCOPE"
+  },
+  "stage96_anatomy_qualification": {
+    "status": "SUCCESS",
+    "tracks_completed": 4,
+    "tracks_total": 4,
+    "checkpoint_metadata_payloads_reviewed": 2,
+    "foreground_anatomy_labels": 9,
+    "coordinate_adapters_validated": 3,
+    "parent_component_arrays_checked": 10,
+    "real_segmentation_inference_completed": false,
+    "reference_dice_measured": false,
+    "lifecycle": "QUALIFIED_FOR_REFERENCE_PILOT"
+  },
+  "experiment_priorities": [
+    {
+      "id": "E87A",
+      "name": "anatomy_localized_global_local_parent_residual",
+      "score": 89
+    },
+    {
+      "id": "E87B",
+      "name": "visibility_aware_auxiliary_supervision",
+      "score": 87
+    },
+    {
+      "id": "E87C",
+      "name": "cross_plane_localization_uncertainty",
+      "score": 81
+    },
+    {
+      "id": "ANATOMY_PILOT",
+      "name": "pretrained_anatomy_reference_pilot",
+      "score": 80
+    },
+    {
+      "id": "E87F",
+      "name": "segmentation_pretrained_local_3d_specialist",
+      "score": 77
+    },
+    {
+      "id": "E87E",
+      "name": "train_only_anatomical_hard_negatives",
+      "score": 71
+    }
+  ],
   "current_frontier": {
     "primary_direction": "anatomy_localized_global_local_parent_residual",
     "secondary_direction": "visibility_aware_auxiliary_supervision",
     "tertiary_direction": "cross_plane_localization_consistency_and_uncertainty",
+    "immediate_private_milestone": "frozen_anatomy_reference_pilot",
     "generic_backbone_swap_is_primary": false
   },
   "publication_policy": {
@@ -73,6 +145,7 @@
     "model_weights_public": false,
     "raw_mri_public": false,
     "private_runner_code_public": false,
-    "source_recovery_handles_public": false
+    "source_recovery_handles_public": false,
+    "public_checks_require_network": false
   }
 }
