@@ -125,9 +125,9 @@ comparison_fragments = [
     "leader" + "_snapshot",
     "leader" + " snapshot",
     "public-score " + "gap",
-    "top score",
-    "trying to beat",
-    "beat the top",
+    "top " + "score",
+    "trying to " + "beat",
+    "beat the " + "top",
 ]
 
 for name in paths:
