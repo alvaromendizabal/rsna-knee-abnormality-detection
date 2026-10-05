@@ -1,14 +1,14 @@
 # Project status
 
-Updated from verified aggregate AWS evidence through **Stage 91 asset recovery · 2026-10-03 UTC**.
+Updated from verified aggregate AWS evidence through **Stage 96 anatomy qualification · 2026-10-05 UTC**.
 
 ## Current boundary
 
-The strongest verified public result is **0.943 macro ROC-AUC** across twelve knee-MRI targets.
+The strongest verified external result remains **0.943 macro ROC-AUC** across twelve knee-MRI targets.
 
-The current research program is no longer centered on building replacement systems around the internal weak-label OOF reference. The scored multi-branch parent is now the control, and new work is evaluated as a controlled addition to that system.
+The scored multi-branch parent is the control. Current research focuses on adding genuinely new spatial supervision while preserving exact fallback behavior and separating development evidence from external evaluation.
 
-Internal grouped metrics remain model-selection evidence and are **not directly interchangeable** with the public score.
+Internal grouped metrics remain model-selection evidence and are **not directly interchangeable** with the external score.
 
 ## Validation contract
 
@@ -16,134 +16,138 @@ The established research boundary includes:
 
 - canonical exact-window cache: **4,407 studies / 69.14 GiB**;
 - grouped non-gold rows: **4,349**;
-- audit-only gold rows: **58**;
+- fully labeled audit rows: **58**;
 - scanner groups: **59**;
 - fold sizes: **870 / 870 / 870 / 870 / 869**;
 - scanner groups crossing folds: **0**;
-- gold optimizer rows: **0**.
+- audit rows used by the grouped optimizer: **0**.
 
-A later source audit showed that some recovered parent-model components used the gold subset during historical checkpoint selection. Those rows are therefore not treated as untouched confirmation for those components.
+A later lineage audit established that all 58 fully labeled studies participated in historical checkpoint selection for recovered components. They are therefore not represented as untouched confirmation for those components.
 
-## Target-specific residual program
+## Retained residual evidence
 
-The research program established that narrow, target-specific residual modeling can add complementary signal without forcing one blend policy across every finding.
+A narrow target-specific residual program demonstrated complementary signal on the grouped research boundary. A consolidated challenger remains a **positive development challenger**.
 
-A later consolidated complement remained a **positive development challenger** on the grouped research boundary. It is retained as evidence rather than discarded solely because one fold moved slightly negative.
+Promotion discipline is explicit:
 
-This changed the project’s promotion discipline:
+- retain valid positive aggregate movement;
+- inspect fold/target dispersion;
+- use paired evidence and uncertainty for stronger promotion claims;
+- invalidate any result with leakage, population mismatch, or broken provenance.
 
-- valid positive aggregate movement is retained;
-- fold dispersion is inspected rather than converted into an automatic veto;
-- paired evidence and uncertainty determine promotion;
-- correctness or leakage failures invalidate a result regardless of score.
+Exact private blend implementation and row-level predictions remain outside the public repository.
 
-Exact private blend implementation, row-level predictions, and model identities remain outside the public repository.
+## Parent reconstruction — current state
 
-## Representation-diversity results
+### Native / Rad / A5
+Verified restoration remains complete for:
 
-### Dense spatial attention
-A fixed dense spatial/anatomy branch executed successfully and produced a negative aggregate result. It was closed at screening.
+- **20 native trained members / 200 member-window evaluations**;
+- **3 Rad source layouts** with multiple trained heads;
+- **5/5 A5 trained folds**.
 
-**Conclusion:** fixed generic regions were not a strong enough mechanism. This result does not reject supervised anatomical localization.
+### Raptor
+All **4/4 Raptor diagnostic views** completed on the currently available mirrored inputs.
 
-### Orthopedic foundation-model transfer
-A frozen musculoskeletal foundation-model feature route was implemented with complete checkpoint coverage and benchmarked on the project GPU.
+Those outputs are explicitly incomplete-input diagnostics. They are not relabeled as full-parent predictions.
 
-The resulting feature-transfer experiment was a valid scientific negative and was closed without post-hoc rescue tuning.
+### CoAt-family execution
+The recovered CoAt-family milestone completed:
 
-**Conclusion:** domain pretraining alone was insufficient in the tested frozen-transfer configuration. The result strengthened the case for task-aligned spatial supervision instead of another frozen embedding path.
+- **8/8 source/checkpoint gates**;
+- **7/7 trained predictions**;
+- aligned joint diagnostic-bank assembly;
+- preservation checks proving the existing parent arrays remained unchanged.
 
-### Task-trained paired image models
-A matched pair of task-trained spatial models completed successfully as an engineering/scientific experiment. The project subsequently moved away from replacement-model iteration and back to the actual scored parent.
+### Full-parent status
+Full historical parity is **not** claimed.
 
-## Parent reconstruction
+Remaining reasons include incomplete acquisition coverage, unresolved historical provenance for one optional repair-family dependency, and the absence of a legitimate complete-input comparison population.
 
-The most important engineering progress since the prior publication is the restoration of the parent system’s major trained branches.
+## Stage 93 — validation and acquisition audit
 
-### Rad branch
-The original trained RadImageNet-family execution path was restored across **three source layouts** with multiple trained heads. Serial and optimized batching paths passed numerical-parity checks.
+The audit completed **7/7 units**.
 
-### Native DINO branch
-The native branch restored:
+Key conclusions:
 
-- **20 trained members**;
-- **200 member/window evaluations**;
-- original parent preprocessing/inference behavior;
-- signature-aware caching and strict fingerprint checks.
+- official training catalog: **4,407 studies**;
+- fully labeled studies: **58**;
+- fully labeled studies outside recovered checkpoint-selection lineage: **0**;
+- scoped acquisition audit: **77 / 152 declared series present**;
+- **75 declared series absent** in the audited mirror;
+- **53 explicitly indexed missing DICOMs**;
+- additional series require file-level inventory;
+- no audited study was represented as complete when source evidence was incomplete.
 
-### A5 branch
-All **5/5 trained A5 folds** were restored with strict state loading and bounded numerical-parity checks.
+This closed the search for an untouched fully labeled cohort inside the unchanged official catalog.
 
-### Raptor / CoAt recovery
-Stage 91 recovered the three Raptor checkpoints and the principal trained assets for three CoAt-family branches into encrypted private S3 storage.
+## Stage 94 — source recovery blocker
 
-About **2.97 GB** of source/model assets were preserved without placing large private binaries in Git history.
+A bounded source-recovery attempt was stopped by protected-resource authorization before downloading new raw images.
 
-Remaining gaps include:
+The project did not bypass the denial, broaden permissions, automate terms acceptance, or silently substitute a different source.
 
-- unresolved source provenance for one repair-family branch;
-- denied access to missing raw acquisitions;
-- real Raptor execution under complete-input signatures;
-- reviewed CoAt execution;
-- complete-parent integration on a legitimate aligned evaluation population.
+That blocker remains separate from independent AWS research.
 
-## Input-signature discipline
+## Stage 95 — geometry audit
 
-A raw-data coverage audit found that the currently mirrored diagnostic population is incomplete.
+Stage 95 completed **5/5 units** and inspected:
 
-The project therefore enforces a strict rule:
+- **2,287 real DICOM headers**;
+- **77 series**;
+- **26 studies**;
+- **93 locally decoded images**.
 
-> partial-input predictions remain partial-input predictions.
+Result: **zero geometry flags and zero unevaluable series in the inspected scope**.
 
-If later recovery changes selected source pixels, only affected branches are recomputed under a new signature. Existing unaffected outputs remain reusable.
+This is a valid negative result. The specific slice-order/physical-geometry defect hypothesis is closed for the inspected inputs unless materially new data arrive.
 
-This avoids silently mixing incompatible parent states.
+## Stage 96 — anatomy qualification
 
-## Anatomy-aware research frontier
+Stage 96 completed **4/4 tracks**.
 
-A cross-competition review of strong prior medical-imaging systems identified a recurring capability that is not yet established in the parent:
+Verified public-safe conclusions:
 
-**explicit anatomical localization and visibility-aware local/global evidence fusion.**
+- two candidate pretrained checkpoint metadata payloads were reviewed;
+- both identify a **full-resolution 3D configuration**;
+- **9 foreground anatomical structures** are represented in the published label contract;
+- **3 coordinate adapters** were validated for project image geometry;
+- exact parent-fallback behavior was checked against **10 saved component arrays**;
+- no trained segmentation inference or Dice measurement has been claimed yet.
 
-The immediate research program prioritizes:
+The candidate is therefore **qualified for a bounded reference-inference pilot**, not promoted into the disease classifier.
 
-1. anatomy-localized residual evidence attached to the existing parent;
-2. visibility-aware auxiliary supervision;
-3. cross-plane localization consistency and multiple plausible region hypotheses.
+See [Anatomy model qualification](ANATOMY_MODEL_QUALIFICATION.md).
 
-The parent already contains strong attention, medical pretraining, multi-plane context, multi-resolution paths, and ensemble diversity. The next step is therefore **not** another generic attention block or backbone swap.
+## Current scientific frontier
 
-See [Anatomy-aware transfer program](ANATOMY_AWARE_TRANSFER_PROGRAM.md).
+The strongest missing capability remains:
 
-## Failure-driven engineering
+**explicit anatomical localization with parent-preserving local/global evidence fusion and visibility-aware supervision.**
 
-Recent stages converted several operational failures into reusable safeguards, including:
+The controlled program remains:
 
-- external dependency isolation;
-- pandas copy-on-write compatibility;
-- disk-budget accounting;
-- resumable checkpoint streaming;
-- exact input signatures;
-- OAuth/session handling;
-- cloud permission diagnostics;
-- manifest-role validation;
-- public/private artifact boundaries.
+1. matched global-only residual control;
+2. supervised anatomical regional pooling;
+3. masked/visibility-aware auxiliary supervision;
+4. fixed multiple localization proposals without another fit.
 
-Completed work is reused rather than recomputed when a later stage fails.
+The parent already contains strong attention, medical pretraining, multi-plane context, multi-resolution paths, and ensemble diversity. The next step is not another generic backbone swap.
 
 ## Current next step
 
-1. resume the existing Stage 91 recovery state without repeating preserved downloads;
-2. complete useful Raptor execution under clearly labeled input scope;
-3. review and execute recovered CoAt-family runtime paths;
-4. assemble the complete parent under compatible input signatures;
-5. establish a legitimate aligned comparison population;
-6. begin the controlled anatomy-aware additions.
+The immediate private AWS milestone is a frozen anatomy-model reference pilot:
 
-No public improvement is claimed from asset recovery or engineering parity alone.
+1. load one pinned pretrained checkpoint under a restricted loader;
+2. measure reference-case segmentation quality against a provided mask;
+3. only if the predeclared gate passes, run exploratory transfer on an existing sagittal series;
+4. derive public-safe anatomical ROI/visibility evidence while proving disease predictions remain unchanged.
+
+No external score change is claimed until measured under a legitimate comparable evaluation.
 
 See:
 
 - [Parent reconstruction frontier](PARENT_RECONSTRUCTION_FRONTIER.md)
+- [Anatomy model qualification](ANATOMY_MODEL_QUALIFICATION.md)
 - [Anatomy-aware transfer program](ANATOMY_AWARE_TRANSFER_PROGRAM.md)
-- [AWS research frontier](AWS_RESIDUAL_FRONTIER.md)
+- [Reproducibility](REPRODUCIBILITY.md)
