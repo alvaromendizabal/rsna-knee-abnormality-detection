@@ -62,27 +62,52 @@ class CurrentFrontierTests(unittest.TestCase):
         )
         self.assertTrue(d["public_score"]["higher_is_better"])
         self.assertFalse(d["public_score"]["internal_metrics_directly_comparable"])
+
         self.assertEqual(
             d["retained_residual_evidence"]["status"],
             "RETAINED_POSITIVE_CHALLENGER",
         )
-        self.assertEqual(
-            d["stage80_fixed_spatial"]["status"],
-            "SCIENTIFIC_NEGATIVE_SCREEN",
-        )
+        self.assertEqual(d["stage80_fixed_spatial"]["status"], "SCIENTIFIC_NEGATIVE_SCREEN")
         self.assertEqual(
             d["stage83_frozen_orthopedic_foundation"]["status"],
             "SCIENTIFIC_NEGATIVE_SCREEN",
         )
-        self.assertEqual(d["parent_reconstruction"]["native_members_executed"], 20)
-        self.assertEqual(d["parent_reconstruction"]["a5_folds_executed"], 5)
-        self.assertEqual(d["parent_reconstruction"]["rad_layouts_executed"], 3)
-        self.assertEqual(d["parent_reconstruction"]["raptor_checkpoints_recovered"], 3)
-        self.assertFalse(d["parent_reconstruction"]["full_parent_parity_established"])
-        self.assertEqual(d["stage91_recovery"]["orchestration_milestones_completed"], 11)
-        self.assertFalse(d["stage91_recovery"]["raw_acquisition_access_complete"])
+
+        parent = d["parent_reconstruction"]
+        self.assertEqual(parent["native_members_executed"], 20)
+        self.assertEqual(parent["a5_folds_executed"], 5)
+        self.assertEqual(parent["rad_layouts_executed"], 3)
+        self.assertEqual(parent["raptor_diagnostic_views_completed"], 4)
+        self.assertEqual(parent["coat_source_checkpoint_gates_completed"], 8)
+        self.assertEqual(parent["coat_trained_predictions_completed"], 7)
+        self.assertTrue(parent["joint_diagnostic_bank_created"])
+        self.assertEqual(parent["complete_input_views"], 0)
+        self.assertFalse(parent["full_parent_parity_established"])
+
+        audit = d["stage93_validation_acquisition_audit"]
+        self.assertEqual(audit["units_completed"], 7)
+        self.assertEqual(audit["present_series"], 77)
+        self.assertEqual(audit["declared_series"], 152)
+        self.assertEqual(audit["untouched_fully_labeled_studies"], 0)
+
+        geometry = d["stage95_geometry_audit"]
+        self.assertEqual(geometry["headers_inspected"], 2287)
+        self.assertEqual(geometry["geometry_flags"], 0)
+        self.assertEqual(
+            geometry["decision"],
+            "CLOSE_GEOMETRY_DEFECT_HYPOTHESIS_FOR_INSPECTED_SCOPE",
+        )
+
+        anatomy = d["stage96_anatomy_qualification"]
+        self.assertEqual(anatomy["tracks_completed"], 4)
+        self.assertEqual(anatomy["foreground_anatomy_labels"], 9)
+        self.assertEqual(anatomy["coordinate_adapters_validated"], 3)
+        self.assertFalse(anatomy["real_segmentation_inference_completed"])
+        self.assertEqual(anatomy["lifecycle"], "QUALIFIED_FOR_REFERENCE_PILOT")
+
         self.assertTrue(d["publication_policy"]["aws_canonical"])
         self.assertFalse(d["publication_policy"]["model_weights_public"])
+        self.assertFalse(d["publication_policy"]["public_checks_require_network"])
 
 
 if __name__ == "__main__":
