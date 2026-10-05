@@ -1,23 +1,73 @@
 # RSNA Knee Abnormality Detection
 
 [![Publication checks](https://github.com/alvaromendizabal/rsna-knee-abnormality-detection/actions/workflows/publication-checks.yml/badge.svg)](https://github.com/alvaromendizabal/rsna-knee-abnormality-detection/actions/workflows/publication-checks.yml)
+[![Public quality](https://github.com/alvaromendizabal/rsna-knee-abnormality-detection/actions/workflows/public-quality.yml/badge.svg)](https://github.com/alvaromendizabal/rsna-knee-abnormality-detection/actions/workflows/public-quality.yml)
 
-**MRI image-model research with leakage-aware validation, multi-branch parent reconstruction, anatomy-aware representation learning, and production-style ML engineering on AWS.**
+**End-to-end MRI machine-learning research: leakage-aware validation, heterogeneous deep-learning reconstruction, anatomy-aware representation learning, GPU-aware inference, and production-style experiment engineering on AWS.**
 
-A notebook-first machine-learning project by **Alvaro Mendizabal** for twelve knee-MRI findings. AWS/SageMaker is the canonical private research environment; this repository is the curated employer-facing and semi-reproducible layer. Raw MRI, identifiers, row-level predictions, private checkpoints, recovery bundles, and competition-specific inference glue stay outside Git history.
+A notebook-first project by **Alvaro Mendizabal** for twelve knee-MRI findings. AWS/SageMaker is the canonical private research environment; this repository is the curated employer-facing and semi-reproducible layer. Raw MRI, identifiers, row-level predictions, private checkpoints, recovery bundles, and competition-specific inference logic stay outside Git history.
 
-> **Latest verified publication boundary: AWS research through Stage 96 anatomy qualification.** The project retains a verified external macro ROC-AUC of **0.943**, has restored the major trained parent branches on the available input scope, completed validation/acquisition and geometry audits, and advanced into a gated anatomy-localization program without claiming unmeasured score gains.
+> **Current verified publication boundary: Stage 96 anatomy qualification.** The project retains a verified external macro ROC-AUC of **0.943**, has restored the major trained parent branches on the available input scope, completed validation/acquisition and DICOM-geometry audits, and advanced into a gated anatomy-localization program without claiming unmeasured improvements.
 
-## Start here
+## 30-second overview
 
-1. **[Project status](docs/PROJECT_STATUS.md)** — current verified state, completed milestones, and next decision.
-2. **[Parent reconstruction frontier](docs/PARENT_RECONSTRUCTION_FRONTIER.md)** — how the heterogeneous parent system was restored without publishing private weights.
-3. **[Anatomy model qualification](docs/ANATOMY_MODEL_QUALIFICATION.md)** — the public-safe contract for qualifying a pretrained knee localizer before downstream integration.
-4. **[Anatomy-aware transfer program](docs/ANATOMY_AWARE_TRANSFER_PROGRAM.md)** — controlled localization, visibility, and local/global fusion research.
-5. **[Reproducibility boundary](docs/REPRODUCIBILITY.md)** — what is reproducible publicly, what remains private, and why.
-6. **[AWS research frontier](docs/AWS_RESIDUAL_FRONTIER.md)** — grouped validation, residual modeling, negative-result discipline, and AWS-only execution.
+| | |
+|---|---|
+| **Problem** | Multi-label abnormality detection from heterogeneous knee MRI studies |
+| **My ownership** | Data contracts, validation, modeling, inference, cloud execution, failure recovery, experiment design, reproducibility, and public documentation |
+| **Scale** | 4,407-study canonical cache; 4,349 grouped development rows; 59 scanner groups |
+| **System** | Multi-branch DINO, RadImageNet, A5, Raptor, and CoAt-family parent with target-specific fusion |
+| **Engineering** | SageMaker + private S3, resumable runners, checkpoint streaming, numerical-parity gates, telemetry, cost bounds, CI |
+| **Research discipline** | Matched controls, grouped validation, scientific negative results, immutable evidence, explicit promotion/kill gates |
+| **Current frontier** | Parent-preserving anatomical localization, visibility-aware supervision, and local/global fusion |
 
-## Current verified evidence
+### What employers should notice
+
+- **I treated the project as a system, not a notebook.** Data lineage, model state, validation membership, input signatures, runtime behavior, artifact recovery, and publication policy are all first-class.
+- **I preserved scientific attribution.** New branches are compared against matched controls; engineering parity is not mislabeled as model improvement.
+- **I made failures reusable.** Avoidable implementation failures became regression tests before the next cost-bearing run.
+- **I managed cloud constraints deliberately.** Large checkpoints stream from private storage, completed work resumes, and resource/cost limits are built into execution.
+- **I closed weak ideas.** Fixed spatial bias, frozen foundation transfer, and a geometry-defect hypothesis were retained as useful negative evidence rather than tuned until favorable.
+- **I protect the competitive implementation.** Public artifacts show the engineering and research method without exposing restricted data or private fusion logic.
+
+## System architecture
+
+```mermaid
+flowchart LR
+    A[MRI + metadata] --> B[Data contracts<br/>identity + geometry + input signatures]
+    B --> C[Canonical AWS cache]
+    C --> D1[Native DINO<br/>20 members]
+    C --> D2[RadImageNet-family<br/>3 layouts]
+    C --> D3[A5<br/>5 folds]
+    C --> D4[Raptor<br/>4 diagnostic views]
+    C --> D5[CoAt families<br/>7 trained predictions]
+
+    D1 --> E[Parent aggregation +<br/>fixed calibration/fusion]
+    D2 --> E
+    D3 --> E
+    D4 --> E
+    D5 --> E
+
+    E --> F[Validation + lineage gates]
+    F --> G[Champion / challenger decisions]
+
+    C --> H[Anatomy qualification]
+    H --> I[Local ROI / visibility features]
+    I --> J[Matched local + global residual]
+    J --> F
+
+    K[Telemetry + cost + manifests<br/>resume + regression tests] -. governs .-> B
+    K -. governs .-> D1
+    K -. governs .-> D2
+    K -. governs .-> D3
+    K -. governs .-> D4
+    K -. governs .-> D5
+    K -. governs .-> H
+```
+
+For the detailed view, read **[System architecture](docs/ARCHITECTURE.md)**.
+
+## Verified evidence
 
 | Evidence boundary | Verified state |
 |---|---:|
@@ -29,40 +79,54 @@ A notebook-first machine-learning project by **Alvaro Mendizabal** for twelve kn
 | A5 parent branch | **5/5 trained folds** |
 | Rad parent branch | **3 source layouts / multiple trained heads** |
 | Raptor diagnostic views | **4/4 completed on explicitly incomplete input scope** |
-| Recovered CoAt-family execution | **8/8 source/checkpoint gates; 7/7 predictions** |
+| CoAt-family execution | **8/8 source/checkpoint gates; 7/7 trained predictions** |
 | Validation/acquisition audit | **7/7 units completed** |
 | Geometry audit | **2,287 headers + 93 images; zero flags in inspected scope** |
 | Anatomy qualification | **4/4 tracks completed; real segmentation pilot is next** |
 
 Internal grouped metrics are model-selection evidence and are not presented as interchangeable with the external score.
 
-## What this project demonstrates
+## Research decisions that matter
 
-- **End-to-end ML ownership:** data contracts, preprocessing, validation, training, inference, checkpoint lineage, cost controls, diagnostics, and publication boundaries are treated as one system.
-- **Leakage-aware evaluation:** scanner-grouped folds, audit-only rows, exact metric contracts, and explicit separation between development and external evaluation.
-- **Multi-branch system reconstruction:** trained DINO, RadImageNet, A5, Raptor, and CoAt-family components are restored as a coherent parent rather than treated as disconnected experiments.
-- **Failure-driven engineering:** dependency, tensor-layout, disk-budget, authentication, cloud-permission, and numerical-equivalence failures become deterministic regression tests.
-- **Scientific negative results:** well-executed ideas are closed when evidence is weak instead of being rescued with post-hoc tuning.
-- **Ceiling-escape research:** external medical-imaging ideas are translated into mechanism-level localization and visibility hypotheses instead of copied by model name.
-- **Cost-aware GPU execution:** large assets stream from private storage, expensive work resumes from checkpoints, and bounded runs preserve completed computation.
-- **Semi-reproducible publication:** aggregate evidence, decision contracts, public-safe helpers, CI, and executed notebooks are visible while competition-sensitive implementation remains private.
+| Question | Decision |
+|---|---|
+| Should a fixed spatial branch be expanded? | **No.** Executed correctly; aggregate evidence was negative. |
+| Should frozen orthopedic foundation features replace task-aligned work? | **No.** Valid negative screen; route closed. |
+| Is DICOM geometry the likely missing capability on the inspected inputs? | **No evidence of it.** 2,287 headers screened with zero flags. |
+| Should engineering reconstruction results be called new model gains? | **No.** Execution correctness and predictive improvement stay separate. |
+| Is there an untouched fully labeled confirmation cohort in the unchanged catalog? | **No.** Selection lineage prevents that claim. |
+| What capability is still genuinely missing? | **Explicit anatomy-aware localization and visibility-conditioned local/global evidence.** |
 
-## Research progression
+See **[Research timeline](docs/RESEARCH_TIMELINE.md)** for the full decision path.
 
-### 1. Validation and residual modeling
-The project established a grouped validation boundary and demonstrated that target-specific residual modeling can preserve complementary signal without forcing one global policy across all findings.
+## Start here
 
-### 2. Representation-diversity experiments
-Fixed spatial bias and frozen foundation-model transfer were tested under the same discipline and retained as useful negative evidence where they failed.
+### 2-minute recruiter review
+1. **README** — this page.
+2. **[Employer case study](docs/EMPLOYER_CASE_STUDY.md)** — problem, ownership, decisions, engineering, outcomes.
+3. **[Notebook 13](notebooks/13_parent_reconstruction_and_anatomy_qualification.ipynb)** — current aggregate research frontier.
 
-### 3. Parent-system reconstruction
-The research shifted from surrogate systems to the scored parent. Major trained branches were restored with strict state loading, numerical-parity checks, input signatures, content-addressed recovery, and resumability.
+### 10-minute ML engineering review
+1. **[System architecture](docs/ARCHITECTURE.md)**
+2. **[Parent reconstruction frontier](docs/PARENT_RECONSTRUCTION_FRONTIER.md)**
+3. **[Reproducibility boundary](docs/REPRODUCIBILITY.md)**
+4. **[Project status](docs/PROJECT_STATUS.md)**
 
-### 4. Validation, acquisition, and geometry audits
-The project audited historical selection membership, missing acquisitions, and DICOM geometry. The result is deliberately conservative: incomplete-input outputs stay incomplete, and no untouched fully labeled confirmation cohort is invented.
+### 15-minute research review
+1. **[Research timeline](docs/RESEARCH_TIMELINE.md)**
+2. **[Anatomy-aware transfer program](docs/ANATOMY_AWARE_TRANSFER_PROGRAM.md)**
+3. **[Anatomy model qualification](docs/ANATOMY_MODEL_QUALIFICATION.md)**
+4. **[AWS research frontier](docs/AWS_RESIDUAL_FRONTIER.md)**
 
-### 5. Anatomy-aware transfer
-A pretrained knee anatomy route passed metadata, coordinate, and exact-parent-fallback qualification. The next bounded milestone is real frozen-model reference inference before any anatomy-conditioned disease model is allowed to advance.
+## Technical stack
+
+**Modeling:** Python, PyTorch, scikit-learn, DINO-style vision encoders, RadImageNet transfer, CoAtNet-family models, multi-view aggregation, calibration, residual modeling.
+
+**Medical imaging:** DICOM metadata/geometry, 2.5D and volumetric representations, multi-plane MRI, anatomy-aware localization, segmentation transfer.
+
+**Cloud / ML engineering:** AWS SageMaker, S3, GPU inference, resumable jobs, content-addressed artifacts, immutable manifests, resource telemetry, cost guards.
+
+**Quality / reproducibility:** grouped validation, leakage audits, numerical-parity tests, regression fixtures, CI publication gates, executed Jupyter notebooks, Plotly/SVG persistence.
 
 ## Public reproducibility
 
@@ -70,10 +134,12 @@ The public layer is dependency-light and designed to fail loudly when the publis
 
 Run:
 
-    python -m unittest discover -s tests
+    python -m unittest discover -s tests -p 'test_current_frontier.py'
+    python -m unittest discover -s tests -p 'test_anatomy_qualification.py'
+    python -m unittest discover -s tests -p 'test_employer_portfolio.py'
     python tools/check_current_frontier.py
 
-GitHub Actions runs the same publication gates on pushes and pull requests. See [Reproducibility](docs/REPRODUCIBILITY.md).
+GitHub Actions runs the publication and public-quality gates on pushes and pull requests. See **[Reproducibility](docs/REPRODUCIBILITY.md)**.
 
 ## Notebook guide
 
