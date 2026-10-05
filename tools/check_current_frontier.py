@@ -101,6 +101,10 @@ paths = [
     "docs/ANATOMY_AWARE_TRANSFER_PROGRAM.md",
     "docs/ANATOMY_MODEL_QUALIFICATION.md",
     "docs/REPRODUCIBILITY.md",
+    "docs/ARCHITECTURE.md",
+    "docs/EMPLOYER_CASE_STUDY.md",
+    "docs/RESEARCH_TIMELINE.md",
+    "docs/EMPLOYER_REVIEW_GUIDE.md",
     "reports/current_frontier/results.json",
     "src/rsna_research/anatomy_qualification.py",
     "tests/test_anatomy_qualification.py",
@@ -121,6 +125,9 @@ comparison_fragments = [
     "leader" + "_snapshot",
     "leader" + " snapshot",
     "public-score " + "gap",
+    "top score",
+    "trying to beat",
+    "beat the top",
 ]
 
 for name in paths:
@@ -131,7 +138,7 @@ for name in paths:
     for fragment in comparison_fragments:
         assert fragment.lower() not in lowered, f"external-comparison framing in {name}"
 
-for pattern in ("test_current_frontier.py", "test_anatomy_qualification.py"):
+for pattern in ("test_current_frontier.py", "test_anatomy_qualification.py", "test_employer_portfolio.py"):
     subprocess.run(
         [
             sys.executable,
