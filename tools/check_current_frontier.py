@@ -18,8 +18,9 @@ assert P["internal_metrics_directly_comparable"] is False
 A = D["aws_validation"]
 assert A["canonical_cache_studies"] == 4407
 assert A["grouped_non_gold_rows"] == 4349
-assert A["gold_audit_rows"] == 58
-assert A["gold_optimizer_rows"] == 0
+assert A["fully_labeled_audit_rows"] == 58
+assert A["audit_optimizer_rows"] == 0
+assert A["fully_labeled_rows_outside_recovered_selection_lineage"] == 0
 assert A["scanner_groups"] == 59
 assert A["cross_fold_scanner_groups"] == 0
 assert A["fold_studies"] == [870, 870, 870, 870, 869]
@@ -30,45 +31,67 @@ assert R["candidate_macro_auc"] > R["baseline_macro_auc"]
 assert math.isclose(R["macro_gain"], 0.0006961577947851, abs_tol=1e-15)
 assert R["public_score_comparable"] is False
 
-S80 = D["stage80_fixed_spatial"]
-assert S80["status"] == "SCIENTIFIC_NEGATIVE_SCREEN"
-assert S80["decision"] == "CLOSE_TESTED_CONFIGURATION"
-assert S80["macro_gain"] < 0
-
-S83 = D["stage83_frozen_orthopedic_foundation"]
-assert S83["status"] == "SCIENTIFIC_NEGATIVE_SCREEN"
-assert S83["decision"] == "CLOSE_FROZEN_FEATURE_CONFIGURATION"
-assert S83["macro_gain"] < 0
+assert D["stage80_fixed_spatial"]["decision"] == "CLOSE_TESTED_CONFIGURATION"
+assert D["stage83_frozen_orthopedic_foundation"]["decision"] == "CLOSE_FROZEN_FEATURE_CONFIGURATION"
 
 PR = D["parent_reconstruction"]
 assert PR["native_members_executed"] == 20
 assert PR["native_window_evaluations"] == 200
 assert PR["a5_folds_executed"] == 5
 assert PR["rad_layouts_executed"] == 3
-assert PR["raptor_checkpoints_recovered"] == 3
-assert PR["coat_families_with_principal_assets"] == 3
-assert PR["private_assets_recovered_bytes"] == 2967474476
+assert PR["raptor_diagnostic_views_completed"] == 4
+assert PR["coat_source_checkpoint_gates_completed"] == 8
+assert PR["coat_trained_predictions_completed"] == 7
+assert PR["joint_diagnostic_bank_created"] is True
+assert PR["complete_input_views"] == 0
 assert PR["full_parent_parity_established"] is False
 
-S91 = D["stage91_recovery"]
-assert S91["status"] == "BLOCKED_WITH_REUSABLE_RECOVERY"
-assert S91["orchestration_milestones_completed"] == 11
-assert S91["orchestration_milestones_total"] == 11
-assert S91["new_private_objects"] == 160
-assert S91["raw_acquisition_access_complete"] is False
+S93 = D["stage93_validation_acquisition_audit"]
+assert S93["status"] == "SUCCESS"
+assert S93["units_completed"] == S93["units_total"] == 7
+assert S93["present_series"] == 77
+assert S93["declared_series"] == 152
+assert S93["absent_series"] == 75
+assert S93["untouched_fully_labeled_studies"] == 0
+
+S94 = D["stage94_source_recovery"]
+assert S94["status"] == "BLOCKED_RESOURCE_AUTHORIZATION"
+assert S94["raw_files_downloaded"] == 0
+assert S94["automatic_bypass_attempted"] is False
+
+S95 = D["stage95_geometry_audit"]
+assert S95["status"] == "SUCCESS_NEGATIVE_HYPOTHESIS"
+assert S95["headers_inspected"] == 2287
+assert S95["geometry_flags"] == 0
+assert S95["unevaluable_series"] == 0
+
+S96 = D["stage96_anatomy_qualification"]
+assert S96["status"] == "SUCCESS"
+assert S96["tracks_completed"] == S96["tracks_total"] == 4
+assert S96["foreground_anatomy_labels"] == 9
+assert S96["coordinate_adapters_validated"] == 3
+assert S96["parent_component_arrays_checked"] == 10
+assert S96["real_segmentation_inference_completed"] is False
+assert S96["reference_dice_measured"] is False
+assert S96["lifecycle"] == "QUALIFIED_FOR_REFERENCE_PILOT"
 
 assert D["publication_policy"]["aws_canonical"] is True
 assert D["publication_policy"]["github_employer_facing"] is True
 assert D["publication_policy"]["row_level_predictions_public"] is False
 assert D["publication_policy"]["model_weights_public"] is False
+assert D["publication_policy"]["public_checks_require_network"] is False
 
-nb = json.loads((ROOT / "notebooks/12_owned_residual_and_representation_frontier.ipynb").read_text())
-code = [c for c in nb["cells"] if c["cell_type"] == "code"]
-outs = [o for c in code for o in c.get("outputs", [])]
-assert not any(o.get("output_type") == "error" for o in outs)
-assert sum("application/vnd.plotly.v1+json" in (o.get("data") or {}) for o in outs) >= 2
-assert sum("image/svg+xml" in (o.get("data") or {}) for o in outs) >= 2
-assert nb["metadata"]["publication_boundary"] == "aggregate-public-safe-historical"
+for notebook, boundary in [
+    ("notebooks/12_owned_residual_and_representation_frontier.ipynb", "aggregate-public-safe-historical"),
+    ("notebooks/13_parent_reconstruction_and_anatomy_qualification.ipynb", "aggregate-public-safe-stage96"),
+]:
+    nb = json.loads((ROOT / notebook).read_text())
+    code = [c for c in nb["cells"] if c["cell_type"] == "code"]
+    outs = [o for c in code for o in c.get("outputs", [])]
+    assert not any(o.get("output_type") == "error" for o in outs)
+    assert sum("application/vnd.plotly.v1+json" in (o.get("data") or {}) for o in outs) >= 2
+    assert sum("image/svg+xml" in (o.get("data") or {}) for o in outs) >= 2
+    assert nb["metadata"]["publication_boundary"] == boundary
 
 paths = [
     "README.md",
@@ -76,10 +99,14 @@ paths = [
     "docs/AWS_RESIDUAL_FRONTIER.md",
     "docs/PARENT_RECONSTRUCTION_FRONTIER.md",
     "docs/ANATOMY_AWARE_TRANSFER_PROGRAM.md",
+    "docs/ANATOMY_MODEL_QUALIFICATION.md",
+    "docs/REPRODUCIBILITY.md",
     "reports/current_frontier/results.json",
+    "src/rsna_research/anatomy_qualification.py",
+    "tests/test_anatomy_qualification.py",
     "notebooks/12_owned_residual_and_representation_frontier.ipynb",
+    "notebooks/13_parent_reconstruction_and_anatomy_qualification.ipynb",
 ]
-
 private_patterns = [
     r"1\.2\.826\.0\.1\.3680043",
     r"AKIA[A-Z0-9]{16}",
@@ -105,16 +132,7 @@ for name in paths:
         assert fragment.lower() not in lowered, f"external-comparison framing in {name}"
 
 subprocess.run(
-    [
-        sys.executable,
-        "-m",
-        "unittest",
-        "discover",
-        "-s",
-        str(ROOT / "tests"),
-        "-p",
-        "test_current_frontier.py",
-    ],
+    [sys.executable, "-m", "unittest", "discover", "-s", str(ROOT / "tests")],
     check=True,
 )
 
