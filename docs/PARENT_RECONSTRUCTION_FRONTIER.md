@@ -2,16 +2,16 @@
 
 ## Why this phase mattered
 
-The project originally explored several owned research systems on a grouped AWS validation boundary. That work produced useful complementary components and negative results, but it was not the same thing as reconstructing the scored multi-branch parent.
+The project originally explored owned research systems on a grouped AWS validation boundary. That work produced useful complementary components and negative results, but it was not the same thing as reconstructing the scored heterogeneous parent.
 
-The current program therefore treats the verified parent as an engineering system with multiple trained branches, preprocessing contracts, fusion logic, and input signatures that must be restored coherently.
+The current program treats the verified parent as an engineering system with multiple trained branches, preprocessing contracts, fitted numerical logic, and input signatures that must be restored coherently.
 
-The objective is **not** to publish private weights or reproduce the entire competition implementation in Git. The objective is to make the engineering approach legible:
+The public objective is not to expose private weights or competition implementation. It is to make the engineering approach legible:
 
-1. recover the source-defined branch contracts;
+1. recover source-defined branch contracts;
 2. validate trained-state loading;
 3. reproduce preprocessing and inference behavior;
-4. compare optimized execution against the original routine;
+4. compare optimized execution against source behavior;
 5. preserve outputs behind immutable input signatures;
 6. recover missing private assets without duplicating completed work;
 7. assemble the parent only when branch inputs are compatible.
@@ -19,151 +19,118 @@ The objective is **not** to publish private weights or reproduce the entire comp
 ## Reconstructed branch families
 
 ### Native DINO branch
-
-The native image branch was restored as a multi-member ensemble with:
+Verified restoration:
 
 - **20 trained members**;
 - **200 member/window evaluations**;
 - source-matched image selection and preprocessing;
 - strict fingerprint checks;
-- checkpoint streaming rather than local checkpoint accumulation;
+- streamed checkpoint access instead of local accumulation;
 - reuse of completed member/window outputs.
 
-A shared-computation optimization was accepted only after probability-level parity checks showed negligible numerical movement.
-
 ### RadImageNet-family branch
+Verified restoration across **three source layouts** with multiple trained heads.
 
-The Rad branch was restored across **three source layouts** and multiple trained heads.
-
-Engineering work included:
-
-- exact image-layout reconstruction;
-- source-compatible DICOM decoding;
-- strict model-state loading;
-- feature reuse across related heads;
-- serial-versus-batched parity testing;
-- bounded GPU execution.
-
-The optimized path was accepted because its numerical differences stayed inside the parent’s declared tolerance.
+Engineering work included exact image-layout reconstruction, source-compatible DICOM decoding, strict state loading, feature reuse, serial-versus-batched parity testing, and bounded GPU execution.
 
 ### A5 branch
+All **five trained folds** were restored with source-defined preprocessing, isolated image dependencies, strict loading, reusable readout features, fold-level resumability, and numerical-parity checks.
 
-All **five trained A5 folds** were restored.
+### Raptor views
+All **four source-defined diagnostic views** have executed on the available mirrored input scope.
 
-The recovery path emphasized:
+Important limitation: the available inputs are incomplete. These outputs remain explicitly partial-input diagnostics and are not treated as complete-parent predictions.
 
-- source-defined image preprocessing;
-- isolated image-library dependencies;
-- strict state loading;
-- reusable readout features;
-- fold-level resumability;
-- numerical checks between original and optimized batching behavior.
+### CoAt-family execution
+The recovered CoAt milestone completed:
 
-No historical-score claim is inferred from successful state loading alone.
+- **8/8 source/checkpoint contract checks**;
+- **7/7 trained checkpoint predictions**;
+- aligned joint diagnostic-bank construction;
+- verification that the existing parent arrays were not mutated.
 
-### Raptor and CoAt families
-
-The next recovery phase restored the three Raptor checkpoints and the principal trained assets for three CoAt-family branches into private encrypted object storage.
-
-About **2.97 GB** of private model/source assets were preserved.
-
-The public repository intentionally does not expose:
-
-- source dataset handles;
-- checkpoint hashes;
-- private file names where disclosure would reveal competitive implementation;
-- model binaries;
-- return bundles;
-- exact fusion weights.
+This closed the recovered CoAt engineering execution milestone without claiming full historical parity.
 
 ## Numerical graph reconstruction
 
 The parent is more than a collection of neural networks.
 
-Its source contains fitted numerical logic for:
+Its source contains fitted numerical logic for branch aggregation, ranking, calibration, target-specific fusion, availability handling, and final weighting.
 
-- branch-specific aggregation;
-- rank-based transforms;
-- calibration;
-- target-specific fusion;
-- branch exclusions;
-- final target-level weighting.
-
-The reconstruction program treats this logic as immutable fitted state. It is not refit casually during engineering work.
-
-A branch is not considered interchangeable with another branch merely because they share architecture family names.
+The reconstruction program treats this fitted logic as immutable state. It is not casually refit during engineering work.
 
 ## Input signatures are part of model identity
 
-A major finding from the reconstruction effort was incomplete raw-acquisition coverage in the mirrored diagnostic population.
+The mirrored diagnostic population remains acquisition-incomplete.
 
-That creates a subtle but important reproducibility issue: the same trained branch can produce a different result if later recovery changes the selected source series or slices.
+The project therefore records input signatures and enforces:
 
-The project therefore records input signatures and applies the following rules:
-
-- partial-input inference is explicitly labeled as partial;
-- missing acquisitions are never substituted with a different sequence;
+- partial-input inference stays labeled partial;
+- missing acquisitions are never replaced with a different sequence;
 - recovered acquisitions trigger recomputation only for affected branches;
 - unaffected outputs remain reusable;
 - full-parent claims require compatible branch inputs on the same cohort.
 
-This is a stronger contract than treating a checkpoint filename as the whole model.
+## Validation lineage is also part of model identity
 
-## Recovery engineering
+A lineage audit found no untouched fully labeled cohort inside the unchanged official catalog for the recovered selected components.
 
-The reconstruction work also hardened the operational layer.
+A technically correct forward pass is therefore not automatically independent validation.
+
+Public reporting separates external recorded score, internal grouped development evidence, engineering parity, and exploratory evaluation on previously selected rows.
+
+## Recovery and reliability engineering
 
 Representative safeguards include:
 
 - private encrypted object storage;
 - create-only content-addressed recovery;
-- bounded disk reserves;
+- bounded local-disk reserves;
 - RAM-streamed checkpoint loading;
-- resumable whole-file acquisition;
+- resumable acquisition;
 - dependency isolation;
-- cached authentication/session reuse;
-- cloud-permission diagnostics that distinguish read, write, and configuration privileges;
-- manifest parsing that distinguishes real inputs, historical aliases, and generated outputs.
-
-The design goal is to make later scientific experiments cheaper and more trustworthy by eliminating repeated infrastructure uncertainty.
+- cloud-permission diagnostics;
+- manifest parsing that distinguishes true inputs, aliases, and generated outputs;
+- regression tests for avoidable operational failures.
 
 ## What is complete
 
-Verified engineering milestones include:
+Verified milestones include:
 
 - source-preserved parent definition;
 - Rad branch execution;
 - native DINO execution;
 - five A5 fold executions;
+- four Raptor diagnostic views;
+- seven CoAt-family trained predictions;
 - fitted numerical-graph reconstruction;
-- private recovery of the major Raptor assets;
-- private recovery of the principal trained assets for three CoAt families;
-- signature-aware reuse contracts.
+- private recovery of major trained assets;
+- joint diagnostic-bank assembly;
+- signature-aware reuse contracts;
+- validation/acquisition lineage audit;
+- physical geometry screen.
 
 ## What remains
 
-The remaining parent-completion work is narrower:
+Full historical parent parity still requires evidence that is not currently available publicly:
 
-- resolve one remaining repair-family source;
-- execute Raptor under the appropriate input scope;
-- review and execute recovered CoAt runtime code;
-- recover missing acquisitions when permitted;
-- recompute only branches whose selected inputs change;
-- assemble all branches on a compatible cohort;
-- establish a legitimate aligned evaluation population.
+- complete compatible acquisitions;
+- any still-relevant optional repair-family provenance;
+- recomputation of branches whose selected pixels change after recovery;
+- compatible complete-input parent assembly;
+- legitimate aligned evaluation membership.
 
-Only after that boundary is stable should new anatomy-aware branches be interpreted as improvements to the parent rather than improvements to a surrogate.
+The scientific work now proceeds in parallel on an independent question: whether a pretrained knee-anatomy localizer can provide a genuinely new, parent-preserving spatial capability.
 
 ## Employer-facing takeaway
 
-This phase demonstrates system-level ML engineering rather than isolated model training:
+This phase demonstrates system-level ML engineering:
 
 - reverse-engineering a heterogeneous inference graph;
 - restoring multiple trained model families;
 - designing numerical-parity gates;
-- preserving lineage and input identity;
+- preserving data/model lineage;
 - streaming large artifacts under storage pressure;
 - making failure recovery resumable;
-- separating public reproducibility from private competition assets.
-
-That engineering foundation is what makes the next research phase scientifically meaningful.
+- separating execution correctness from validation correctness;
+- maintaining a deliberate public/private reproducibility boundary.
