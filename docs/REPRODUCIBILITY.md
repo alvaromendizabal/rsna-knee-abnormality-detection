@@ -96,3 +96,16 @@ Only validated aggregate evidence crosses into GitHub.
 This public layer does **not** claim complete historical reproduction of every private artifact, an untouched labeled confirmation cohort where lineage evidence says otherwise, complete raw acquisition coverage, a new external score when none was measured, or clinical validity.
 
 That distinction is part of the reproducibility standard rather than a limitation to hide.
+
+## Current Stage 104 publication contract
+
+The current public frontier adds deterministic checks for:
+
+- the Stage 102 same-population research gain from **0.7943834 to 0.7978448**;
+- the Stage 104 higher point estimate with an uncertainty interval crossing zero;
+- the Winner Technique Inventory counts: **9 competitions, 15 lineages, 37 technique families**;
+- the 29-mechanism capability checklist: **8 full / 11 partial / 6 missing / 4 blocked**;
+- the executed Notebook 14 persistence contract with four Plotly outputs and four independent SVG fallbacks.
+
+These checks validate published aggregate claims. They do not recreate private row-level predictions, model weights, or exact competition inference logic.
+
