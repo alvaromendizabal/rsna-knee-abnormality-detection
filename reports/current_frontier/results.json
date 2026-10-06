@@ -1,6 +1,6 @@
 {
-  "as_of_utc": "2026-10-05T03:33:08Z",
-  "evidence_boundary": "Verified aggregate AWS research through Stage 96 anatomy qualification. Stage 97 reference/native anatomy inference is prepared privately but is not represented as completed.",
+  "as_of_utc": "2026-10-06T03:25:00Z",
+  "evidence_boundary": "Verified aggregate AWS research through Stage 104. Stage 105 is prepared privately but is not represented as completed.",
   "public_score": {
     "verified_official_score": 0.943,
     "metric": "unweighted_macro_roc_auc_12_targets",
@@ -17,35 +17,61 @@
     "audit_optimizer_rows": 0,
     "fully_labeled_rows_outside_recovered_selection_lineage": 0,
     "scanner_groups": 59,
-    "fold_studies": [
-      870,
-      870,
-      870,
-      870,
-      869
-    ],
+    "fold_studies": [870, 870, 870, 870, 869],
     "cross_fold_scanner_groups": 0
   },
-  "retained_residual_evidence": {
-    "status": "RETAINED_POSITIVE_CHALLENGER",
-    "baseline_macro_auc": 0.7936872288001792,
-    "candidate_macro_auc": 0.7943833865949643,
-    "macro_gain": 0.0006961577947851,
-    "evaluation_setting": "grouped_internal_oof",
+  "research_frontier": {
+    "stage50_baseline_macro_auc": 0.7936872288001792,
+    "stage84_retained_macro_auc": 0.7943833865949643,
+    "stage102_ordered_context_macro_auc": 0.7978447501637148,
+    "stage102_gain_vs_stage84": 0.0034613635687505,
+    "stage104_highest_point_macro_auc": 0.7978946262164966,
+    "stage104_gain_vs_stage102": 0.0000498760527818,
+    "stage104_ci90_lower": -0.0001735904,
+    "stage104_ci90_upper": 0.0002000818,
+    "stage104_interpretation": "RETAIN_POINT_ESTIMATE_INCONCLUSIVE",
+    "evaluation_setting": "scanner_group_disjoint_weak_label_development",
     "public_score_comparable": false
   },
-  "stage80_fixed_spatial": {
-    "status": "SCIENTIFIC_NEGATIVE_SCREEN",
-    "macro_gain": -0.0008008280403827,
-    "bootstrap_positive_fraction": 0.075,
-    "decision": "CLOSE_TESTED_CONFIGURATION"
+  "winner_technique_inventory": {
+    "competitions_audited": 9,
+    "top_solution_lineages_audited": 15,
+    "technique_families_identified": 37,
+    "high_confidence_transferable_mechanisms": 29,
+    "fully_implemented": 8,
+    "partially_implemented": 11,
+    "missing": 6,
+    "blocked": 4,
+    "coverage_interpretation": "capability_evidence_checklist_not_fraction_of_winning_performance"
   },
-  "stage83_frozen_orthopedic_foundation": {
-    "status": "SCIENTIFIC_NEGATIVE_SCREEN",
-    "incumbent_macro_auc": 0.789873,
-    "candidate_blend_macro_auc": 0.789437,
-    "macro_gain": -0.000436,
-    "decision": "CLOSE_FROZEN_FEATURE_CONFIGURATION"
+  "anatomy_program": {
+    "reference_structures": 9,
+    "reference_mean_dice": 0.9117686351,
+    "reference_min_structure_dice": 0.8619886,
+    "reference_gate_passed": true,
+    "native_manual_truth_available": false,
+    "disease_improvement_claimed_from_anatomy": false
+  },
+  "stage103_integration": {
+    "status": "SUCCESS",
+    "tracks_completed": 14,
+    "tracks_total": 14,
+    "cached_image_canaries_verified": 10,
+    "full_cohort_export_parity_passed": true,
+    "new_predictive_gain": false
+  },
+  "stage104_neighbor_context": {
+    "status": "SUCCESS_INCONCLUSIVE_HYPOTHESIS",
+    "tracks_completed": 14,
+    "tracks_total": 14,
+    "stage102_reference_macro_auc": 0.7978447501637148,
+    "matched_control_macro_auc": 0.7978796724807826,
+    "neighbor_context_macro_auc": 0.7978946262164966,
+    "delta_vs_stage102": 0.0000498760527818,
+    "delta_vs_matched_control": 0.0000149537357140,
+    "ci90_lower": -0.0001735904,
+    "ci90_upper": 0.0002000818,
+    "decision": "PRESERVE_POINT_ESTIMATE_CLOSE_MICROTUNING"
   },
   "parent_reconstruction": {
     "rad_layouts_executed": 3,
@@ -87,55 +113,12 @@
     "unevaluable_series": 0,
     "decision": "CLOSE_GEOMETRY_DEFECT_HYPOTHESIS_FOR_INSPECTED_SCOPE"
   },
-  "stage96_anatomy_qualification": {
-    "status": "SUCCESS",
-    "tracks_completed": 4,
-    "tracks_total": 4,
-    "checkpoint_metadata_payloads_reviewed": 2,
-    "foreground_anatomy_labels": 9,
-    "coordinate_adapters_validated": 3,
-    "parent_component_arrays_checked": 10,
-    "real_segmentation_inference_completed": false,
-    "reference_dice_measured": false,
-    "lifecycle": "QUALIFIED_FOR_REFERENCE_PILOT"
-  },
-  "experiment_priorities": [
-    {
-      "id": "E87A",
-      "name": "anatomy_localized_global_local_parent_residual",
-      "score": 89
-    },
-    {
-      "id": "E87B",
-      "name": "visibility_aware_auxiliary_supervision",
-      "score": 87
-    },
-    {
-      "id": "E87C",
-      "name": "cross_plane_localization_uncertainty",
-      "score": 81
-    },
-    {
-      "id": "ANATOMY_PILOT",
-      "name": "pretrained_anatomy_reference_pilot",
-      "score": 80
-    },
-    {
-      "id": "E87F",
-      "name": "segmentation_pretrained_local_3d_specialist",
-      "score": 77
-    },
-    {
-      "id": "E87E",
-      "name": "train_only_anatomical_hard_negatives",
-      "score": 71
-    }
-  ],
   "current_frontier": {
-    "primary_direction": "anatomy_localized_global_local_parent_residual",
-    "secondary_direction": "visibility_aware_auxiliary_supervision",
-    "tertiary_direction": "cross_plane_localization_consistency_and_uncertainty",
-    "immediate_private_milestone": "frozen_anatomy_reference_pilot",
+    "primary_direction": "winner_informed_training_and_anatomy_aware_evidence",
+    "validated_new_capability": "cross_slice_context_modeling",
+    "current_research_champion": "stage104_highest_point_estimate_with_inconclusive_increment",
+    "better_qualified_research_result": "stage102_ordered_context",
+    "prepared_private_milestone": "nested_training_side_robustness",
     "generic_backbone_swap_is_primary": false
   },
   "publication_policy": {
@@ -146,6 +129,7 @@
     "raw_mri_public": false,
     "private_runner_code_public": false,
     "source_recovery_handles_public": false,
+    "exact_competition_fusion_logic_public": false,
     "public_checks_require_network": false
   }
 }
