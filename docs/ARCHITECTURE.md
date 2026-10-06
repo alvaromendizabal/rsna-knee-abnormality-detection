@@ -194,3 +194,18 @@ Missing or low-confidence anatomical evidence must fall back exactly to the pare
 **Private AWS/S3:** raw MRI, identifiers, row-level predictions, checkpoints, private runners, source handles, exact competition fusion logic, resumable heavy artifacts.
 
 This split makes the repository reviewable and partially reproducible without leaking restricted data or competitive implementation.
+
+## Stage 104 sequence-research extension
+
+The original heterogeneous parent remains the control. The public research graph now also includes a frozen-window sequence layer:
+
+- scanner-grouped feature windows feed a matched orderless control and an ordered context model;
+- full-cohort out-of-fold predictions are evaluated on the same 4,349-study research population;
+- paired uncertainty is tracked separately from point estimates;
+- exported prediction parity is qualified before the model is treated as a reusable artifact;
+- winner-technique gap analysis determines which materially new capability is tested next.
+
+The Stage 102 ordered-context path improved the retained grouped research result from **0.7943834 to 0.7978448**. Stage 104 produced a slightly higher point estimate, **0.7978946**, but its paired interval crossed zero. The architecture therefore preserves the candidate while closing repeated micro-tuning of that exact extension.
+
+This is intentionally a research extension rather than a replacement of the scored parent or a claim of external-score parity.
+
