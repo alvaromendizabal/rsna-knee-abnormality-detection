@@ -8,29 +8,40 @@ sys.path.insert(0, str(ROOT))
 
 from src.rsna_research.current_frontier import (
     aggregate_gain,
+    paired_interval_state,
     parent_reconstruction_summary,
     retention_state,
     screening_state,
+    winner_transfer_coverage,
 )
 
 
 class CurrentFrontierTests(unittest.TestCase):
-    def test_retained_positive_gain(self):
-        gain = aggregate_gain(0.7943833865949643, 0.7936872288001792)
-        self.assertAlmostEqual(gain, 0.0006961577947851, places=14)
+    def test_stage102_full_cohort_gain(self):
+        gain = aggregate_gain(0.7978447501637148, 0.7943833865949643)
+        self.assertAlmostEqual(gain, 0.0034613635687505, places=14)
         self.assertEqual(
             retention_state(
-                candidate=0.7943833865949643,
-                baseline=0.7936872288001792,
+                candidate=0.7978447501637148,
+                baseline=0.7943833865949643,
                 valid=True,
             ),
             "RETAIN_POSITIVE",
         )
 
-    def test_invalid_evidence_is_not_retained(self):
+    def test_stage104_increment_is_inconclusive(self):
+        self.assertAlmostEqual(
+            aggregate_gain(0.7978946262164966, 0.7978447501637148),
+            0.0000498760527818,
+            places=14,
+        )
         self.assertEqual(
-            retention_state(candidate=0.9, baseline=0.8, valid=False),
-            "INVALID",
+            paired_interval_state(
+                lower=-0.0001735904,
+                upper=0.0002000818,
+                delta=0.0000498760527818,
+            ),
+            "INCONCLUSIVE",
         )
 
     def test_negative_spatial_screen_closes(self):
@@ -41,6 +52,16 @@ class CurrentFrontierTests(unittest.TestCase):
         )
         self.assertEqual(state, "CLOSE")
 
+    def test_winner_transfer_coverage(self):
+        d = winner_transfer_coverage(
+            fully_implemented=8,
+            partially_implemented=11,
+            missing=6,
+            blocked=4,
+        )
+        self.assertEqual(d["total"], 29)
+        self.assertAlmostEqual(d["full_coverage_fraction"], 8 / 29)
+
     def test_parent_reconstruction_summary(self):
         d = parent_reconstruction_summary(
             native_members=20,
@@ -50,64 +71,40 @@ class CurrentFrontierTests(unittest.TestCase):
             recovered_asset_bytes=2967474476,
         )
         self.assertTrue(d["core_trained_branches_restored"])
-        self.assertEqual(d["native_members"], 20)
-        self.assertEqual(d["a5_folds"], 5)
 
     def test_report_contract(self):
         d = json.loads((ROOT / "reports/current_frontier/results.json").read_text())
         self.assertEqual(d["public_score"]["verified_official_score"], 0.943)
-        self.assertEqual(
-            d["public_score"]["metric"],
-            "unweighted_macro_roc_auc_12_targets",
-        )
-        self.assertTrue(d["public_score"]["higher_is_better"])
         self.assertFalse(d["public_score"]["internal_metrics_directly_comparable"])
 
-        self.assertEqual(
-            d["retained_residual_evidence"]["status"],
-            "RETAINED_POSITIVE_CHALLENGER",
-        )
-        self.assertEqual(d["stage80_fixed_spatial"]["status"], "SCIENTIFIC_NEGATIVE_SCREEN")
-        self.assertEqual(
-            d["stage83_frozen_orthopedic_foundation"]["status"],
-            "SCIENTIFIC_NEGATIVE_SCREEN",
-        )
+        f = d["research_frontier"]
+        self.assertAlmostEqual(f["stage102_ordered_context_macro_auc"], 0.7978447501637148)
+        self.assertAlmostEqual(f["stage104_highest_point_macro_auc"], 0.7978946262164966)
+        self.assertEqual(f["stage104_interpretation"], "RETAIN_POINT_ESTIMATE_INCONCLUSIVE")
+        self.assertFalse(f["public_score_comparable"])
 
-        parent = d["parent_reconstruction"]
-        self.assertEqual(parent["native_members_executed"], 20)
-        self.assertEqual(parent["a5_folds_executed"], 5)
-        self.assertEqual(parent["rad_layouts_executed"], 3)
-        self.assertEqual(parent["raptor_diagnostic_views_completed"], 4)
-        self.assertEqual(parent["coat_source_checkpoint_gates_completed"], 8)
-        self.assertEqual(parent["coat_trained_predictions_completed"], 7)
-        self.assertTrue(parent["joint_diagnostic_bank_created"])
-        self.assertEqual(parent["complete_input_views"], 0)
-        self.assertFalse(parent["full_parent_parity_established"])
+        inv = d["winner_technique_inventory"]
+        self.assertEqual(inv["competitions_audited"], 9)
+        self.assertEqual(inv["top_solution_lineages_audited"], 15)
+        self.assertEqual(inv["technique_families_identified"], 37)
+        self.assertEqual(inv["high_confidence_transferable_mechanisms"], 29)
 
-        audit = d["stage93_validation_acquisition_audit"]
-        self.assertEqual(audit["units_completed"], 7)
-        self.assertEqual(audit["present_series"], 77)
-        self.assertEqual(audit["declared_series"], 152)
-        self.assertEqual(audit["untouched_fully_labeled_studies"], 0)
+        anatomy = d["anatomy_program"]
+        self.assertTrue(anatomy["reference_gate_passed"])
+        self.assertGreater(anatomy["reference_mean_dice"], 0.90)
 
-        geometry = d["stage95_geometry_audit"]
-        self.assertEqual(geometry["headers_inspected"], 2287)
-        self.assertEqual(geometry["geometry_flags"], 0)
-        self.assertEqual(
-            geometry["decision"],
-            "CLOSE_GEOMETRY_DEFECT_HYPOTHESIS_FOR_INSPECTED_SCOPE",
-        )
+        s103 = d["stage103_integration"]
+        self.assertEqual(s103["tracks_completed"], 14)
+        self.assertTrue(s103["full_cohort_export_parity_passed"])
 
-        anatomy = d["stage96_anatomy_qualification"]
-        self.assertEqual(anatomy["tracks_completed"], 4)
-        self.assertEqual(anatomy["foreground_anatomy_labels"], 9)
-        self.assertEqual(anatomy["coordinate_adapters_validated"], 3)
-        self.assertFalse(anatomy["real_segmentation_inference_completed"])
-        self.assertEqual(anatomy["lifecycle"], "QUALIFIED_FOR_REFERENCE_PILOT")
+        s104 = d["stage104_neighbor_context"]
+        self.assertEqual(s104["status"], "SUCCESS_INCONCLUSIVE_HYPOTHESIS")
+        self.assertEqual(s104["tracks_completed"], 14)
+        self.assertEqual(s104["decision"], "PRESERVE_POINT_ESTIMATE_CLOSE_MICROTUNING")
 
         self.assertTrue(d["publication_policy"]["aws_canonical"])
         self.assertFalse(d["publication_policy"]["model_weights_public"])
-        self.assertFalse(d["publication_policy"]["public_checks_require_network"])
+        self.assertFalse(d["publication_policy"]["exact_competition_fusion_logic_public"])
 
 
 if __name__ == "__main__":

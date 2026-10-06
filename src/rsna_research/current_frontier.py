@@ -1,8 +1,7 @@
 """Public-safe aggregate helpers for the current RSNA research frontier.
 
-The functions operate on aggregate evidence only. They intentionally do not expose
-study identifiers, predictions, private weights, cache shards, source handles,
-cloud paths, or submission logic.
+These helpers intentionally exclude study identifiers, row-level predictions,
+private weights, cloud paths, source handles, and competition-specific logic.
 """
 from __future__ import annotations
 
@@ -11,7 +10,6 @@ from typing import Mapping
 
 
 def aggregate_gain(candidate: float, baseline: float) -> float:
-    """Return candidate minus baseline after validating probability-like scores."""
     if not all(isfinite(x) and 0.0 <= x <= 1.0 for x in (candidate, baseline)):
         raise ValueError("scores must be finite probabilities")
     return float(candidate) - float(baseline)
@@ -25,7 +23,6 @@ def screening_state(
     minimum_macro_gain: float = 0.0,
     minimum_bootstrap: float = 0.5,
 ) -> str:
-    """Return ADVANCE or CLOSE for a bounded aggregate screening experiment."""
     values = [float(v) for v in fold_gains.values()]
     if not values:
         raise ValueError("fold_gains cannot be empty")
@@ -43,7 +40,6 @@ def screening_state(
 
 
 def retention_state(*, candidate: float, baseline: float, valid: bool = True) -> str:
-    """Classify aggregate evidence without treating every retained result as promoted."""
     if not valid:
         return "INVALID"
     gain = aggregate_gain(candidate, baseline)
@@ -54,6 +50,40 @@ def retention_state(*, candidate: float, baseline: float, valid: bool = True) ->
     return "INCONCLUSIVE"
 
 
+def paired_interval_state(*, lower: float, upper: float, delta: float) -> str:
+    values = (float(lower), float(upper), float(delta))
+    if not all(isfinite(v) for v in values):
+        raise ValueError("interval values must be finite")
+    if lower > upper:
+        raise ValueError("lower cannot exceed upper")
+    if delta > 0.0 and lower > 0.0:
+        return "POSITIVE_SUPPORTED"
+    if delta < 0.0 and upper < 0.0:
+        return "NEGATIVE_SUPPORTED"
+    return "INCONCLUSIVE"
+
+
+def winner_transfer_coverage(
+    *, fully_implemented: int, partially_implemented: int, missing: int, blocked: int
+) -> dict[str, int | float]:
+    values = {
+        "fully_implemented": int(fully_implemented),
+        "partially_implemented": int(partially_implemented),
+        "missing": int(missing),
+        "blocked": int(blocked),
+    }
+    if any(v < 0 for v in values.values()):
+        raise ValueError("coverage counts must be non-negative")
+    total = sum(values.values())
+    if total == 0:
+        raise ValueError("coverage total cannot be zero")
+    return {
+        **values,
+        "total": total,
+        "full_coverage_fraction": values["fully_implemented"] / total,
+    }
+
+
 def parent_reconstruction_summary(
     *,
     native_members: int,
@@ -62,7 +92,6 @@ def parent_reconstruction_summary(
     rad_layouts: int,
     recovered_asset_bytes: int,
 ) -> dict[str, int | bool]:
-    """Validate and summarize public-safe parent reconstruction counts."""
     values = {
         "native_members": int(native_members),
         "native_windows": int(native_windows),

@@ -25,6 +25,7 @@ jobs:
         run: |
           python -m unittest discover -s tests -p 'test_current_frontier.py'
           python -m unittest discover -s tests -p 'test_anatomy_qualification.py'
+          python -m unittest discover -s tests -p 'test_winner_transfer.py'
           python -m unittest discover -s tests -p 'test_employer_portfolio.py'
 
       - name: Verify publication boundary

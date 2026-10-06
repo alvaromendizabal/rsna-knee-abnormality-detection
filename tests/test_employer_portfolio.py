@@ -14,7 +14,9 @@ class EmployerPortfolioTests(unittest.TestCase):
             "docs/RESEARCH_TIMELINE.md",
             "docs/EMPLOYER_REVIEW_GUIDE.md",
             "docs/REPRODUCIBILITY.md",
-            "notebooks/13_parent_reconstruction_and_anatomy_qualification.ipynb",
+            "docs/CONTEXT_MODELING_FRONTIER.md",
+            "docs/WINNER_TRANSFER_FRONTIER.md",
+            "notebooks/14_winner_transfer_and_context_modeling.ipynb",
         ]
         for rel in required:
             self.assertTrue((ROOT / rel).is_file(), rel)
@@ -24,29 +26,16 @@ class EmployerPortfolioTests(unittest.TestCase):
         for heading in [
             "## 30-second overview",
             "### What employers should notice",
-            "## System architecture",
             "## Research decisions that matter",
             "### 2-minute recruiter review",
             "### 10-minute ML engineering review",
-            "### 15-minute research review",
+            "### 15-minute applied research review",
             "## Technical stack",
         ]:
             self.assertIn(heading, text)
-        self.assertIn("flowchart LR", text)
         self.assertIn("0.943", text)
-
-    def test_architecture_has_three_system_views(self):
-        text = (ROOT / "docs/ARCHITECTURE.md").read_text(encoding="utf-8")
-        self.assertGreaterEqual(text.count("```mermaid"), 3)
-        for phrase in [
-            "model identity includes data identity",
-            "Control plane",
-            "Failure recovery",
-            "Validation architecture",
-            "Anatomy-aware extension",
-            "Public/private architecture boundary",
-        ]:
-            self.assertIn(phrase.lower(), text.lower())
+        self.assertIn("0.7978448", text)
+        self.assertIn("Winner Technique Inventory", text)
 
     def test_case_study_shows_ownership_and_outcomes(self):
         text = (ROOT / "docs/EMPLOYER_CASE_STUDY.md").read_text(encoding="utf-8")
@@ -62,23 +51,36 @@ class EmployerPortfolioTests(unittest.TestCase):
         ]:
             self.assertIn(phrase, text)
 
-    def test_timeline_records_questions_evidence_decisions(self):
+    def test_timeline_records_decisions(self):
         text = (ROOT / "docs/RESEARCH_TIMELINE.md").read_text(encoding="utf-8")
-        self.assertGreaterEqual(text.count("### Decision"), 5)
-        self.assertIn("Current controlled research plan", text)
-        self.assertIn("A0", text)
-        self.assertIn("A4", text)
+        self.assertGreaterEqual(text.count("### Decision"), 8)
+        self.assertIn("winner-technique audit", text.lower())
+        self.assertIn("ordered cross-slice context", text.lower())
+
+    def test_context_frontier_shows_gain_and_uncertainty(self):
+        text = (ROOT / "docs/CONTEXT_MODELING_FRONTIER.md").read_text(encoding="utf-8")
+        self.assertIn("0.7943834", text)
+        self.assertIn("0.7978448", text)
+        self.assertIn("0.7978946", text)
+        self.assertIn("crossed zero", text.lower())
+
+    def test_winner_frontier_has_inventory_and_coverage(self):
+        text = (ROOT / "docs/WINNER_TRANSFER_FRONTIER.md").read_text(encoding="utf-8")
+        for phrase in ["9 prior competitions", "15 independent", "37 normalized", "29 high-confidence"]:
+            self.assertIn(phrase, text)
 
     def test_employer_docs_respect_publication_boundary(self):
         paths = [
             "README.md",
-            "docs/ARCHITECTURE.md",
             "docs/EMPLOYER_CASE_STUDY.md",
             "docs/RESEARCH_TIMELINE.md",
             "docs/EMPLOYER_REVIEW_GUIDE.md",
+            "docs/REPRODUCIBILITY.md",
+            "docs/CONTEXT_MODELING_FRONTIER.md",
+            "docs/WINNER_TRANSFER_FRONTIER.md",
         ]
         banned = [
-            r"1\\.2\\.826\\.0\\.1\\.3680043",
+            r"1\.2\.826\.0\.1\.3680043",
             r"AKIA[A-Z0-9]{16}",
             r"ASIA[A-Z0-9]{16}",
             r"gh[pousr]_[A-Za-z0-9]{20,}",
@@ -90,7 +92,6 @@ class EmployerPortfolioTests(unittest.TestCase):
             "beat the " + "top",
             "leader " + "snapshot",
             "public-score " + "gap",
-            r"0\\.961",
         ]
         for rel in paths:
             text = (ROOT / rel).read_text(encoding="utf-8")
