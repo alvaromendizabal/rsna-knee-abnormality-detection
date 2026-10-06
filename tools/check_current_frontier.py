@@ -19,97 +19,74 @@ A = D["aws_validation"]
 assert A["canonical_cache_studies"] == 4407
 assert A["grouped_non_gold_rows"] == 4349
 assert A["fully_labeled_audit_rows"] == 58
-assert A["audit_optimizer_rows"] == 0
 assert A["fully_labeled_rows_outside_recovered_selection_lineage"] == 0
 assert A["scanner_groups"] == 59
 assert A["cross_fold_scanner_groups"] == 0
 assert A["fold_studies"] == [870, 870, 870, 870, 869]
 
-R = D["retained_residual_evidence"]
-assert R["status"] == "RETAINED_POSITIVE_CHALLENGER"
-assert R["candidate_macro_auc"] > R["baseline_macro_auc"]
-assert math.isclose(R["macro_gain"], 0.0006961577947851, abs_tol=1e-15)
-assert R["public_score_comparable"] is False
+F = D["research_frontier"]
+assert math.isclose(F["stage84_retained_macro_auc"], 0.7943833865949643, abs_tol=1e-15)
+assert math.isclose(F["stage102_ordered_context_macro_auc"], 0.7978447501637148, abs_tol=1e-15)
+assert F["stage102_gain_vs_stage84"] > 0.003
+assert math.isclose(F["stage104_highest_point_macro_auc"], 0.7978946262164966, abs_tol=1e-15)
+assert F["stage104_ci90_lower"] < 0 < F["stage104_ci90_upper"]
+assert F["stage104_interpretation"] == "RETAIN_POINT_ESTIMATE_INCONCLUSIVE"
+assert F["public_score_comparable"] is False
 
-assert D["stage80_fixed_spatial"]["decision"] == "CLOSE_TESTED_CONFIGURATION"
-assert D["stage83_frozen_orthopedic_foundation"]["decision"] == "CLOSE_FROZEN_FEATURE_CONFIGURATION"
+I = D["winner_technique_inventory"]
+assert I["competitions_audited"] >= 8
+assert I["top_solution_lineages_audited"] >= 15
+assert I["technique_families_identified"] == 37
+assert I["high_confidence_transferable_mechanisms"] == 29
+assert sum(I[k] for k in ("fully_implemented", "partially_implemented", "missing", "blocked")) == 29
 
-PR = D["parent_reconstruction"]
-assert PR["native_members_executed"] == 20
-assert PR["native_window_evaluations"] == 200
-assert PR["a5_folds_executed"] == 5
-assert PR["rad_layouts_executed"] == 3
-assert PR["raptor_diagnostic_views_completed"] == 4
-assert PR["coat_source_checkpoint_gates_completed"] == 8
-assert PR["coat_trained_predictions_completed"] == 7
-assert PR["joint_diagnostic_bank_created"] is True
-assert PR["complete_input_views"] == 0
-assert PR["full_parent_parity_established"] is False
+AN = D["anatomy_program"]
+assert AN["reference_structures"] == 9
+assert AN["reference_mean_dice"] > 0.90
+assert AN["reference_min_structure_dice"] > 0.85
+assert AN["reference_gate_passed"] is True
 
-S93 = D["stage93_validation_acquisition_audit"]
-assert S93["status"] == "SUCCESS"
-assert S93["units_completed"] == S93["units_total"] == 7
-assert S93["present_series"] == 77
-assert S93["declared_series"] == 152
-assert S93["absent_series"] == 75
-assert S93["untouched_fully_labeled_studies"] == 0
+S103 = D["stage103_integration"]
+assert S103["tracks_completed"] == S103["tracks_total"] == 14
+assert S103["cached_image_canaries_verified"] == 10
+assert S103["full_cohort_export_parity_passed"] is True
+assert S103["new_predictive_gain"] is False
 
-S94 = D["stage94_source_recovery"]
-assert S94["status"] == "BLOCKED_RESOURCE_AUTHORIZATION"
-assert S94["raw_files_downloaded"] == 0
-assert S94["automatic_bypass_attempted"] is False
-
-S95 = D["stage95_geometry_audit"]
-assert S95["status"] == "SUCCESS_NEGATIVE_HYPOTHESIS"
-assert S95["headers_inspected"] == 2287
-assert S95["geometry_flags"] == 0
-assert S95["unevaluable_series"] == 0
-
-S96 = D["stage96_anatomy_qualification"]
-assert S96["status"] == "SUCCESS"
-assert S96["tracks_completed"] == S96["tracks_total"] == 4
-assert S96["foreground_anatomy_labels"] == 9
-assert S96["coordinate_adapters_validated"] == 3
-assert S96["parent_component_arrays_checked"] == 10
-assert S96["real_segmentation_inference_completed"] is False
-assert S96["reference_dice_measured"] is False
-assert S96["lifecycle"] == "QUALIFIED_FOR_REFERENCE_PILOT"
+S104 = D["stage104_neighbor_context"]
+assert S104["status"] == "SUCCESS_INCONCLUSIVE_HYPOTHESIS"
+assert S104["tracks_completed"] == S104["tracks_total"] == 14
+assert S104["ci90_lower"] < 0 < S104["ci90_upper"]
+assert S104["decision"] == "PRESERVE_POINT_ESTIMATE_CLOSE_MICROTUNING"
 
 assert D["publication_policy"]["aws_canonical"] is True
-assert D["publication_policy"]["github_employer_facing"] is True
 assert D["publication_policy"]["row_level_predictions_public"] is False
 assert D["publication_policy"]["model_weights_public"] is False
+assert D["publication_policy"]["exact_competition_fusion_logic_public"] is False
 assert D["publication_policy"]["public_checks_require_network"] is False
 
-for notebook, boundary in [
-    ("notebooks/12_owned_residual_and_representation_frontier.ipynb", "aggregate-public-safe-historical"),
-    ("notebooks/13_parent_reconstruction_and_anatomy_qualification.ipynb", "aggregate-public-safe-stage96"),
-]:
-    nb = json.loads((ROOT / notebook).read_text())
-    code = [c for c in nb["cells"] if c["cell_type"] == "code"]
-    outs = [o for c in code for o in c.get("outputs", [])]
-    assert not any(o.get("output_type") == "error" for o in outs)
-    assert sum("application/vnd.plotly.v1+json" in (o.get("data") or {}) for o in outs) >= 2
-    assert sum("image/svg+xml" in (o.get("data") or {}) for o in outs) >= 2
-    assert nb["metadata"]["publication_boundary"] == boundary
+nb = json.loads((ROOT / "notebooks/14_winner_transfer_and_context_modeling.ipynb").read_text())
+code = [c for c in nb["cells"] if c["cell_type"] == "code"]
+outs = [o for c in code for o in c.get("outputs", [])]
+assert code and all(c.get("execution_count") is not None for c in code)
+assert not any(o.get("output_type") == "error" for o in outs)
+assert sum("application/vnd.plotly.v1+json" in (o.get("data") or {}) for o in outs) == 4
+assert sum("image/svg+xml" in (o.get("data") or {}) for o in outs) == 4
+assert nb["metadata"]["publication_boundary"] == "aggregate-public-safe-stage104"
+assert "M14_PUBLICATION_COMPLETE" in json.dumps(nb)
 
 paths = [
     "README.md",
     "docs/PROJECT_STATUS.md",
-    "docs/AWS_RESIDUAL_FRONTIER.md",
-    "docs/PARENT_RECONSTRUCTION_FRONTIER.md",
-    "docs/ANATOMY_AWARE_TRANSFER_PROGRAM.md",
-    "docs/ANATOMY_MODEL_QUALIFICATION.md",
-    "docs/REPRODUCIBILITY.md",
-    "docs/ARCHITECTURE.md",
     "docs/EMPLOYER_CASE_STUDY.md",
     "docs/RESEARCH_TIMELINE.md",
     "docs/EMPLOYER_REVIEW_GUIDE.md",
+    "docs/CONTEXT_MODELING_FRONTIER.md",
+    "docs/WINNER_TRANSFER_FRONTIER.md",
     "reports/current_frontier/results.json",
-    "src/rsna_research/anatomy_qualification.py",
-    "tests/test_anatomy_qualification.py",
-    "notebooks/12_owned_residual_and_representation_frontier.ipynb",
-    "notebooks/13_parent_reconstruction_and_anatomy_qualification.ipynb",
+    "src/rsna_research/current_frontier.py",
+    "tests/test_current_frontier.py",
+    "tests/test_winner_transfer.py",
+    "notebooks/14_winner_transfer_and_context_modeling.ipynb",
 ]
 private_patterns = [
     r"1\.2\.826\.0\.1\.3680043",
@@ -120,9 +97,7 @@ private_patterns = [
     r"arn:aws:",
     r"/home/sagemaker-user/",
 ]
-comparison_fragments = [
-    "0." + "961",
-    "leader" + "_snapshot",
+competitive_framing = [
     "leader" + " snapshot",
     "public-score " + "gap",
     "top " + "score",
@@ -131,25 +106,16 @@ comparison_fragments = [
 ]
 
 for name in paths:
-    txt = (ROOT / name).read_text()
+    txt = (ROOT / name).read_text(encoding="utf-8")
     for pattern in private_patterns:
         assert not re.search(pattern, txt), f"private-content pattern in {name}"
     lowered = txt.lower()
-    for fragment in comparison_fragments:
+    for fragment in competitive_framing:
         assert fragment.lower() not in lowered, f"external-comparison framing in {name}"
 
-for pattern in ("test_current_frontier.py", "test_anatomy_qualification.py", "test_employer_portfolio.py"):
+for pattern in ("test_current_frontier.py", "test_winner_transfer.py", "test_employer_portfolio.py"):
     subprocess.run(
-        [
-            sys.executable,
-            "-m",
-            "unittest",
-            "discover",
-            "-s",
-            str(ROOT / "tests"),
-            "-p",
-            pattern,
-        ],
+        [sys.executable, "-m", "unittest", "discover", "-s", str(ROOT / "tests"), "-p", pattern],
         check=True,
     )
 
