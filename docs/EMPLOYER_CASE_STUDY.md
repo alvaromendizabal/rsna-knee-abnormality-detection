@@ -2,23 +2,11 @@
 
 ## Executive summary
 
-This project demonstrates end-to-end ownership of a difficult medical-imaging ML research system: data lineage, grouped validation, heterogeneous deep-learning inference, cloud execution, failure recovery, numerical-parity testing, experiment governance, and a controlled research program for adding new spatial supervision.
+This project demonstrates end-to-end ownership of a difficult medical-imaging ML research system: data lineage, grouped validation, heterogeneous deep-learning reconstruction, anatomy-aware representation learning, winner-informed sequence modeling, cloud execution, failure recovery, numerical-parity testing, experiment governance, and public/private reproducibility controls.
 
 The strongest verified external result retained in the public project record is **0.943 macro ROC-AUC** across twelve knee-MRI findings.
 
-The most important portfolio signal is not one model architecture. It is the way the project turns an evolving research problem into a reproducible engineering system with explicit evidence boundaries.
-
-## Problem
-
-Knee MRI studies are heterogeneous:
-
-- multiple planes and sequences;
-- varying slice counts and spacing;
-- target-specific pathology visibility;
-- incomplete mirrored acquisitions;
-- multi-label outputs with unequal difficulty.
-
-A robust system needs more than image classification. It needs controlled study-level aggregation, exact input identity, validation that respects scanner/entity structure, and careful handling of missing acquisitions.
+The strongest portfolio signal is the system of evidence, not one architecture.
 
 ## My ownership
 
@@ -26,133 +14,119 @@ I owned the project across:
 
 - data and metadata contracts;
 - DICOM decoding and geometry checks;
-- grouped/scanner-aware validation;
+- scanner-grouped validation;
 - image-model and residual experiments;
 - heterogeneous parent reconstruction;
+- anatomy-model qualification;
+- cross-slice sequence modeling;
+- winner-solution research and capability mapping;
 - GPU/CPU execution design;
-- checkpoint and artifact lineage;
-- cloud storage/recovery;
-- runtime observability and cost controls;
+- checkpoint/artifact lineage;
+- cloud storage and recovery;
+- observability and cost controls;
 - regression testing and resumability;
-- experiment promotion/closure decisions;
+- model promotion/closure decisions;
 - public/private reproducibility design.
 
 ## Core constraints
 
-### Validation
-Internal development evidence could not be represented as identical to the external evaluation. Later lineage work also showed that the fully labeled audit set had historical selection exposure for recovered components.
+**Validation:** internal development evidence is not represented as identical to external evaluation.
 
-### Data
-The scoped mirror was incomplete: not every declared acquisition was available for each study.
+**Data:** the scoped mirror has incomplete acquisitions.
 
-### Infrastructure
-Large checkpoints and image artifacts had to coexist with tight local disk headroom on SageMaker Studio.
+**Infrastructure:** large checkpoints and image artifacts must coexist with tight local disk headroom on SageMaker.
 
-### Reproducibility
-Completed expensive work needed to survive later-stage failures without being recomputed.
+**Reproducibility:** completed expensive work must survive later-stage failures.
 
-### Publication
-The repository needed to demonstrate engineering depth without publishing restricted MRI, identifiers, private checkpoints, or competitive implementation details.
+**Publication:** the repository must demonstrate depth without publishing MRI, identifiers, row-level predictions, private weights, or exact competition implementation.
 
 ## Approach
 
 ### 1. Establish a validation contract
-I built a grouped research boundary with scanner-disjoint folds and kept external performance separate from internal model-selection metrics.
+Scanner-grouped folds and explicit evidence classes prevent leakage and score-setting confusion.
 
-### 2. Test representation hypotheses
-I evaluated target-specific residuals, fixed spatial bias, foundation-model transfer, and paired image-model routes under explicit controls.
-
-Negative results were preserved when the hypothesis failed.
+### 2. Preserve negative results
+Fixed spatial bias, frozen foundation transfer, and a geometry-defect hypothesis were retained as valid negative evidence rather than tuned until favorable.
 
 ### 3. Reconstruct the heterogeneous parent
-Rather than continue optimizing surrogate systems, I restored the trained parent branches:
-
-- native DINO ensemble;
-- RadImageNet-family heads/layouts;
-- five A5 folds;
-- Raptor views;
-- CoAt-family checkpoints and inference.
-
-I also preserved the fixed fitted numerical fusion/calibration graph rather than casually refitting it.
+The major trained branches were restored while preserving the fitted numerical aggregation/calibration.
 
 ### 4. Make recovery resumable
-Large model assets were stored privately and content-addressed. Valid completed units were reused. Input signatures determined which branches needed recomputation after source changes.
+Large private artifacts are content-addressed and completed work is reused.
 
-### 5. Audit validation and acquisition lineage
-I explicitly checked which studies were usable for independent claims and which acquisitions were actually present.
+### 5. Audit acquisition and selection lineage
+The project explicitly identified incomplete inputs and historical selection exposure instead of inventing clean validation membership.
 
-### 6. Test physical-geometry failure modes
-A bounded DICOM geometry screen inspected thousands of real headers and closed that hypothesis when no actionable defect appeared.
+### 6. Qualify anatomy
+A pretrained knee-anatomy route passed a nine-structure reference pilot with mean Dice above 0.91. Native-transfer truth remains limited.
 
-### 7. Introduce a genuinely new capability
-The next research direction became supervised anatomy-aware localization and visibility-conditioned evidence, because generic attention, multi-plane context, medical pretraining, and ensemble diversity were already represented in the parent.
+### 7. Import a proven mechanism instead of swapping another backbone
+A mandatory review of prior strong medical-imaging solutions produced a capability inventory. Cross-slice context emerged as a credible gap.
+
+The full-cohort grouped research comparison improved from **0.7943834 to 0.7978448**.
+
+### 8. Treat uncertainty as part of the decision
+A later explicit neighbor-context extension reached **0.7978946**, but its paired interval crossed zero.
+
+Decision: preserve the result, do not over-promote it, and move to a materially different capability.
 
 ## Key decisions
 
 | Decision | Evidence | Outcome |
 |---|---|---|
-| Retain narrow residual modeling | Positive grouped development movement | Preserved as development challenger |
 | Expand fixed spatial branch | Negative aggregate screen | Closed |
 | Expand frozen orthopedic foundation features | Negative matched screen | Closed |
-| Treat partial inputs as complete parent | Acquisition audit showed missing series | Rejected |
-| Assume fully labeled rows are untouched | Selection lineage contradicted this | Rejected |
+| Treat partial acquisitions as complete | Acquisition audit contradicted this | Rejected |
+| Treat fully labeled audit rows as untouched | Selection lineage contradicted this | Rejected |
 | Correct DICOM ordering/geometry | 2,287-header audit found zero flags | Closed for inspected scope |
 | Add another generic backbone | Parent already contains strong diversity | Deprioritized |
-| Qualify anatomy-aware transfer | Missing capability + source evidence | Advanced to gated reference pilot |
+| Qualify anatomy transfer | Reference segmentation gate passed | Preserved enabling capability |
+| Add ordered cross-slice context | Full-cohort grouped improvement | Retained |
+| Promote tiny Stage 104 increment | Paired interval crossed zero | Not promoted |
+| Choose future experiments ad hoc | Winner inventory now exists | Replaced by ranked capability process |
 
 ## Engineering highlights
 
 ### Resumability
-Each expensive unit is independently reusable. A later failure does not erase earlier valid work.
+Each expensive unit is independently reusable.
 
 ### Numerical parity
-Optimizations are accepted only after source-versus-optimized output differences pass explicit tolerances.
+Optimizations and exports are accepted only after explicit output-equivalence gates.
 
 ### Failure regression
-Avoidable failures become deterministic regression tests before the next expensive run.
+Avoidable failures become deterministic tests before another cost-bearing run.
 
 ### Resource engineering
-The project uses:
-
-- private S3 for large assets;
-- RAM/checkpoint streaming;
-- local-disk safety reserves;
-- bounded worker counts;
-- GPU memory gates;
-- representative short performance benchmarks;
-- timestamped resource/cost telemetry.
+The system uses private object storage, streaming/checkpoint recovery, disk reserves, GPU memory gates, bounded execution, and cost telemetry.
 
 ### Evidence discipline
-A successful run is not automatically a promoted model. Engineering parity, internal development improvement, and external performance are separate lifecycle states.
+A successful run is not automatically a promoted model. Engineering parity, development movement, uncertainty, and external performance are separate lifecycle states.
+
+### Winner-informed prioritization
+The public-safe capability inventory spans **9 competitions, 15 top-solution lineages, and 37 technique families**.
 
 ## Technical stack
 
-**Languages / core:** Python, Jupyter.
+**Core:** Python, Jupyter, PyTorch, scikit-learn.
 
-**ML / CV:** PyTorch, scikit-learn, DINO-style encoders, CoAtNet-family architectures, medical-image pretraining, residual modeling, calibration, ensembling.
-
-**Medical imaging:** DICOM metadata and geometry, multi-plane MRI, 2.5D/3D representations, anatomy localization, segmentation transfer.
+**Medical imaging:** DICOM metadata/geometry, multi-plane MRI, 2.5D/3D representations, anatomy localization, segmentation transfer.
 
 **Cloud:** AWS SageMaker, S3, GPU inference, private artifact storage.
 
-**Engineering:** deterministic tests, resumable runners, manifests, structured telemetry, CI publication gates, public/private artifact controls.
+**Engineering:** deterministic tests, resumable runners, manifests, telemetry, CI publication gates.
 
 ## Outcomes
 
-Verified public-safe outcomes include:
-
-- external macro ROC-AUC record: **0.943**;
-- 4,407-study canonical cache;
-- scanner-disjoint grouped research boundary;
-- 20 native trained members restored;
-- 5 A5 folds restored;
-- 4 Raptor diagnostic views executed;
-- 7 CoAt-family trained predictions executed after 8 source/checkpoint gates;
-- 7-unit validation/acquisition audit completed;
-- 2,287-header geometry audit completed with zero flags;
-- 4-track pretrained anatomy qualification completed.
-
-The current public state intentionally stops before claiming segmentation quality or downstream anatomy-conditioned disease improvement that has not yet been measured.
+- external macro ROC-AUC record: **0.943**
+- 4,407-study canonical cache
+- scanner-disjoint grouped research boundary
+- heterogeneous parent branches restored
+- 2,287-header geometry audit with zero flags
+- nine-structure anatomy reference qualification above 0.91 mean Dice
+- full-cohort context-modeling gain from **0.7943834 to 0.7978448**
+- inference/export parity qualification
+- Stage 104 point estimate **0.7978946**, correctly retained as inconclusive
+- Winner Technique Inventory covering **9 competitions / 15 lineages / 37 mechanism families**
 
 ## What this demonstrates to an employer
 
@@ -161,15 +135,16 @@ The current public state intentionally stops before claiming segmentation qualit
 - ability to debug and recover complex model systems;
 - production-aware cloud engineering;
 - validation/leakage discipline;
-- resource and cost awareness;
-- high-quality technical communication;
-- willingness to close weak ideas;
-- ability to protect sensitive/private implementation while still making work reviewable.
+- cost awareness;
+- rigorous negative-result handling;
+- ability to translate external research into controlled internal experiments;
+- strong technical communication;
+- protection of sensitive implementation while keeping work reviewable.
 
 ## Review path
 
-For a fast review: README → this case study → Notebook 13.
+Fast review: README → this case study → Notebook 14.
 
-For ML engineering depth: add Architecture + Reproducibility + Parent Reconstruction.
+ML engineering depth: Architecture + Reproducibility + Project Status.
 
-For research depth: add Research Timeline + Anatomy-Aware Transfer Program.
+Research depth: Context Modeling Frontier + Winner Transfer Frontier + Research Timeline.
