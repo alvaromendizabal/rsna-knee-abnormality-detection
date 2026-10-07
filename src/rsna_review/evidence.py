@@ -52,7 +52,7 @@ def summary(data):
     for key in ('row_level_predictions_public', 'model_weights_public', 'raw_mri_public', 'private_runner_code_public', 'exact_competition_fusion_logic_public'):
         require(data['publication_policy'][key] is False, f'Private boundary changed: {key}')
     return {'as_of_utc': data['as_of_utc'], 'scores': scores, 'stage102_gain': gain, 'coverage': coverage,
-            'folds': folds, 'matched_delta': delta, 'ci90': [lower, upper], 'stage104_decision': 'INCONCLUSIVE'}
+            'folds': folds, 'matched_delta': delta, 'reference_delta': scores[2] - scores[1], 'ci90': [lower, upper], 'stage104_decision': 'INCONCLUSIVE'}
 
 
 def fingerprints(root, notebook):
@@ -68,7 +68,7 @@ def verify_historical(notebook, expected, number):
     require(not any(o['output_type'] == 'error' for o in outputs), 'Historical notebook error')
     plots = [o['data']['application/vnd.plotly.v1+json'] for o in outputs if 'application/vnd.plotly.v1+json' in o.get('data', {})]
     svgs = [o['data']['image/svg+xml'] for o in outputs if 'image/svg+xml' in o.get('data', {})]
-    require(len(plots) == len(svgs) == 2 and all('<svg' in ''.join(x) for x in svgs), 'Two saved Plotly and SVG charts required')
+    require(len(plots) == len(svgs) == 2 and all('<svg' in ''.join(x) and '<path' in ''.join(x) and len(''.join(x)) > 1500 for x in svgs), 'Two saved Plotly and SVG charts required')
     if number == '12':
         charts = [(['Baseline', 'Retained residual'], [.7912075114786626, .7936862526975088]),
                   (['Fold 0', 'Fold 2', 'Macro'], [.0002088, -.0012338, -.0008008280403827])]
@@ -97,14 +97,14 @@ def verify_notebook(root, path=None, number='14'):
     require(not any(o['output_type'] == 'error' for o in outputs), 'Notebook contains error output')
     plots = [o['data']['application/vnd.plotly.v1+json'] for o in outputs if 'application/vnd.plotly.v1+json' in o.get('data', {})]
     svgs = [o['data']['image/svg+xml'] for o in outputs if 'image/svg+xml' in o.get('data', {})]
-    require(len(plots) == len(svgs) == 4 and all('<svg' in ''.join(x) for x in svgs), 'Four Plotly and SVG charts required')
+    require(len(plots) == len(svgs) == 4 and all('<svg' in ''.join(x) and '<path' in ''.join(x) and len(''.join(x)) > 1500 for x in svgs), 'Four Plotly and SVG charts required')
     for plot, values, labels in zip(plots[:3], [expected['scores'], expected['coverage'], expected['folds']],
         [['Stage 84', 'Stage 102', 'Stage 104'], ['Full', 'Partial', 'Missing', 'Blocked'], ['Fold 0', 'Fold 1', 'Fold 2', 'Fold 3', 'Fold 4']], strict=True):
         require(len(plot['data']) == 1 and plot['data'][0]['y'] == values and plot['data'][0]['x'] == labels, 'Chart differs from source evidence')
     trace = plots[3]['data'][0]
-    require(trace['x'] == [expected['matched_delta']], 'Wrong Stage 104 comparator')
-    require(trace['error_x']['array'] == [expected['ci90'][1] - expected['matched_delta']], 'Upper interval mismatch')
-    require(trace['error_x']['arrayminus'] == [expected['matched_delta'] - expected['ci90'][0]], 'Lower interval mismatch')
+    require(trace['x'] == [expected['reference_delta']], 'Wrong Stage 104 comparator')
+    require(trace['error_x']['array'] == [expected['ci90'][1] - expected['reference_delta']], 'Upper interval mismatch')
+    require(trace['error_x']['arrayminus'] == [expected['reference_delta'] - expected['ci90'][0]], 'Lower interval mismatch')
     streams = ''.join(''.join(o.get('text', '')) for o in outputs if o['output_type'] == 'stream')
     marker = 'REVIEW_SUMMARY '
     lines = [line.removeprefix(marker) for line in streams.splitlines() if line.startswith(marker)]

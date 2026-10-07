@@ -77,6 +77,11 @@ class PublicReviewTests(unittest.TestCase):
         del out['data']['image/svg+xml']
         self.assert_invalid_notebook()
 
+    def test_blank_fallback_rejected(self):
+        out = next(o for o in self.notebook['cells'][1]['outputs'] if 'data' in o)
+        out['data']['image/svg+xml'] = '<svg></svg>'
+        self.assert_invalid_notebook()
+
     def test_incomplete_execution_rejected(self):
         self.notebook['cells'][1]['execution_count'] = None
         self.assert_invalid_notebook()
