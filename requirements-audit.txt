@@ -1,0 +1,5 @@
+# Direct pins for the public synthetic metadata audit; no private research packages.
+numpy==2.3.5
+pandas==2.2.3
+psutil==7.2.2
+pytest==8.4.2

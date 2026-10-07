@@ -30,3 +30,33 @@ jobs:
 
       - name: Verify publication boundary
         run: python tools/check_current_frontier.py
+
+  reproducible-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-review.lock
+      - name: Install public review environment
+        run: python -m pip install --require-hashes -r requirements-review.lock
+      - name: Run complete public tests and synthetic example
+        run: |
+          python -m pytest -q
+          python examples/run_public_review.py
+          python -O scripts/verify_review_notebook.py
+      - name: Execute and verify saved review notebooks
+        run: |
+          python scripts/execute_review_notebook.py --notebook 12 --output "$RUNNER_TEMP/rsna-review/12.ipynb"
+          python scripts/execute_review_notebook.py --notebook 13 --output "$RUNNER_TEMP/rsna-review/13.ipynb"
+          python scripts/execute_review_notebook.py --notebook 14 --output "$RUNNER_TEMP/rsna-review/14.ipynb"
+      - name: Preserve executed notebooks for review
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: public-review-notebooks
+          path: ${{ runner.temp }}/rsna-review/*.ipynb
+          retention-days: 14
+          if-no-files-found: error

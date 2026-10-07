@@ -7,7 +7,7 @@
 
 A notebook-first project by **Alvaro Mendizabal** for twelve knee-MRI findings. AWS/SageMaker is the canonical private research environment; this repository is the curated employer-facing and semi-reproducible layer. Raw MRI, identifiers, row-level predictions, private checkpoints, return bundles, and exact competition inference/fusion logic stay outside public history.
 
-> **Current verified publication boundary: Stage 104.** The project retains a verified external macro ROC-AUC of **0.943** and progressed the same 4,349-study scanner-grouped research population from **0.7943834 to 0.7978448** through winner-informed cross-slice context modeling. A later neighbor-context probe reached **0.7978946**, but its paired uncertainty interval crossed zero, so it is preserved as inconclusive rather than over-promoted.
+> **Portfolio review complete through Stage 104; private research remains ongoing.** The project retains a verified external macro ROC-AUC of **0.943** and progressed the same 4,349-study scanner-grouped research population from **0.7943834 to 0.7978448** through winner-informed cross-slice context modeling. A later neighbor-context probe reached **0.7978946**, but its paired uncertainty interval crossed zero, so it is preserved as inconclusive rather than over-promoted.
 
 ## 30-second overview
 
@@ -97,16 +97,20 @@ Internal grouped metrics are model-selection evidence and are not presented as i
 
 ## Public reproducibility
 
-Run:
+**Five-minute review:** [reviewer guide](docs/EMPLOYER_REVIEW_GUIDE.md) → [executed Notebook 14](notebooks/14_winner_transfer_and_context_modeling.ipynb) → [synthetic metric example](examples/run_public_review.py).
 
-    python -m unittest discover -s tests -p 'test_current_frontier.py'
-    python -m unittest discover -s tests -p 'test_winner_transfer.py'
-    python -m unittest discover -s tests -p 'test_employer_portfolio.py'
+The [reproduction guide](docs/REPRODUCIBILITY.md) provides a pinned CPU environment, a four-study synthetic example using the actual public twelve-target metric, the complete public test suite, and real Jupyter replay of Notebooks 12–14. No cloud account, MRI, model download, or GPU is needed.
+
+For the standard-library publication contract, run from the repository root:
+
     python tools/check_current_frontier.py
+    python scripts/verify_review_notebook.py
+
+The source/output verifier checks notebook source and report fingerprints, actual plotted values, saved execution counts, and persistent Plotly/SVG output. Regenerating aggregate charts validates the public review layer; it does not independently reproduce the private experimental scores.
 
 ## Notebook guide
 
-Notebooks 01–13 preserve the earlier research path. **[Notebook 14 — Winner transfer and context modeling](notebooks/14_winner_transfer_and_context_modeling.ipynb)** is the current public entry point.
+Notebooks 01–13 preserve the earlier research path. Notebook 00 is a **prepared, unexecuted private preflight template**, not a runnable public demo. Notebooks 12–14 have executable aggregate chart sources and a documented replay path; older notebooks are archived execution records with their original environment/data assumptions. **[Notebook 14 — Winner transfer and context modeling](notebooks/14_winner_transfer_and_context_modeling.ipynb)** is the current public entry point.
 
 ## Public repository versus private AWS workspace
 
