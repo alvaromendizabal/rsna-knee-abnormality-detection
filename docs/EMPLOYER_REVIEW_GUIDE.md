@@ -6,9 +6,9 @@ This repository is intentionally deep. This page gives reviewers a fast path bas
 
 Read:
 
-1. README
-2. Employer Case Study
-3. Notebook 14
+1. [README](../README.md)
+2. [Employer Case Study](EMPLOYER_CASE_STUDY.md)
+3. [Notebook 14](../notebooks/14_winner_transfer_and_context_modeling.ipynb)
 
 Key signal: **end-to-end ownership of a complex medical-imaging ML research system on AWS.**
 
@@ -16,10 +16,10 @@ Key signal: **end-to-end ownership of a complex medical-imaging ML research syst
 
 Read:
 
-1. System Architecture
-2. Reproducibility Boundary
-3. Project Status
-4. Parent Reconstruction Frontier
+1. [System Architecture](ARCHITECTURE.md)
+2. [Reproducibility Boundary](REPRODUCIBILITY.md)
+3. [Project Status](PROJECT_STATUS.md)
+4. [Parent Reconstruction Frontier](PARENT_RECONSTRUCTION_FRONTIER.md)
 
 Look for:
 
@@ -35,11 +35,11 @@ Look for:
 
 Read:
 
-1. Research Timeline
-2. Context Modeling Frontier
-3. Winner Transfer Frontier
-4. Anatomy-Aware Transfer Program
-5. Notebook 14
+1. [Research Timeline](RESEARCH_TIMELINE.md)
+2. [Context Modeling Frontier](CONTEXT_MODELING_FRONTIER.md)
+3. [Winner Transfer Frontier](WINNER_TRANSFER_FRONTIER.md)
+4. [Anatomy-Aware Transfer Program](ANATOMY_AWARE_TRANSFER_PROGRAM.md)
+5. [Notebook 14](../notebooks/14_winner_transfer_and_context_modeling.ipynb)
 
 Look for:
 
@@ -51,6 +51,14 @@ Look for:
 - explicit promotion/closure gates;
 - separation of engineering parity from predictive evidence;
 - winner-derived capability ranking before compute spend.
+
+## Hands-on review — 5 minutes after environment setup
+
+1. Run the [synthetic example](../examples/run_public_review.py): it exercises the public twelve-target metric, rejects invalid submission inputs, and keeps a positive but uncertain increment inconclusive.
+2. Follow [the replay commands](REPRODUCIBILITY.md) to regenerate the three recent aggregate notebooks in a clean kernel.
+3. Inspect the [current aggregate report](../reports/current_frontier/results.json) and [source/output verifier](../src/rsna_review/evidence.py).
+
+The synthetic fixture's 0.75 AUC is illustrative and is never a project result. The 0.943 external record and grouped development values remain separate. Complete reviewability at Stage 104 does not claim full parent parity, clinical deployment, or completion of the prepared Stage 105 experiment.
 
 ## Interview discussion map
 

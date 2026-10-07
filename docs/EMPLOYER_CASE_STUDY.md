@@ -143,7 +143,9 @@ The public-safe capability inventory spans **9 competitions, 15 top-solution lin
 
 ## Review path
 
-Fast review: README → this case study → Notebook 14.
+Fast review: [README](../README.md) → this case study → [executed Notebook 14](../notebooks/14_winner_transfer_and_context_modeling.ipynb).
+
+Hands-on review: [synthetic metric example](../examples/run_public_review.py) and [pinned notebook replay](REPRODUCIBILITY.md). The public portfolio is complete through Stage 104; the prepared next private experiment remains unexecuted in this publication.
 
 ML engineering depth: Architecture + Reproducibility + Project Status.
 
