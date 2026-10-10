@@ -8,7 +8,7 @@ I built a research system for twelve findings in knee MRI, covering DICOM audits
 
 I also built two public implementations that make the engineering decisions inspectable: an interactive browser trainer and a CPU pipeline with durable fold checkpoints. Both generate synthetic data, fit twelve logistic outputs, and evaluate held-out predictions. Recorded aggregate MRI research remains a separate evidence layer.
 
-## Engineering contributions
+## My ownership and engineering contributions
 
 I designed the research workflow and its validation, execution, and publication controls: data contracts and joins; grouped splits; model integration and numerical-parity checks; resumable artifact handling; experiment interpretation; and the review experience in this repository. The original dataset, pretrained model families, and published methods are external contributions credited in [Sources](SOURCES.md).
 
