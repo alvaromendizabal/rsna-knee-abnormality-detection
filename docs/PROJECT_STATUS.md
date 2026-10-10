@@ -1,6 +1,6 @@
 # Project status
 
-Updated from verified aggregate AWS evidence through **Stage 104 · 2026-10-06 UTC**.
+The employer-facing release is complete. This page preserves the published aggregate research snapshot through **Stage 104 · 2026-10-06 UTC**; it is not a live experiment tracker. See [Project closeout](PROJECT_CLOSEOUT.md) for the release scope and [Reproducibility](REPRODUCIBILITY.md) for the independent public demonstration.
 
 ## Current boundary
 
@@ -95,14 +95,11 @@ A bounded screen inspected **2,287 DICOM headers, 77 series, 26 studies, and 93 
 
 That result is preserved as a valid negative experiment.
 
-## Current scientific frontier
+## Research limits at closeout
 
-The project now has two complementary frontiers:
+Ordered cross-slice context provided the better-supported recent development gain. The smaller neighbor-context increment remained inconclusive. Complete compatible input recovery, independent clinical validation, and a fully verified new raw-image test-serving path are not established by this public snapshot.
 
-1. proven grouped improvement through cross-slice context;
-2. winner-informed missing capabilities, especially anatomy-aware supervision and leakage-safe weak-label robustness.
-
-The next private experiment is prepared but is not represented here as completed until a verified owner return exists.
+The portfolio release does not depend on another private experiment. Earlier reports and notebooks remain dated research records, including decisions and proposed work from their original publication dates.
 
 ## Publication boundary
 

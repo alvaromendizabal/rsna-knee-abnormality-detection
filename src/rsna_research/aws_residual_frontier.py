@@ -2,8 +2,6 @@ from __future__ import annotations
 
 GIB = 1024 ** 3
 
-def public_gap(reference: float, leader: float) -> float:
-    return round(float(leader) - float(reference), 12)
 
 def detect_image_layout(shape: tuple[int, ...]) -> str:
     if len(shape) != 4:

@@ -57,11 +57,7 @@
   "benchmark": {
     "metric": "unweighted macro ROC AUC across 12 findings",
     "direction": "higher",
-    "source": "https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/overview/evaluation",
-    "leaderboard_source": "https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/leaderboard",
-    "top_score": null,
-    "verified_top_score": false,
-    "reason": "Public page available but leading rows were not retrievable during this review."
+    "source": "https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/overview/evaluation"
   },
   "inference": "Report text and report-derived state variables are NEVER test-time predictors. They are candidate training supervision only.",
   "predeclared_decision": "Measure joint and leave-one-block-out assignment differences. Do not promote labels or claim accuracy without adjudication. Review multilingual feasibility next."

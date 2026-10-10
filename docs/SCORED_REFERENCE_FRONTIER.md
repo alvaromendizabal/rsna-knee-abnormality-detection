@@ -2,7 +2,7 @@
 
 ## Objective
 
-The project remains anchored to the historically best scored RSNA system: **0.933 public macro-ROC-AUC**. A user-supplied September 29 leaderboard snapshot shows **0.961** at the top.
+This historical snapshot examines the project’s scored reference at **0.933 public macro-ROC-AUC**. Later project evidence is summarized in [Project status](PROJECT_STATUS.md).
 
 The recovered reference is kept as the mandatory public control. The public repository documents aggregate readiness and engineering decisions without publishing the private weights or full submission stack.
 

@@ -13,10 +13,8 @@ N = json.loads((ROOT / "notebooks/07_deployment_and_training_frontier.ipynb").re
 
 L = D["leaderboard"]
 assert L["reference_public_auc"] == 0.933
-assert L["highest_returned_page_auc"] == 0.958
 assert L["stage36_public_auc"] == 0.820
 assert L["stage36_status"] == "complete"
-assert math.isclose(L["dated_gap"], 0.025, abs_tol=1e-12)
 
 T = D["training_data"]
 assert T["cached_studies"] == T["train_studies"] == 4407
@@ -102,5 +100,5 @@ subprocess.run(
 )
 print(
     "TRAINING_FRONTIER_PUBLICATION_PASSED: full cache, grouped folds, Stage-34 matched training, "
-    "Stage-36 official score, notebook outputs, privacy scan, 10 synthetic tests"
+    "Stage-36 official score, notebook outputs, privacy scan, 8 synthetic tests"
 )

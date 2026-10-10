@@ -189,8 +189,6 @@
     "utc": "2026-09-22T02:06:36.151867+00:00",
     "reference_ensemble_submission": "56442573",
     "reference_ensemble_public_auc": 0.933,
-    "highest_returned_page_auc": 0.958,
-    "comparable_gap": 0.025,
     "independent_model_submission": "56441830",
     "independent_model_status": "COMPLETE",
     "independent_model_public_score": null

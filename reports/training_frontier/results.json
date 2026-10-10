@@ -3,8 +3,6 @@
   "evaluation_boundary": "Verified aggregate evidence through Stage 54. Public-safe summary only; no study identifiers, row-level predictions, feature banks, checkpoints, or private return artifacts.",
   "leaderboard_historical": {
     "reference_public_auc": 0.933,
-    "highest_returned_page_auc": 0.958,
-    "dated_gap": 0.025,
     "independent_stage36_dino_public_auc": 0.82,
     "note": "Historical public-score context; refresh required before a future submission."
   },
@@ -99,8 +97,6 @@
   "leaderboard": {
     "reference_submission": "56442573",
     "reference_public_auc": 0.933,
-    "highest_returned_page_auc": 0.958,
-    "dated_gap": 0.025,
     "stage36_submission": "56507693",
     "stage36_recipe": "independently trained DINOv2-Small epoch-3 baseline",
     "stage36_public_auc": 0.82,

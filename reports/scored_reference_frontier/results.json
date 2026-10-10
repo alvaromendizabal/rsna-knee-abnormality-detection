@@ -3,8 +3,6 @@
   "evaluation_boundary": "Verified aggregate evidence through Stage 63. Stage 64 is prepared but not yet executed.",
   "historical_public": {
     "reference_auc": 0.933,
-    "leader_auc": 0.958,
-    "gap": 0.025,
     "independent_dino_auc": 0.82,
     "freshness": "historical_not_refreshed"
   },

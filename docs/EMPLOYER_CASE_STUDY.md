@@ -1,152 +1,58 @@
-# Employer case study
+# Case study · medical-imaging ML systems
 
 ## Executive summary
 
-This project demonstrates end-to-end ownership of a difficult medical-imaging ML research system: data lineage, grouped validation, heterogeneous deep-learning reconstruction, anatomy-aware representation learning, winner-informed sequence modeling, cloud execution, failure recovery, numerical-parity testing, experiment governance, and public/private reproducibility controls.
+This project explores twelve findings in knee MRI while treating data identity, evaluation design, and recoverable execution as first-class engineering problems. The work spans Python research tooling, DICOM audits, scanner-grouped validation, heterogeneous PyTorch models, AWS execution, and evidence-based experiment decisions.
 
-The strongest verified external result retained in the public project record is **0.943 macro ROC-AUC** across twelve knee-MRI findings.
-
-The strongest portfolio signal is the system of evidence, not one architecture.
+The public release gives a reviewer two complementary views: recorded aggregate research evidence and an independently runnable synthetic engineering pipeline. The latter demonstrates contracts and recovery without access to MRI, trained models, or private inference logic.
 
 ## My ownership
 
-I owned the project across:
-
-- data and metadata contracts;
-- DICOM decoding and geometry checks;
-- scanner-grouped validation;
-- image-model and residual experiments;
-- heterogeneous parent reconstruction;
-- anatomy-model qualification;
-- cross-slice sequence modeling;
-- winner-solution research and capability mapping;
-- GPU/CPU execution design;
-- checkpoint/artifact lineage;
-- cloud storage and recovery;
-- observability and cost controls;
-- regression testing and resumability;
-- model promotion/closure decisions;
-- public/private reproducibility design.
+I designed the research workflow and its validation, execution, and publication controls: data contracts and joins; grouped splits; model reconstruction and numerical-parity checks; resumable artifact handling; experiment interpretation; and the review experience in this repository. The original dataset, pretrained model families, and published methods are external contributions credited in [Sources](SOURCES.md).
 
 ## Core constraints
 
-**Validation:** internal development evidence is not represented as identical to external evaluation.
-
-**Data:** the scoped mirror has incomplete acquisitions.
-
-**Infrastructure:** large checkpoints and image artifacts must coexist with tight local disk headroom on SageMaker.
-
-**Reproducibility:** completed expensive work must survive later-stage failures.
-
-**Publication:** the repository must demonstrate depth without publishing MRI, identifiers, row-level predictions, private weights, or exact competition implementation.
-
-## Approach
-
-### 1. Establish a validation contract
-Scanner-grouped folds and explicit evidence classes prevent leakage and score-setting confusion.
-
-### 2. Preserve negative results
-Fixed spatial bias, frozen foundation transfer, and a geometry-defect hypothesis were retained as valid negative evidence rather than tuned until favorable.
-
-### 3. Reconstruct the heterogeneous parent
-The major trained branches were restored while preserving the fitted numerical aggregation/calibration.
-
-### 4. Make recovery resumable
-Large private artifacts are content-addressed and completed work is reused.
-
-### 5. Audit acquisition and selection lineage
-The project explicitly identified incomplete inputs and historical selection exposure instead of inventing clean validation membership.
-
-### 6. Qualify anatomy
-A pretrained knee-anatomy route passed a nine-structure reference pilot with mean Dice above 0.91. Native-transfer truth remains limited.
-
-### 7. Import a proven mechanism instead of swapping another backbone
-A mandatory review of prior strong medical-imaging solutions produced a capability inventory. Cross-slice context emerged as a credible gap.
-
-The full-cohort grouped research comparison improved from **0.7943834 to 0.7978448**.
-
-### 8. Treat uncertainty as part of the decision
-A later explicit neighbor-context extension reached **0.7978946**, but its paired interval crossed zero.
-
-Decision: preserve the result, do not over-promote it, and move to a materially different capability.
+| Constraint | Engineering response |
+|---|---|
+| Scanner-specific acquisition patterns | Grouped evaluation; audit scanner membership across folds |
+| Incomplete source acquisitions | Explicit coverage checks and scoped restoration claims |
+| Large artifacts and limited local storage | Reusable work units, manifests, streaming, resource telemetry |
+| Repeated development-set inspection | Separate development evidence from independent confirmation |
+| Restricted data and private implementation | Publish aggregate evidence and a separate synthetic demonstration |
 
 ## Key decisions
 
-| Decision | Evidence | Outcome |
+| Decision | Evidence | Result |
 |---|---|---|
-| Expand fixed spatial branch | Negative aggregate screen | Closed |
-| Expand frozen orthopedic foundation features | Negative matched screen | Closed |
-| Treat partial acquisitions as complete | Acquisition audit contradicted this | Rejected |
-| Treat fully labeled audit rows as untouched | Selection lineage contradicted this | Rejected |
-| Correct DICOM ordering/geometry | 2,287-header audit found zero flags | Closed for inspected scope |
-| Add another generic backbone | Parent already contains strong diversity | Deprioritized |
-| Qualify anatomy transfer | Reference segmentation gate passed | Preserved enabling capability |
-| Add ordered cross-slice context | Full-cohort grouped improvement | Retained |
-| Promote tiny Stage 104 increment | Paired interval crossed zero | Not promoted |
-| Choose future experiments ad hoc | Winner inventory now exists | Replaced by ranked capability process |
+| Preserve scanner separation | 59 scanner groups; zero groups crossing folds | Retained validation boundary |
+| Stop fixed spatial and frozen-feature routes | Negative matched comparisons | Avoided further spending on those hypotheses |
+| Investigate image geometry | 2,287 headers and 93 decoded images; no flags within scope | Closed that hypothesis for the inspected sample |
+| Add ordered cross-slice context | Same 4,349-study development population | Macro AUC improved from 0.7943834 to 0.7978448 |
+| Promote a narrow neighbor-context extension | Point estimate 0.7978946; paired interval crossed zero | Retained as inconclusive |
+| Claim a fully reconstructed image-to-output system | Compatible input coverage and evaluation independence unresolved | Claim withheld |
 
 ## Engineering highlights
 
-### Resumability
-Each expensive unit is independently reusable.
+**Recoverable execution.** Completed work has a compatibility contract, not just a filename. The [public pipeline](../src/rsna_review/public_pipeline.py) makes this inspectable: deterministic data, train-only normalization, scanner-disjoint folds, atomic checkpoints, content hashes, and resume rejection when inputs or implementation change.
 
-### Numerical parity
-Optimizations and exports are accepted only after explicit output-equivalence gates.
+**Numerical and scientific gates.** Schema validation, target ordering, finite probability checks, and paired uncertainty serve different purposes. A successful execution does not establish a meaningful model improvement. [Notebook 14](../notebooks/14_winner_transfer_and_context_modeling.ipynb) retains the inconclusive result and its interval.
 
-### Failure regression
-Avoidable failures become deterministic tests before another cost-bearing run.
-
-### Resource engineering
-The system uses private object storage, streaming/checkpoint recovery, disk reserves, GPU memory gates, bounded execution, and cost telemetry.
-
-### Evidence discipline
-A successful run is not automatically a promoted model. Engineering parity, development movement, uncertainty, and external performance are separate lifecycle states.
-
-### Winner-informed prioritization
-The public-safe capability inventory spans **9 competitions, 15 top-solution lineages, and 37 technique families**.
+**Reviewable evidence.** Hash-locked dependencies and CI execute the synthetic demo and replay three aggregate notebooks. Publication checks also inspect candidate files for restricted artifacts and concrete credential patterns. These controls reduce accidental disclosure; they do not replace a human review.
 
 ## Technical stack
 
-**Core:** Python, Jupyter, PyTorch, scikit-learn.
-
-**Medical imaging:** DICOM metadata/geometry, multi-plane MRI, 2.5D/3D representations, anatomy localization, segmentation transfer.
-
-**Cloud:** AWS SageMaker, S3, GPU inference, private artifact storage.
-
-**Engineering:** deterministic tests, resumable runners, manifests, telemetry, CI publication gates.
+- **Research:** Python, Jupyter, PyTorch, scikit-learn; multi-plane DICOM/MRI and anatomy-transfer studies.
+- **Infrastructure:** AWS SageMaker, S3, GPU execution, resumable artifacts and resource telemetry.
+- **Public review:** NumPy, pandas, pytest, Plotly, Jupyter, HTML/SVG reports, GitHub Actions.
 
 ## Outcomes
 
-- external macro ROC-AUC record: **0.943**
-- 4,407-study canonical cache
-- scanner-disjoint grouped research boundary
-- heterogeneous parent branches restored
-- 2,287-header geometry audit with zero flags
-- nine-structure anatomy reference qualification above 0.91 mean Dice
-- full-cohort context-modeling gain from **0.7943834 to 0.7978448**
-- inference/export parity qualification
-- Stage 104 point estimate **0.7978946**, correctly retained as inconclusive
-- Winner Technique Inventory covering **9 competitions / 15 lineages / 37 mechanism families**
+The recorded external result is **0.943 macro ROC-AUC**. Separately, the grouped development comparison improved by **0.0034614**, from **0.7943834 to 0.7978448**. These evaluation settings are not interchangeable. The 58 fully labeled audit rows are not an untouched confirmation set, and scanner separation alone does not eliminate every source of bias.
+
+The anatomy route passed a nine-structure reference pilot with mean Dice approximately **0.9118**. Native-domain transfer remains exploratory. No diagnostic use or clinical readiness is claimed.
 
 ## What this demonstrates to an employer
 
-- ownership across the full ML lifecycle;
-- research judgment under imperfect evidence;
-- ability to debug and recover complex model systems;
-- production-aware cloud engineering;
-- validation/leakage discipline;
-- cost awareness;
-- rigorous negative-result handling;
-- ability to translate external research into controlled internal experiments;
-- strong technical communication;
-- protection of sensitive implementation while keeping work reviewable.
+The core contribution is a disciplined way to build and inspect ML systems under imperfect data and constrained compute: verify identities, isolate evaluation assumptions, preserve completed work, retain negative evidence, and make claims traceable to artifacts.
 
-## Review path
-
-Fast review: [README](../README.md) → this case study → [executed Notebook 14](../notebooks/14_winner_transfer_and_context_modeling.ipynb).
-
-Hands-on review: [synthetic metric example](../examples/run_public_review.py) and [pinned notebook replay](REPRODUCIBILITY.md). The public portfolio is complete through Stage 104; the prepared next private experiment remains unexecuted in this publication.
-
-ML engineering depth: Architecture + Reproducibility + Project Status.
-
-Research depth: Context Modeling Frontier + Winner Transfer Frontier + Research Timeline.
+Start with the [review guide](EMPLOYER_REVIEW_GUIDE.md), run the [CPU demonstration](REPRODUCIBILITY.md), or inspect the [architecture](ARCHITECTURE.md). The [closeout record](PROJECT_CLOSEOUT.md) defines the completed public scope and the research limits at publication.

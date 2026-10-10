@@ -1,211 +1,57 @@
 # System architecture
 
-## Overview
+![Private research and public review, joined by aggregate evidence](assets/architecture.svg)
 
-This project is organized as a **research system**, not a single model. The scored parent combines heterogeneous image-model families, fitted numerical aggregation, strict input identity, and an experiment-control layer that governs validation, cost, resumability, and promotion.
+The project has two execution surfaces. The original research uses private MRI and model artifacts on AWS. The public review surface runs entirely on synthetic features and retained aggregate reports. They share engineering principles; the public demonstration does not reproduce the private model or its scientific scores.
 
-```mermaid
-flowchart TB
-    subgraph DATA["Data + identity"]
-        A1[MRI / DICOM]
-        A2[Series metadata]
-        A3[Labels + lineage]
-        A4[Input signatures]
-    end
+## Data and model identity
 
-    subgraph AWS["AWS / SageMaker canonical research state"]
-        B1[Canonical cache]
-        B2[Experiment runner]
-        B3[Private S3 artifacts]
-        B4[Telemetry + cost ledger]
-        B5[Immutable manifests]
-    end
+A model's effective identity includes source state, selected acquisitions, image transforms, target order, fitted aggregation, and evaluation membership. A restored checkpoint alone cannot establish equivalence. The research therefore kept input signatures and numerical-parity gates alongside weights.
 
-    subgraph PARENT["Heterogeneous parent"]
-        C1[Native DINO<br/>20 trained members]
-        C2[RadImageNet family<br/>3 layouts]
-        C3[A5<br/>5 folds]
-        C4[Raptor<br/>4 diagnostic views]
-        C5[CoAt families<br/>7 trained predictions]
-        C6[Fixed numerical<br/>calibration + fusion]
-    end
+The canonical cache contains **4,407 studies**. The retained grouped development population contains **4,349 studies in 59 scanner groups**, with zero scanner groups crossing folds. The **58 fully labeled audit rows** have historical selection exposure and are not treated as untouched confirmation.
 
-    subgraph RESEARCH["Controlled research additions"]
-        D1[Global-only residual control]
-        D2[Anatomical regional pooling]
-        D3[Visibility-aware auxiliary task]
-        D4[Multiple localization proposals]
-    end
+## Research execution
 
-    subgraph GOVERNANCE["Scientific + engineering governance"]
-        E1[Grouped validation]
-        E2[Leakage / lineage audit]
-        E3[Numerical parity]
-        E4[Resume + regression tests]
-        E5[Champion / challenger registry]
-    end
-
-    A1 --> B1
-    A2 --> B1
-    A3 --> E1
-    A3 --> E2
-    A4 --> B2
-
-    B1 --> C1
-    B1 --> C2
-    B1 --> C3
-    B1 --> C4
-    B1 --> C5
-
-    C1 --> C6
-    C2 --> C6
-    C3 --> C6
-    C4 --> C6
-    C5 --> C6
-
-    C6 --> E1
-    C6 --> E3
-    E1 --> E5
-    E2 --> E5
-    E3 --> E5
-
-    B2 --> B3
-    B2 --> B4
-    B2 --> B5
-    E4 -. governs .-> B2
-
-    B1 --> D1
-    B1 --> D2
-    D2 --> D3
-    D3 --> D4
-    D1 --> E1
-    D2 --> E1
-    D3 --> E1
-    D4 --> E1
-```
-
-## Design principle: model identity includes data identity
-
-A checkpoint alone is not treated as the model.
-
-The effective model identity includes:
-
-- checkpoint/source state;
-- selected series and slices;
-- image transforms;
-- target order;
-- fitted aggregation/calibration;
-- evaluation membership.
-
-When newly recovered acquisitions change selected pixels, only affected branches are invalidated. Unaffected outputs remain reusable.
-
-## Parent component status
-
-| Component | Public-safe status | Why it matters |
+| Layer | Responsibility | Public evidence |
 |---|---|---|
-| Native DINO | 20 trained members / 200 member-window evaluations | Strong heterogeneous image representation |
-| RadImageNet family | 3 source layouts / multiple trained heads | Medical-pretraining diversity |
-| A5 | 5/5 trained folds | Complementary learned branch |
-| Raptor | 4/4 diagnostic views on partial input scope | Additional spatial/model diversity |
-| CoAt families | 8/8 gates + 7/7 trained predictions | Recovered spatial/depth aggregation families |
-| Numerical graph | Fixed fitted calibration/fusion preserved | Prevents accidental retraining during restoration |
+| Data contracts | Schema, joins, DICOM geometry, acquisition coverage | [Protocol](RESEARCH_PROTOCOL.md) and public helpers |
+| Heterogeneous models | Restore trained branches with strict source and input identity | [Historical reconstruction record](SCORED_REFERENCE_FRONTIER.md) |
+| Experiment control | Resume compatible work, monitor resources, preserve failures | [Engineering case study](EMPLOYER_CASE_STUDY.md) |
+| Evaluation | Grouped development metrics, parity checks, paired uncertainty | [Executed research notebook](../notebooks/14_winner_transfer_and_context_modeling.ipynb) |
+| Publication | Aggregate results, reviewable code, restricted-artifact checks | [Publication procedure](GIT_PUBLICATION.md) |
 
-Full historical parity is deliberately not claimed while complete compatible acquisitions and independent evaluation membership remain unresolved.
+The reconstruction record includes 20 native trained members, five A5 folds, four Raptor diagnostic views on incomplete input scope, and seven CoAt predictions. Complete historical parity is not claimed while compatible source inputs and independent evaluation membership remain unresolved. Exact private aggregation and inference implementation are excluded.
 
-## Control plane
+## Public pipeline
 
-The research control plane is as important as the model graph.
+[Source](../src/rsna_review/public_pipeline.py) · [CLI](../examples/run_public_pipeline.py) · [Tests](../tests/test_public_pipeline.py)
 
-### Before execution
-- verify artifact/source identity;
-- discover hardware and disk headroom;
-- run deterministic self-tests;
-- validate metric/evaluation contract;
-- benchmark representative worker/batch choices when needed.
-
-### During execution
-- emit timestamped heartbeats;
-- track completed/total/remaining work;
-- record process/system/GPU memory;
-- preserve current and peak utilization;
-- accumulate estimated compute cost;
-- checkpoint independently reusable units.
-
-### After execution
-- validate outputs;
-- compare numerical parity where relevant;
-- write immutable manifests;
-- update the experiment registry;
-- produce one compact return bundle;
-- preserve nonzero failure status if the run failed.
-
-## Failure recovery
+The CPU demonstration generates synthetic features and twelve binary targets. Scanner-disjoint folds, train-only normalization, and a generic logistic model produce held-out predictions. Every number in this demonstration describes generated data only.
 
 ```mermaid
-flowchart LR
-    A[Start / resume] --> B{Completed artifact valid?}
-    B -- yes --> C[Reuse]
-    B -- no --> D[Execute missing unit]
-    D --> E{Gate passes?}
-    E -- yes --> F[Commit immutable artifact]
-    E -- no --> G[Package diagnostics + stop]
-    F --> H{More units?}
-    H -- yes --> B
-    H -- no --> I[Validate final result]
-    I --> J[Notebook + manifest + registry]
-```
-
-This design prevents a late failure from forcing expensive earlier stages to rerun.
-
-## Validation architecture
-
-The project separates four evidence classes:
-
-1. **External recorded performance** — comparable public result.
-2. **Grouped internal development evidence** — model-selection research.
-3. **Engineering parity** — source/runtime equivalence checks.
-4. **Exploratory analysis** — useful but not independent confirmation.
-
-They are intentionally not collapsed into one score.
-
-## Anatomy-aware extension
-
-The current research program adds a new capability without replacing the parent.
-
-```mermaid
-flowchart LR
-    A[Parent global features] --> B[Matched global residual]
-    A --> C[Anatomy localizer]
-    C --> D[ROI + visibility features]
-    D --> E[Localized residual]
-    B --> F[Controlled comparison]
+flowchart TD
+    A["Data, code and configuration"] --> B{"Compatible checkpoint?"}
+    B -->|Verified| C["Reuse completed fold"]
+    B -->|Missing| D["Fit and validate fold"]
+    D --> E["Atomically save checkpoint"]
+    C --> F["Assemble held-out report"]
     E --> F
-    F --> G{Localization adds value?}
-    G -- no --> H[Keep parent / close route]
-    G -- yes --> I[Advance to auxiliary visibility + proposal tests]
+    B -->|Mismatch| G["Stop with evidence intact"]
 ```
 
-Missing or low-confidence anatomical evidence must fall back exactly to the parent.
+A manifest binds input, configuration, implementation, and runtime identity. Checkpoint content hashes are validated before reuse. The same command can resume a deliberately interrupted run; tests compare its completed output against a fresh run. Incompatible or damaged state is rejected rather than silently reused.
 
-## Public/private architecture boundary
+## Evidence classes
 
-**Public GitHub:** aggregate metrics, diagrams, experiment contracts, public-safe helpers, tests, CI, executed aggregate notebooks.
+| Class | What it supports | What it does not support |
+|---|---|---|
+| Recorded external evaluation | Historical project performance in that setting | Current clinical performance |
+| Grouped development evaluation | Controlled research comparisons | Independent confirmation after repeated selection |
+| Engineering parity | Equivalence within tested inputs and tolerances | Generalization to untested acquisitions |
+| Synthetic demonstration | Code behavior, contracts, recovery | MRI diagnostic accuracy |
 
-**Private AWS/S3:** raw MRI, identifiers, row-level predictions, checkpoints, private runners, source handles, exact competition fusion logic, resumable heavy artifacts.
+Ordered cross-slice context improved the retained grouped result from **0.7943834 to 0.7978448**. A later extension reached **0.7978946**, but its paired interval crossed zero. The public record preserves both the useful improvement and the uncertainty.
 
-This split makes the repository reviewable and partially reproducible without leaking restricted data or competitive implementation.
+## Publication boundary
 
-## Stage 104 sequence-research extension
-
-The original heterogeneous parent remains the control. The public research graph now also includes a frozen-window sequence layer:
-
-- scanner-grouped feature windows feed a matched orderless control and an ordered context model;
-- full-cohort out-of-fold predictions are evaluated on the same 4,349-study research population;
-- paired uncertainty is tracked separately from point estimates;
-- exported prediction parity is qualified before the model is treated as a reusable artifact;
-- winner-technique gap analysis determines which materially new capability is tested next.
-
-The Stage 102 ordered-context path improved the retained grouped research result from **0.7943834 to 0.7978448**. Stage 104 produced a slightly higher point estimate, **0.7978946**, but its paired interval crossed zero. The architecture therefore preserves the candidate while closing repeated micro-tuning of that exact extension.
-
-This is intentionally a research extension rather than a replacement of the scored parent or a claim of external-score parity.
-
+Public artifacts include aggregate reports, executed aggregate notebooks, generic helpers, synthetic data generation, tests, and diagrams. Raw MRI, patient/study identifiers, research row-level predictions, model weights, private runners, cloud paths, and exact inference/fusion logic remain excluded. See [Reproducibility](REPRODUCIBILITY.md) for the supported environment and commands.

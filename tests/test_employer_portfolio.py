@@ -14,6 +14,10 @@ class EmployerPortfolioTests(unittest.TestCase):
             "docs/RESEARCH_TIMELINE.md",
             "docs/EMPLOYER_REVIEW_GUIDE.md",
             "docs/REPRODUCIBILITY.md",
+            "docs/PROJECT_CLOSEOUT.md",
+            "docs/assets/portfolio-hero.svg",
+            "docs/assets/architecture.svg",
+            "examples/run_public_pipeline.py",
             "docs/CONTEXT_MODELING_FRONTIER.md",
             "docs/WINNER_TRANSFER_FRONTIER.md",
             "notebooks/14_winner_transfer_and_context_modeling.ipynb",
@@ -21,21 +25,33 @@ class EmployerPortfolioTests(unittest.TestCase):
         for rel in required:
             self.assertTrue((ROOT / rel).is_file(), rel)
 
-    def test_readme_has_fast_review_contract(self):
+    def test_readme_exposes_review_and_reproduction_paths(self):
         text = (ROOT / "README.md").read_text(encoding="utf-8")
-        for heading in [
-            "## 30-second overview",
-            "### What employers should notice",
-            "## Research decisions that matter",
-            "### 2-minute recruiter review",
-            "### 10-minute ML engineering review",
-            "### 15-minute applied research review",
-            "## Technical stack",
+        for path in [
+            "docs/EMPLOYER_REVIEW_GUIDE.md",
+            "docs/EMPLOYER_CASE_STUDY.md",
+            "docs/ARCHITECTURE.md",
+            "docs/REPRODUCIBILITY.md",
+            "docs/PROJECT_CLOSEOUT.md",
+            "examples/run_public_pipeline.py",
+            "requirements-review.lock",
         ]:
-            self.assertIn(heading, text)
+            self.assertIn(path, text)
+            self.assertTrue((ROOT / path).is_file(), path)
         self.assertIn("0.943", text)
         self.assertIn("0.7978448", text)
-        self.assertIn("Winner Technique Inventory", text)
+        self.assertIn("SYNTHETIC_ONLY", text)
+
+    def test_employer_review_links_resolve(self):
+        for name in ('README.md', 'docs/EMPLOYER_REVIEW_GUIDE.md',
+                     'docs/REPRODUCIBILITY.md', 'docs/PROJECT_CLOSEOUT.md',
+                     'docs/ARCHITECTURE.md', 'docs/EMPLOYER_CASE_STUDY.md'):
+            document = ROOT / name
+            for destination in re.findall(r'\]\(([^\s)]+)\)', document.read_text()):
+                if destination.startswith(('https://', 'http://', '#', 'mailto:')):
+                    continue
+                target = destination.split('#', 1)[0]
+                self.assertTrue((document.parent / target).is_file(), f'{name}: {target}')
 
     def test_case_study_shows_ownership_and_outcomes(self):
         text = (ROOT / "docs/EMPLOYER_CASE_STUDY.md").read_text(encoding="utf-8")

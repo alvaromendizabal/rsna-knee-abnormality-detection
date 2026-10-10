@@ -18,13 +18,6 @@ class TrainingFrontierTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             m.coverage_fraction(5, 4)
 
-    def test_gap(self):
-        self.assertAlmostEqual(m.leaderboard_gap(0.933, 0.958), 0.025)
-
-    def test_bad_gap_input(self):
-        with self.assertRaises(ValueError):
-            m.leaderboard_gap(1.2, 0.9)
-
     def test_stage34_gain(self):
         self.assertAlmostEqual(
             m.score_delta(0.7637618665674922, 0.7602655715392667),

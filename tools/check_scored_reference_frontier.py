@@ -4,8 +4,8 @@ import json, math, re, subprocess, sys
 ROOT=Path(__file__).resolve().parents[1]
 D=json.loads((ROOT/'reports/scored_reference_frontier/results.json').read_text())
 H=D['historical_public']; R=D['scored_reference']; O=D['runtime_optimization']; N=D['next_milestone']
-assert H['reference_auc']==0.933 and H['leader_auc']==0.958
-assert math.isclose(H['gap'],0.025,abs_tol=1e-12)
+assert H['reference_auc']==0.933 and H['independent_dino_auc']==0.820
+assert set(H)=={'reference_auc','independent_dino_auc','freshness'}
 assert R['asset_paths']==36 and R['weight_files']==32
 assert R['gpu_checkpoint_checks_passed']==32
 assert R['stored_native_fingerprints_checked']==20

@@ -3,11 +3,9 @@ import sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
-from src.rsna_research.scored_reference_frontier import historical_public_gap, head_call_reduction, median_speed_ratio
+from src.rsna_research.scored_reference_frontier import head_call_reduction, median_speed_ratio
 
 class ScoredReferenceFrontierTests(unittest.TestCase):
-    def test_historical_gap(self):
-        self.assertEqual(historical_public_gap(0.933, 0.958), 0.025)
     def test_head_call_reduction(self):
         self.assertEqual(head_call_reduction(20, 15), 0.25)
     def test_median_speed_ratio(self):

@@ -43,3 +43,11 @@ __pycache__/
 kaggle.json
 .aws/
 .huggingface/
+
+# Public demo products and private handoff archives stay local
+demo-output/
+*.zip
+*.tar
+*.tgz
+*.7z
+runner[0-9]*/

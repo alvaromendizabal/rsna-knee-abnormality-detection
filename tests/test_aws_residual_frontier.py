@@ -4,7 +4,6 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from src.rsna_research.aws_residual_frontier import (
-    public_gap,
     detect_image_layout,
     canonical_nhwc_shape,
     uint8_payload_gib,
@@ -12,9 +11,6 @@ from src.rsna_research.aws_residual_frontier import (
 )
 
 class AwsResidualFrontierTests(unittest.TestCase):
-    def test_public_gap(self):
-        self.assertEqual(public_gap(0.933,0.961),0.028)
-
     def test_canonical_nchw(self):
         shape=(72,3,336,336)
         self.assertEqual(detect_image_layout(shape),'NCHW')

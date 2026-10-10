@@ -60,6 +60,22 @@ def versions() -> dict:
         except importlib.metadata.PackageNotFoundError: result[name] = 'NOT_INSTALLED'
     return result
 
+def current_rss_bytes() -> int:
+    """Read resident memory, including Linux sandboxes with remapped process IDs."""
+    try:
+        return psutil.Process().memory_info().rss
+    except (psutil.NoSuchProcess, psutil.AccessDenied):
+        # /proc/self resolves in the kernel even when the visible PID namespace
+        # disagrees with os.getpid(). Keep the memory gate active on that path.
+        try:
+            resident_pages = int(Path('/proc/self/statm').read_text().split()[1])
+            page_size = os.sysconf('SC_PAGE_SIZE')
+            if resident_pages < 0 or page_size <= 0:
+                raise ValueError('Invalid resident memory measurement')
+            return resident_pages * page_size
+        except (OSError, ValueError, IndexError) as exc:
+            raise RuntimeError('Resident memory telemetry is unavailable; audit stopped.') from exc
+
 def source_hash(root: Path) -> str:
     paths = []
     for folder in ('src', 'scripts', 'tests', 'configs'):
@@ -86,7 +102,7 @@ class Progress:
     def log(self, stage: str, event: str, completed=0, total=0):
         now = time.monotonic()
         if stage != self.stage: self.stage, self.stage_start = stage, now
-        rss = psutil.Process().memory_info().rss / 1024**3
+        rss = current_rss_bytes() / 1024**3
         if now - self.start > self.seconds or rss > self.rss_gib:
             raise RuntimeError('Audit elapsed-time or memory limit reached; completed stages remain intact.')
         item = dict(utc=utc(), stage=stage, event=event, completed=int(completed), total=int(total),
