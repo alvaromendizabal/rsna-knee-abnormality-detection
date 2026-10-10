@@ -1,4 +1,6 @@
-# Case study · medical-imaging ML systems
+# RSNA · Medical-imaging ML systems engineering
+
+**Alvaro Mendizabal · Computer vision · Group-aware evaluation · Reliable GPU research**
 
 ## Executive summary
 
@@ -6,9 +8,13 @@ I built a research system for twelve findings in knee MRI, covering DICOM audits
 
 I also built two public implementations that make the engineering decisions inspectable: an interactive browser trainer and a CPU pipeline with durable fold checkpoints. Both generate synthetic data, fit twelve logistic outputs, and evaluate held-out predictions. Recorded aggregate MRI research remains a separate evidence layer.
 
-## My ownership
+## My ownership and engineering contributions
 
 I designed the research workflow and its validation, execution, and publication controls: data contracts and joins; grouped splits; model integration and numerical-parity checks; resumable artifact handling; experiment interpretation; and the review experience in this repository. The original dataset, pretrained model families, and published methods are external contributions credited in [Sources](SOURCES.md).
+
+The distinguishing system work is the connection between these layers: an experiment
+must satisfy its input contract, preserve the scanner boundary, survive interruption,
+and produce evidence that supports the next modeling decision.
 
 ## Core constraints
 
@@ -29,7 +35,7 @@ I designed the research workflow and its validation, execution, and publication 
 | Investigate image geometry | 2,287 headers and 93 decoded images; no flags within scope | Closed that hypothesis for the inspected sample |
 | Add ordered cross-slice context | Same 4,349-study development population | Macro AUC improved from 0.7943834 to 0.7978448 |
 | Evaluate a narrow neighbor-context extension | Point estimate 0.7978946; paired interval crossed zero | Retained as inconclusive |
-| Claim a fully reconstructed image-to-output system | Compatible input coverage and evaluation independence unresolved | Claim withheld |
+| Validate complete image-to-output serving | Compatible input coverage and evaluation independence unresolved | Complete-system claim withheld |
 
 ## Engineering highlights
 
