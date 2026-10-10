@@ -2,13 +2,11 @@
   "competition": "rsna-knee-abnormality-detection",
   "metric": "macro ROC AUC across 12 findings",
   "direction": "maximize",
-  "leaderboard_url": "https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/leaderboard",
   "reference_date": "2026-09-12",
-  "top_score": null,
-  "top_score_verified": false,
-  "evaluation_setting": "current public leaderboard; exact score requires user-observed evidence",
+  "evaluation_setting": "Project evaluation records distinguish grouped cross-validation, local development and official public/private scores.",
   "our_cross_validation_score": null,
   "our_public_leaderboard_score": null,
   "our_private_leaderboard_score": null,
-  "goal": "attempt to reach or surpass the strongest valid comparable score; not guaranteed"
+  "evaluation_url": "https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/overview/evaluation",
+  "objective": "Evaluate reproducible model changes with explicit provenance, validation boundaries and resource limits."
 }

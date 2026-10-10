@@ -3,9 +3,6 @@
   "evidence_boundary": "Verified public-safe evidence through Stage 72 submission-boundary hardening; no new official Stage-72 score is claimed.",
   "historical_public": {
     "reference_auc": 0.933,
-    "leader_snapshot_auc": 0.961,
-    "gap": 0.028,
-    "leader_snapshot_source": "user-supplied 2026-09-29 leaderboard screenshot",
     "internal_metrics_directly_comparable": false
   },
   "aws_training_boundary": {

@@ -2,7 +2,7 @@
 
 ## Mandatory public control
 
-The historically strongest project score remains **0.933 public macro-ROC-AUC**. A user-supplied September 29 leaderboard snapshot shows **0.961** at the top, a public gap of **0.028**.
+This historical snapshot records the project’s scored reference at **0.933 public macro-ROC-AUC**. Later project evidence is summarized in [Project status](PROJECT_STATUS.md).
 
 Internal grouped metrics are used for research decisions and are not treated as public-score equivalents.
 

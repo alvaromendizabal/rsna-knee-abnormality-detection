@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="hero-title hero-description">
+  <title id="hero-title">Medical imaging. Measured engineering.</title>
+  <desc id="hero-description">A research-to-review machine learning systems case study for knee MRI. Project scope: 4,349 development studies, 59 scanner groups, and a CPU review demo. An abstract stack of outlined data cards decorates the right side.</desc>
+  <defs>
+    <pattern id="hero-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 H 0 V 24" fill="none" stroke="#D8E5E0" stroke-width="1"/>
+    </pattern>
+    <clipPath id="hero-panel-clip"><rect x="918" y="72" width="222" height="276" rx="20"/></clipPath>
+  </defs>
+  <rect width="1200" height="420" rx="24" fill="#F7F5EF"/>
+  <path d="M24 0 H1200 V7 H24 A17 17 0 0 0 7 24 V396 A17 17 0 0 0 24 413 H1200 V420 H24 A24 24 0 0 1 0 396 V24 A24 24 0 0 1 24 0Z" fill="#147D75"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="64" y="60" font-size="14" font-weight="700" letter-spacing="2" fill="#35615C">KNEE MRI · RESEARCH &amp; ENGINEERING</text>
+    <text x="61" y="143" font-size="58" font-weight="700" letter-spacing="-1.5" fill="#182F43">Medical imaging.</text>
+    <text x="61" y="211" font-size="58" font-weight="700" letter-spacing="-1.5" fill="#182F43">Measured engineering.</text>
+    <text x="64" y="255" font-size="22" fill="#485D67">A research-to-review ML systems case study</text>
+    <path d="M64 284 H848" stroke="#D7DED9" stroke-width="1"/>
+    <g>
+      <rect x="64" y="310" width="288" height="60" rx="10" fill="#FFFFFF" stroke="#D7DED9"/>
+      <circle cx="85" cy="340" r="4" fill="#147D75"/>
+      <text x="99" y="346" font-size="18" fill="#182F43"><tspan font-weight="700">4,349</tspan> development studies</text>
+      <rect x="366" y="310" width="228" height="60" rx="10" fill="#FFFFFF" stroke="#D7DED9"/>
+      <circle cx="387" cy="340" r="4" fill="#147D75"/>
+      <text x="401" y="346" font-size="18" fill="#182F43"><tspan font-weight="700">59</tspan> scanner groups</text>
+      <rect x="608" y="310" width="240" height="60" rx="10" fill="#FFFFFF" stroke="#D7DED9"/>
+      <circle cx="629" cy="340" r="4" fill="#147D75"/>
+      <text x="643" y="346" font-size="18" fill="#182F43"><tspan font-weight="700">CPU</tspan> review demo</text>
+    </g>
+  </g>
+  <g aria-hidden="true">
+    <rect x="918" y="72" width="222" height="276" rx="20" fill="#EAF1EC"/>
+    <rect x="918" y="72" width="222" height="276" fill="url(#hero-grid)" clip-path="url(#hero-panel-clip)"/>
+    <rect x="950" y="108" width="134" height="162" rx="12" fill="#F7F5EF" stroke="#9AB9AE" stroke-width="2"/>
+    <rect x="965" y="124" width="134" height="162" rx="12" fill="#F7F5EF" stroke="#5E968A" stroke-width="2"/>
+    <rect x="980" y="140" width="134" height="162" rx="12" fill="#FFFFFF" stroke="#147D75" stroke-width="2"/>
+    <path d="M997 166 H1062 M997 175 H1035" stroke="#A7B7B9" stroke-width="3" stroke-linecap="round"/>
+    <rect x="997" y="196" width="24" height="16" rx="3" fill="#D7E3DC"/>
+    <rect x="1034" y="196" width="24" height="16" rx="3" fill="#D7E3DC"/>
+    <rect x="1071" y="196" width="26" height="16" rx="3" fill="#D7E3DC"/>
+    <rect x="997" y="222" width="24" height="16" rx="3" fill="#D7E3DC"/>
+    <rect x="1034" y="222" width="24" height="16" rx="3" fill="#147D75"/>
+    <rect x="1071" y="222" width="26" height="16" rx="3" fill="#D7E3DC"/>
+    <path d="M997 269 H1097 M997 280 H1065" stroke="#D7E3DC" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="1105" cy="103" r="8" fill="#147D75"/>
+    <path d="M1101 103 L1104 106 L1109 100" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

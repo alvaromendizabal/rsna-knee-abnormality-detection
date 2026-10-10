@@ -49,9 +49,9 @@ MRNet is primary evidence for multi-plane knee MRI representations and slice agg
 
 The current feature registry deliberately distinguishes acquisition availability from the actual tissue findings a model must learn. Future anatomy concepts include ligament integrity, meniscal morphology, compartment-specific cartilage changes, marrow abnormalities and joint-fluid patterns, aligned to the twelve task labels. These are research directions requiring validated representations, not clinical decision rules or deployable diagnoses.
 
-## Competitive benchmark discipline
+## Evaluation provenance
 
-`configs/benchmark.json` records the official leaderboard URL and a null current top score. A precise current leader score was not extractable from the public page during preparation. Do not substitute a stale participant score, rounded third-party number, or local cross-validation score. Record a user-observed leaderboard screenshot with date, metric, public/private status, score and relevant constraints. Leaderboard improvements must be tied to the exact submitted artifact; local ablations do not establish that the project has beaten Kaggle.
+`configs/benchmark.json` records the official evaluation definition and the project's distinct score fields. Preserve the date, metric, public/private status, cohort and relevant constraints for each reported result. Official score changes must be tied to the exact submitted artifact; local ablations establish only the stated local evaluation outcome. Missing scores remain null rather than being inferred from other evaluation settings.
 
 ## Publishing and safety
 

@@ -5,8 +5,8 @@ ROOT=Path(__file__).resolve().parents[1]
 D=json.loads((ROOT/'reports/aws_residual_frontier/results.json').read_text())
 H=D['historical_public']; A=D['aws_training_boundary']; S70=D['stage70']; S71=D['stage71']; S72=D['stage72']
 
-assert H['reference_auc']==0.933 and H['leader_snapshot_auc']==0.961
-assert math.isclose(H['gap'],0.028,abs_tol=1e-12)
+assert H['reference_auc']==0.933
+assert set(H)=={'reference_auc','internal_metrics_directly_comparable'}
 assert H['internal_metrics_directly_comparable'] is False
 
 assert A['canonical_cache_studies']==4407

@@ -11,11 +11,6 @@ def coverage_fraction(cached: int, total: int) -> float:
     return cached / total
 
 
-def leaderboard_gap(reference: float, leader: float) -> float:
-    if not all(isfinite(x) and 0.0 <= x <= 1.0 for x in (reference, leader)):
-        raise ValueError("scores must be finite probabilities")
-    return leader - reference
-
 
 def score_delta(candidate: float, baseline: float) -> float:
     if not all(isfinite(x) and 0.0 <= x <= 1.0 for x in (candidate, baseline)):

@@ -1,90 +1,50 @@
 # Employer review guide
 
-This repository is intentionally deep. This page gives reviewers a fast path based on role.
+This is a completed engineering portfolio release by Alvaro Mendizabal. It combines a runnable public example with a documented record of private medical-imaging research. The [closeout](PROJECT_CLOSEOUT.md) states what was delivered and what the evidence does not establish.
 
-## Recruiter / talent partner — 2 minutes
+## A short review
 
-Read:
+1. Read the [README](../README.md) for the problem, ownership and results.
+2. Open the [architecture](ARCHITECTURE.md) and [case study](EMPLOYER_CASE_STUDY.md) for the design decisions.
+3. Inspect [Notebook 14](../notebooks/14_winner_transfer_and_context_modeling.ipynb) alongside its [aggregate report](../reports/current_frontier/results.json).
 
-1. [README](../README.md)
-2. [Employer Case Study](EMPLOYER_CASE_STUDY.md)
-3. [Notebook 14](../notebooks/14_winner_transfer_and_context_modeling.ipynb)
+The central engineering question is how to make expensive experiments traceable, recoverable and scientifically interpretable when data and model components have different provenance.
 
-Key signal: **end-to-end ownership of a complex medical-imaging ML research system on AWS.**
+## A hands-on review
 
-## ML engineering manager — 10 minutes
+Follow the Python 3.12 setup in [Reproducibility](REPRODUCIBILITY.md), then run:
 
-Read:
+```bash
+python examples/run_public_pipeline.py --output /tmp/rsna-public-demo
+python -m pytest -q
+python scripts/verify_review_notebook.py
+```
 
-1. [System Architecture](ARCHITECTURE.md)
-2. [Reproducibility Boundary](REPRODUCIBILITY.md)
-3. [Project Status](PROJECT_STATUS.md)
-4. [Parent Reconstruction Frontier](PARENT_RECONSTRUCTION_FRONTIER.md)
+Use the activated review environment for these commands. Open `/tmp/rsna-public-demo/report.html` and inspect its neighboring `results.json` and `synthetic_predictions.csv`.
 
-Look for:
+The pipeline generates synthetic tabular features and twelve labels, separates scanner groups across five folds, learns normalization from each training fold, fits logistic models, and evaluates held-out predictions. Its manifests bind inputs, configuration, source and runtime to reusable checkpoints. A completed rerun verifies the cache and performs zero fits. The reproduction guide also demonstrates a controlled interruption after one committed fold.
 
-- resumability;
-- checkpoint and input lineage;
-- numerical-parity gates;
-- GPU/storage/resource engineering;
-- failure regression;
-- cloud artifact design;
-- CI/publication controls.
+These outputs are labeled **SYNTHETIC_ONLY**. They demonstrate implementation behavior; they are not patient predictions, an MRI classifier, or evidence for the historical research scores.
 
-## Applied scientist / data scientist — 15 minutes
+## What to inspect by role
 
-Read:
+| Review focus | Suggested evidence | Questions to ask |
+|---|---|---|
+| ML engineering | [Public pipeline](../examples/run_public_pipeline.py), tests, [architecture](ARCHITECTURE.md) | Can completed work be trusted and reused? What invalidates a checkpoint? |
+| Applied research | [Context modeling](CONTEXT_MODELING_FRONTIER.md), [research timeline](RESEARCH_TIMELINE.md), aggregate report | Were comparisons made on the same population? Was uncertainty used in the decision? |
+| Data and evaluation | [Reproduction boundary](REPRODUCIBILITY.md), schema/metric tests | Are groups, targets and prediction rows aligned? Which data influenced selection? |
+| Delivery and maintainability | CI workflows, [publication procedure](GIT_PUBLICATION.md), [closeout](PROJECT_CLOSEOUT.md) | Are dependencies pinned, outputs verifiable and public artifacts appropriately scoped? |
 
-1. [Research Timeline](RESEARCH_TIMELINE.md)
-2. [Context Modeling Frontier](CONTEXT_MODELING_FRONTIER.md)
-3. [Winner Transfer Frontier](WINNER_TRANSFER_FRONTIER.md)
-4. [Anatomy-Aware Transfer Program](ANATOMY_AWARE_TRANSFER_PROGRAM.md)
-5. [Notebook 14](../notebooks/14_winner_transfer_and_context_modeling.ipynb)
+## Outcomes worth discussing
 
-Look for:
+The recorded cross-slice context study moved grouped macro ROC-AUC from **0.7943834 to 0.7978448** on the same 4,349-study development population. A later **0.7978946** point estimate had a paired interval that crossed zero; the incremental hypothesis remained inconclusive.
 
-- leakage-aware grouped validation;
-- matched controls;
-- paired uncertainty;
-- negative-result discipline;
-- mechanism-driven research;
-- explicit promotion/closure gates;
-- separation of engineering parity from predictive evidence;
-- winner-derived capability ranking before compute spend.
+Other records preserve negative experiments and narrower engineering qualifications. For example, successful reference anatomy segmentation does not establish disease-prediction benefit, and a geometry audit only supports its inspected acquisition scope. The historical **0.943** external record is evaluated separately from the internal grouped results.
 
-## Hands-on review — 5 minutes after environment setup
+My contribution covers data/evaluation contracts, experiment orchestration, model integration and controlled extensions, recovery, testing, evidence presentation and publication controls. Existing frameworks, pretrained models and prior solution methods supplied components; the portfolio does not claim authorship of those external architectures.
 
-1. Run the [synthetic example](../examples/run_public_review.py): it exercises the public twelve-target metric, rejects invalid submission inputs, and keeps a positive but uncertain increment inconclusive.
-2. Follow [the replay commands](REPRODUCIBILITY.md) to regenerate the three recent aggregate notebooks in a clean kernel.
-3. Inspect the [current aggregate report](../reports/current_frontier/results.json) and [source/output verifier](../src/rsna_review/evidence.py).
+## Scope of the completed release
 
-The synthetic fixture's 0.75 AUC is illustrative and is never a project result. The 0.943 external record and grouped development values remain separate. Complete reviewability at Stage 104 does not claim full parent parity, clinical deployment, or completion of the prepared Stage 105 experiment.
+The public code and aggregate notebook replay can be reviewed without MRI, model weights, AWS access or a GPU. Private row-level experiments cannot be independently rerun from this repository. Full raw-image test serving and clinical validity are not established, and no new submission is claimed.
 
-## Interview discussion map
-
-### “Tell me about a technically difficult ML project.”
-Use the parent reconstruction + sequence-modeling story: heterogeneous model families, fixed fusion logic, incomplete inputs, storage pressure, source/runtime parity, and a controlled full-cohort research improvement.
-
-### “How do you avoid overfitting experiments?”
-Use scanner-grouped validation, selection-lineage audits, matched controls, fixed evaluation rules, paired uncertainty, and retention of negative/inconclusive results.
-
-### “How do you design reliable ML infrastructure?”
-Use resumable units, immutable manifests, content-addressed assets, telemetry, resource/cost guards, regression fixtures, and one-return packaging.
-
-### “How do you decide what to try next?”
-Use the Winner Technique Inventory: audit strong prior solutions, normalize mechanism families, map capability gaps, rank them, then run bounded controlled transfers.
-
-### “Give an example of a modeling idea that actually helped.”
-Use Stage 102 cross-slice context: the same 4,349-study grouped research metric moved from **0.7943834 to 0.7978448**.
-
-### “Give an example of not overclaiming.”
-Use Stage 104: the point estimate rose to **0.7978946**, but the paired interval crossed zero, so it was preserved as inconclusive rather than promoted.
-
-### “How do you balance reproducibility with sensitive/private work?”
-Use the AWS-canonical / GitHub-curated split and the automated privacy/publication gates.
-
-## What is intentionally not public
-
-The repository does not expose raw MRI, identifiers, row-level predictions, checkpoints, private source handles, private runners, cloud paths, or exact competition fusion/inference logic.
-
-That boundary is part of the engineering design, not missing documentation.
+Historical reports remain dated records. Their references to prepared experiments are preserved for provenance and are not commitments to continuing private work. Raw images, identifiers, private predictions, checkpoints, cloud paths and exact competition inference logic remain outside this release.

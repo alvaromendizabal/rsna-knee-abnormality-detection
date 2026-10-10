@@ -1,8 +1,6 @@
 from __future__ import annotations
 from statistics import median
 
-def historical_public_gap(reference: float, leader: float) -> float:
-    return round(float(leader) - float(reference), 12)
 
 def head_call_reduction(original_calls: int, candidate_calls: int) -> float:
     if original_calls <= 0 or candidate_calls < 0 or candidate_calls > original_calls:
