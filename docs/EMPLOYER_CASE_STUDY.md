@@ -2,13 +2,13 @@
 
 ## Executive summary
 
-This project explores twelve findings in knee MRI while treating data identity, evaluation design, and recoverable execution as first-class engineering problems. The work spans Python research tooling, DICOM audits, scanner-grouped validation, heterogeneous PyTorch models, AWS execution, and evidence-based experiment decisions.
+I built a research system for twelve findings in knee MRI, covering DICOM audits, scanner-grouped validation, heterogeneous PyTorch models, cross-slice context and recoverable AWS execution. Data identity, evaluation design and resource use shaped the system from input contracts through the final promotion decision.
 
-The public release gives a reviewer two complementary views: recorded aggregate research evidence and an independently runnable synthetic engineering pipeline. The latter demonstrates contracts and recovery without access to MRI, trained models, or private inference logic.
+I also built two public implementations that make the engineering decisions inspectable: an interactive browser trainer and a CPU pipeline with durable fold checkpoints. Both generate synthetic data, fit twelve logistic outputs, and evaluate held-out predictions. Recorded aggregate MRI research remains a separate evidence layer.
 
 ## My ownership
 
-I designed the research workflow and its validation, execution, and publication controls: data contracts and joins; grouped splits; model reconstruction and numerical-parity checks; resumable artifact handling; experiment interpretation; and the review experience in this repository. The original dataset, pretrained model families, and published methods are external contributions credited in [Sources](SOURCES.md).
+I designed the research workflow and its validation, execution, and publication controls: data contracts and joins; grouped splits; model integration and numerical-parity checks; resumable artifact handling; experiment interpretation; and the review experience in this repository. The original dataset, pretrained model families, and published methods are external contributions credited in [Sources](SOURCES.md).
 
 ## Core constraints
 
@@ -37,6 +37,8 @@ I designed the research workflow and its validation, execution, and publication 
 
 **Numerical and scientific gates.** Schema validation, target ordering, finite probability checks, and paired uncertainty serve different purposes. A successful execution does not establish a meaningful model improvement. [Notebook 14](../notebooks/14_winner_transfer_and_context_modeling.ipynb) retains the inconclusive result and its interval.
 
+**Interactive inspection.** The [browser demo](../public-demo/index.html) performs logistic training locally, showing fold progress and held-out metrics with pause, resume and result export. The Python pipeline exposes durable recovery and cache rejection through the same broad workflow. Each implementation reports its own synthetic results.
+
 **Reviewable evidence.** Hash-locked dependencies and CI execute the synthetic demo and replay three aggregate notebooks. Publication checks also inspect candidate files for restricted artifacts and concrete credential patterns. These controls reduce accidental disclosure; they do not replace a human review.
 
 ## Technical stack
@@ -55,4 +57,4 @@ The anatomy route passed a nine-structure reference pilot with mean Dice approxi
 
 The core contribution is a disciplined way to build and inspect ML systems under imperfect data and constrained compute: verify identities, isolate evaluation assumptions, preserve completed work, retain negative evidence, and make claims traceable to artifacts.
 
-Start with the [review guide](EMPLOYER_REVIEW_GUIDE.md), run the [CPU demonstration](REPRODUCIBILITY.md), or inspect the [architecture](ARCHITECTURE.md). The [closeout record](PROJECT_CLOSEOUT.md) defines the completed public scope and the research limits at publication.
+Start with the [three-minute review](EMPLOYER_REVIEW_GUIDE.md), explore the [browser demo](../public-demo/index.html), run the [CPU pipeline](REPRODUCIBILITY.md), or inspect the [architecture](ARCHITECTURE.md). The [closeout record](PROJECT_CLOSEOUT.md) defines the completed public scope and the research limits at publication.
