@@ -28,7 +28,7 @@ I designed the research workflow and its validation, execution, and publication 
 | Stop fixed spatial and frozen-feature routes | Negative matched comparisons | Avoided further spending on those hypotheses |
 | Investigate image geometry | 2,287 headers and 93 decoded images; no flags within scope | Closed that hypothesis for the inspected sample |
 | Add ordered cross-slice context | Same 4,349-study development population | Macro AUC improved from 0.7943834 to 0.7978448 |
-| Promote a narrow neighbor-context extension | Point estimate 0.7978946; paired interval crossed zero | Retained as inconclusive |
+| Evaluate a narrow neighbor-context extension | Point estimate 0.7978946; paired interval crossed zero | Retained as inconclusive |
 | Claim a fully reconstructed image-to-output system | Compatible input coverage and evaluation independence unresolved | Claim withheld |
 
 ## Engineering highlights
@@ -37,7 +37,7 @@ I designed the research workflow and its validation, execution, and publication 
 
 **Numerical and scientific gates.** Schema validation, target ordering, finite probability checks, and paired uncertainty serve different purposes. A successful execution does not establish a meaningful model improvement. [Notebook 14](../notebooks/14_winner_transfer_and_context_modeling.ipynb) retains the inconclusive result and its interval.
 
-**Interactive inspection.** The [browser demo](../public-demo/index.html) performs logistic training locally, showing fold progress and held-out metrics with pause, resume and result export. The Python pipeline exposes durable recovery and cache rejection through the same broad workflow. Each implementation reports its own synthetic results.
+**Interactive inspection.** The [browser demo](https://alvaro-rsna-engineering-lab.tartmacaw2.chatgpt.site) performs logistic training locally, showing fold progress and held-out metrics with pause, resume and result export. The Python pipeline exposes durable recovery and cache rejection through the same broad workflow. Each implementation reports its own synthetic results.
 
 **Reviewable evidence.** Hash-locked dependencies and CI execute the synthetic demo and replay three aggregate notebooks. Publication checks also inspect candidate files for restricted artifacts and concrete credential patterns. These controls reduce accidental disclosure; they do not replace a human review.
 
@@ -57,4 +57,4 @@ The anatomy route passed a nine-structure reference pilot with mean Dice approxi
 
 The core contribution is a disciplined way to build and inspect ML systems under imperfect data and constrained compute: verify identities, isolate evaluation assumptions, preserve completed work, retain negative evidence, and make claims traceable to artifacts.
 
-Start with the [three-minute review](EMPLOYER_REVIEW_GUIDE.md), explore the [browser demo](../public-demo/index.html), run the [CPU pipeline](REPRODUCIBILITY.md), or inspect the [architecture](ARCHITECTURE.md). The [closeout record](PROJECT_CLOSEOUT.md) defines the completed public scope and the research limits at publication.
+Start with the [three-minute review](EMPLOYER_REVIEW_GUIDE.md), explore the [browser demo](https://alvaro-rsna-engineering-lab.tartmacaw2.chatgpt.site), run the [CPU pipeline](REPRODUCIBILITY.md), or inspect the [architecture](ARCHITECTURE.md). The [closeout record](PROJECT_CLOSEOUT.md) defines the completed public scope and the research limits at publication.
