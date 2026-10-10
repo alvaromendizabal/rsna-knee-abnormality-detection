@@ -1,6 +1,24 @@
 # Reproducibility
 
-The completed public release supports an offline CPU engineering demo, the public test suite and replay of selected aggregate notebooks. The private MRI experiments are represented by dated aggregate evidence; their data, weights and exact competition implementation are not distributed.
+The public release supports an interactive browser trainer, an offline CPU pipeline, the public test suite and replay of selected aggregate notebooks. The private MRI experiments are represented by dated aggregate evidence; their data, weights and tuned research implementation are not distributed.
+
+## Open the browser demo
+
+[Launch the public demo](https://alvaro-rsna-engineering-lab.tartmacaw2.chatgpt.site) without an account or installation. To serve the same source locally, run from the checkout root:
+
+```bash
+python -m http.server 8000
+```
+
+Visit `http://localhost:8000/public-demo/`. No package installation or backend is required. The page generates 480 synthetic rows across 120 nested groups and 10 scanners, then trains twelve logistic outputs across five scanner-disjoint folds. Normalization uses each training fold only.
+
+Pause and resume an active run, reset it, inspect held-out metrics and export the result. Training executes in the browser. The browser and Python pipeline are independent public implementations and report their own results; neither recalculates historical MRI scores.
+
+With Node.js installed, the browser engine checks run locally:
+
+```bash
+node tools/test_public_demo.mjs
+```
 
 ## Set up the pinned environment
 
@@ -31,7 +49,7 @@ Inspect:
 | `synthetic_predictions.csv` | Held-out predictions for fictional rows |
 | Fold checkpoints and manifests | Committed work with fingerprints and checksums for resume validation |
 
-All outputs are labeled **SYNTHETIC_ONLY**. These are synthetic tabular models, not an MRI classifier, clinical evidence, or a scientific reproduction of the private scores.
+All outputs are labeled **SYNTHETIC_ONLY**. Their metrics describe generated tabular data. MRI performance and clinical evidence remain outside the demo claim.
 
 Run the same command again to validate and reuse all completed folds with zero additional fits. A changed input, configuration, source or runtime invalidates an incompatible cache rather than silently overwriting it; choose a new output directory for a different run.
 
@@ -86,11 +104,12 @@ Notebook 00 is a prepared, unexecuted private preflight template. Notebooks 01â€
 
 | Evidence | What can be established here | What is outside the claim |
 |---|---|---|
-| Public pipeline | Group isolation, training/evaluation flow, validated resume and reporting on synthetic data | MRI performance or clinical validity |
+| Browser trainer | Actual logistic training, group isolation, pause/resume and export on synthetic data | MRI performance or durable Python checkpoint behavior |
+| Python pipeline | Group isolation, training/evaluation flow, validated resume and reporting on synthetic data | MRI performance or clinical validity |
 | Public helpers/tests | Metric, schema, fallback, provenance and publication contracts | Private model/checkpoint equivalence |
 | Aggregate notebook replay | Published values, arithmetic, plots and uncertainty decisions agree | Independent reconstruction of private predictions |
 | Archived research report | Dated development outcomes and their stated scope | New experiments, a new submission or an untouched confirmation cohort |
 
 The [aggregate snapshot](../reports/current_frontier/results.json) retains Stage 102's grouped result **0.7978448** and Stage 104's **0.7978946** inconclusive increment. The external **0.943** record is separate. The 58 fully labeled audit rows were within recovered selection lineage and are not treated as untouched confirmation.
 
-MRI/DICOM data, identifiers, row-level research predictions, private checkpoints, cloud locations, private runners/returns and exact competition inference code remain excluded. Full raw-image test serving is not established by this release. The [closeout](PROJECT_CLOSEOUT.md) defines completion; historical preparation notes are not an ongoing work promise.
+MRI/DICOM data, identifiers, row-level research predictions, private checkpoints, cloud locations, private runners/returns and tuned research inference code remain excluded. Full raw-image test serving is not established by this release. The [closeout](PROJECT_CLOSEOUT.md) defines completion; historical preparation notes are not an ongoing work promise.

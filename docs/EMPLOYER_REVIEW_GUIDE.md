@@ -2,13 +2,13 @@
 
 This is a completed engineering portfolio release by Alvaro Mendizabal. It combines a runnable public example with a documented record of private medical-imaging research. The [closeout](PROJECT_CLOSEOUT.md) states what was delivered and what the evidence does not establish.
 
-## A short review
+## A three-minute review
 
-1. Read the [README](../README.md) for the problem, ownership and results.
-2. Open the [architecture](ARCHITECTURE.md) and [case study](EMPLOYER_CASE_STUDY.md) for the design decisions.
-3. Inspect [Notebook 14](../notebooks/14_winner_transfer_and_context_modeling.ipynb) alongside its [aggregate report](../reports/current_frontier/results.json).
+1. **See the work.** Read the [README](../README.md) for my ownership, the historical external score and the grouped development result.
+2. **Try the implementation.** Open the [public browser demo](https://alvaro-rsna-engineering-lab.tartmacaw2.chatgpt.site). Generate a cohort, start training, pause/resume, and inspect the held-out metrics. [Launch instructions](REPRODUCIBILITY.md)
+3. **Inspect one decision.** Read the [case study](EMPLOYER_CASE_STUDY.md) and [Notebook 14](../notebooks/14_winner_transfer_and_context_modeling.ipynb): ordered context improved the recorded development metric, while the later incremental hypothesis stayed inconclusive.
 
-The central engineering question is how to make expensive experiments traceable, recoverable and scientifically interpretable when data and model components have different provenance.
+The browser trains real logistic models on synthetic data in the page. It is separate from both the historical MRI system and the Python pipeline's durable checkpoint implementation. The [architecture](ARCHITECTURE.md) explains how the research workflow connects inputs, evaluation and recovery.
 
 ## A hands-on review
 
@@ -41,10 +41,10 @@ The recorded cross-slice context study moved grouped macro ROC-AUC from **0.7943
 
 Other records preserve negative experiments and narrower engineering qualifications. For example, successful reference anatomy segmentation does not establish disease-prediction benefit, and a geometry audit only supports its inspected acquisition scope. The historical **0.943** external record is evaluated separately from the internal grouped results.
 
-My contribution covers data/evaluation contracts, experiment orchestration, model integration and controlled extensions, recovery, testing, evidence presentation and publication controls. Existing frameworks, pretrained models and prior solution methods supplied components; the portfolio does not claim authorship of those external architectures.
+My contribution covers data/evaluation contracts, experiment orchestration, model integration and controlled extensions, recovery, testing, evidence presentation and publication controls. The [source record](SOURCES.md) credits the frameworks, pretrained architectures and published methods I integrated.
 
 ## Scope of the completed release
 
-The public code and aggregate notebook replay can be reviewed without MRI, model weights, AWS access or a GPU. Private row-level experiments cannot be independently rerun from this repository. Full raw-image test serving and clinical validity are not established, and no new submission is claimed.
+The browser demo, CPU pipeline and aggregate notebook replay can be reviewed without MRI, model weights, AWS access or a GPU. Private row-level experiments cannot be independently rerun from this repository. Full raw-image test serving and clinical validity are not established.
 
-Historical reports remain dated records. Their references to prepared experiments are preserved for provenance and are not commitments to continuing private work. Raw images, identifiers, private predictions, checkpoints, cloud paths and exact competition inference logic remain outside this release.
+Historical reports remain dated records. Their references to prepared experiments are preserved for provenance and are not commitments to continuing private work. Raw images, identifiers, private predictions, checkpoints, cloud paths and tuned research inference logic remain outside this release.

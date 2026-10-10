@@ -5,26 +5,36 @@
 
 ![Medical-imaging ML engineering portfolio: validation, recovery and evidence](docs/assets/portfolio-hero.svg)
 
-**An engineering case study by Alvaro Mendizabal: building a reproducible research system for twelve knee-MRI findings.**
+**Alvaro Mendizabal · Machine Learning Engineer**
 
-The difficult work extended beyond fitting a model. Heterogeneous acquisitions, scanner effects, inherited model components and expensive cloud execution required explicit data contracts, controlled comparisons and reliable recovery. I designed the validation and experiment workflow, integrated existing image-model families, investigated representation changes, and built the artifact, testing and reporting layers around them.
+I built a research and evaluation system for twelve knee-MRI findings: scanner-disjoint validation, heterogeneous image models, cross-slice context, and recoverable AWS execution. I also built the data contracts, checkpoint validation, tests and reporting needed to make expensive experiments reviewable.
 
-**This portfolio release is complete.** It includes a runnable public CPU pipeline, tested research helpers, executed aggregate notebooks and a documented evidence boundary. The [closeout](docs/PROJECT_CLOSEOUT.md) defines the finished scope.
+**Historical external result: 0.943 macro ROC-AUC.** Separately, ordered context improved grouped development AUC from **0.7943834 to 0.7978448** on the same 4,349-study population. A further 0.7978946 estimate remained inconclusive; I preserved that result without promoting it as a confirmed gain.
+
+**Start here:** [Interactive training demo](https://alvaro-rsna-engineering-lab.tartmacaw2.chatgpt.site) · [Case study](docs/EMPLOYER_CASE_STUDY.md) · [Three-minute review](docs/EMPLOYER_REVIEW_GUIDE.md) · [Run locally](docs/REPRODUCIBILITY.md)
 
 ## What I built
 
-- **Validation that follows the data.** Scanner-disjoint development folds, target/schema checks, lineage audits and paired uncertainty distinguish model-selection evidence from independent confirmation.
-- **Recoverable ML execution.** Content fingerprints, validated checkpoints, atomic artifact writes and explicit resume behavior preserve completed work when later steps stop.
-- **Controlled modeling experiments.** Cross-slice context studies, matched controls and retained negative or inconclusive results make the research decisions inspectable.
-- **An auditable review layer.** Aggregate reports, executable chart sources, saved notebook outputs and CI checks connect the written account to testable artifacts.
+| Capability | Implementation and evidence |
+|---|---|
+| Group-aware evaluation | 59 scanner groups, zero cross-fold scanner overlap, aligned targets and paired uncertainty |
+| Controlled modeling | Multi-model integration, ordered-context studies, matched controls and explicit negative decisions |
+| Recoverable execution | Atomic artifacts, input/source fingerprints, validated fold checkpoints and corruption rejection |
+| Reviewable results | Aggregate notebooks, machine-readable reports, tests and CI |
 
-The private research used Python, PyTorch, AWS SageMaker and S3. The public review environment uses Python 3.12, NumPy/pandas, pytest, Jupyter and Plotly; it requires no cloud credentials or GPU.
+The research used Python, PyTorch, AWS SageMaker and S3. The public demonstrations run on CPU without cloud credentials or private data.
 
-![Architecture showing the research workflow and public review boundary](docs/assets/architecture.svg)
+## Try the browser demo
 
-## Run the public pipeline
+[Open the public demo](https://alvaro-rsna-engineering-lab.tartmacaw2.chatgpt.site), or serve the checkout locally:
 
-From the repository root, install the hash-locked review environment and run:
+```bash
+python -m http.server 8000
+```
+
+Open `http://localhost:8000/public-demo/`. Generate a synthetic cohort, train twelve logistic outputs across five scanner-disjoint folds, and inspect held-out metrics as the run progresses. Pause, resume, reset and export the result. Training executes in the browser; normalization uses only each fold's training rows.
+
+## Run the Python pipeline
 
 ```bash
 python3.12 -m venv ../rsna-public-review-env
@@ -32,24 +42,14 @@ python3.12 -m venv ../rsna-public-review-env
 ../rsna-public-review-env/bin/python examples/run_public_pipeline.py --output /tmp/rsna-public-demo
 ```
 
-Open `/tmp/rsna-public-demo/report.html`. The demo generates synthetic tabular data, fits twelve logistic outputs across five group-disjoint folds using training-only normalization, saves validated fold checkpoints, and produces predictions, metrics and an HTML report. Repeating the command verifies and reuses completed folds. The [reproduction guide](docs/REPRODUCIBILITY.md) includes a controlled pause/resume exercise and the test commands.
+Open `/tmp/rsna-public-demo/report.html`. This pipeline creates predictions, metrics, content-bound checkpoints and an HTML report. Repeating the command verifies and reuses completed folds. [Pause/resume and test commands](docs/REPRODUCIBILITY.md)
 
-Every demo output is labeled **SYNTHETIC_ONLY**. This is an executable example of the engineering workflow, not an MRI classifier or a reproduction of the private experimental results.
+Both demos are labeled **SYNTHETIC_ONLY** and exercise the engineering workflow on generated tabular data. Historical MRI scores are separate evidence; neither demo is a clinical model.
 
-## Evidence and interpretation
+## Inspect the research
 
-The [dated aggregate report](reports/current_frontier/results.json) preserves the research evidence through Stage 104:
+[Employer review guide](docs/EMPLOYER_REVIEW_GUIDE.md) · [Case study](docs/EMPLOYER_CASE_STUDY.md) · [Architecture](docs/ARCHITECTURE.md) · [Executed Notebook 14](notebooks/14_winner_transfer_and_context_modeling.ipynb)
 
-| Recorded result | Interpretation |
-|---|---|
-| **0.943** external macro ROC-AUC | Historical competition record; separate from internal development metrics |
-| **0.7943834 → 0.7978448** grouped macro ROC-AUC | Ordered-context improvement on the same 4,349-study development population |
-| **0.7978946** neighbor-context estimate | Increment remained inconclusive because its paired interval crossed zero |
+The [dated aggregate report](reports/current_frontier/results.json) preserves research through Stage 104. Internal development metrics are distinct from the external score. The 58 fully labeled audit rows are not an untouched confirmation cohort, and full raw-image test serving or clinical validity is not established by this release.
 
-The development population spans 59 scanner groups, with zero groups crossing folds in the recorded contract. The 58 fully labeled audit rows are not an untouched confirmation cohort. Engineering parity, reference anatomy segmentation and synthetic demo metrics each have their own scope; none establishes clinical validity. Full raw-image test serving is not established by this public release.
-
-## Review the work
-
-Start with the [employer review guide](docs/EMPLOYER_REVIEW_GUIDE.md), then choose the [case study](docs/EMPLOYER_CASE_STUDY.md), [architecture](docs/ARCHITECTURE.md) or [executed Notebook 14](notebooks/14_winner_transfer_and_context_modeling.ipynb).
-
-Public files contain aggregate evidence, synthetic examples, helpers, tests and documentation. MRI/DICOM data, patient/study identifiers, row-level research predictions, private checkpoints, cloud locations and exact competition inference code remain excluded. [Publication checks](docs/GIT_PUBLICATION.md) enforce that boundary. No diagnostic or clinical use is claimed.
+This [completed portfolio release](docs/PROJECT_CLOSEOUT.md) publishes code, aggregate evidence and synthetic examples. MRI/DICOM data, identifiers, private predictions, checkpoints and tuned research inference code remain excluded. [Publication boundary](docs/GIT_PUBLICATION.md)
