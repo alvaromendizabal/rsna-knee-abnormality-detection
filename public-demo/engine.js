@@ -46,12 +46,25 @@ export function roc(labels,scores){
 export function createExperiment(seed=2026){const data=makeDataset(seed);return{data,seed,fold:0,epoch:0,weights:null,scaler:null,loss:null,lossHistory:[],summaries:[],probabilities:Array.from({length:CONFIG.rows},()=>null)};}
 const vector=(row,scaler)=>[1,...row.x.map((v,j)=>(v-scaler.mean[j])/scaler.scale[j])];
 export function predict(row,scaler,weights){const x=vector(row,scaler);return weights.map(w=>sigmoid(w.reduce((s,v,j)=>s+v*x[j],0)));}
+// Derived fold features are ephemeral: never serialized as checkpoint authority.
+// WeakMap entries are released with their experiment, and rebuilt after restore.
+const foldCache = new WeakMap();
+function preparedFold(state){
+ let cached=foldCache.get(state);
+ if(!cached||cached.fold!==state.fold||cached.scaler!==state.scaler){
+  const {train,test}=foldIndices(state.data,state.fold);
+  if(!state.scaler)state.scaler=fitScaler(state.data,train);
+  cached={fold:state.fold,scaler:state.scaler,train,test,vectors:train.map(i=>vector(state.data.rows[i],state.scaler))};
+  foldCache.set(state,cached);
+ }
+ return cached;
+}
 export function step(state){
  if(state.fold===CONFIG.folds)return{done:true,committed:false};
- const {train,test}=foldIndices(state.data,state.fold);
- if(!state.weights){state.scaler=fitScaler(state.data,train);state.weights=Array.from({length:CONFIG.targets},()=>Array(CONFIG.features+1).fill(0));}
+ const {train,test,vectors}=preparedFold(state);
+ if(!state.weights)state.weights=Array.from({length:CONFIG.targets},()=>Array(CONFIG.features+1).fill(0));
  const gradient=state.weights.map(w=>w.map(()=>0));let loss=0;
- for(const i of train){const row=state.data.rows[i],x=vector(row,state.scaler);
+ for(let k=0;k<train.length;k++){const row=state.data.rows[train[k]],x=vectors[k];
   for(let t=0;t<CONFIG.targets;t++){const p=sigmoid(state.weights[t].reduce((s,v,j)=>s+v*x[j],0)),error=p-row.y[t];loss-=row.y[t]*Math.log(Math.max(p,1e-12))+(1-row.y[t])*Math.log(Math.max(1-p,1e-12));for(let j=0;j<x.length;j++)gradient[t][j]+=error*x[j]/train.length;}
  }
  for(let t=0;t<CONFIG.targets;t++)for(let j=0;j<=CONFIG.features;j++)state.weights[t][j]-=CONFIG.learningRate*(gradient[t][j]+(j?CONFIG.regularization*state.weights[t][j]:0));
@@ -75,6 +88,7 @@ export function snapshot(state){const body=JSON.stringify(payload(state));return
 export function restore(raw){
  check(typeof raw==='string'&&raw.length<1000000,'Checkpoint size is invalid.');const envelope=JSON.parse(raw);check(typeof envelope.body==='string'&&hash(envelope.body)===envelope.checksum,'Checkpoint checksum mismatch.');
  const p=JSON.parse(envelope.body);check(p.version===CONFIG.version&&p.implementation===ENGINE_SIGNATURE&&JSON.stringify(p.config)===JSON.stringify(CONFIG),'Checkpoint belongs to a different engine implementation or configuration.');
+ check(Number.isInteger(p.seed)&&p.seed>=1&&p.seed<=999999999,'Invalid checkpoint seed.');
  const state=createExperiment(p.seed);check(p.datasetSignature===state.data.signature,'Synthetic input fingerprint mismatch.');
  check(Number.isInteger(p.fold)&&p.fold>=0&&p.fold<=5&&Number.isInteger(p.epoch)&&p.epoch>=0&&p.epoch<CONFIG.epochs&&(p.fold<5||p.epoch===0),'Invalid checkpoint progress.');
  const finiteArray=(a,n)=>Array.isArray(a)&&a.length===n&&a.every(Number.isFinite);
@@ -83,7 +97,9 @@ export function restore(raw){
  check(Array.isArray(p.lossHistory)&&p.lossHistory.length===p.fold*CONFIG.epochs+p.epoch&&p.lossHistory.every(v=>Number.isFinite(v)&&v>=0),'Invalid training history.');
  check(Array.isArray(p.summaries)&&p.summaries.length===p.fold,'Invalid completed folds.');
  p.summaries.forEach((s,i)=>check(s.fold===i&&s.trainRows===384&&s.testRows===96&&s.normalizationFitRows===384&&finiteArray(s.perTarget,12)&&s.perTarget.every(v=>v>=0&&v<=1)&&s.macroAuc===s.perTarget.reduce((a,b)=>a+b,0)/CONFIG.targets&&s.finalTrainingLoss===p.lossHistory[(i+1)*CONFIG.epochs-1],'Invalid fold summary.'));
- if(p.epoch>0)check(Array.isArray(p.weights)&&p.weights.length===12&&p.weights.every(w=>finiteArray(w,21))&&p.scaler&&finiteArray(p.scaler.mean,20)&&finiteArray(p.scaler.scale,20)&&p.scaler.scale.every(v=>v>0),'Invalid active fold state.');
+ // Starting at zero, each standardized-feature gradient is bounded by one;
+ // the fixed learning rate bounds every reachable coefficient after p.epoch steps.
+ if(p.epoch>0)check(Array.isArray(p.weights)&&p.weights.length===12&&p.weights.every(w=>finiteArray(w,21)&&w.every(v=>Math.abs(v)<=CONFIG.learningRate*p.epoch+1e-9))&&p.scaler&&finiteArray(p.scaler.mean,20)&&finiteArray(p.scaler.scale,20)&&p.scaler.scale.every(v=>v>0),'Invalid active fold state.');
  else check(p.weights===null&&p.scaler===null,'Unexpected active fold state.');
  if(p.epoch>0)check(JSON.stringify(p.scaler)===JSON.stringify(fitScaler(state.data,foldIndices(state.data,p.fold).train)),'Checkpoint normalization differs from training-only fit.');
  p.summaries.forEach((summary,fold)=>{const test=foldIndices(state.data,fold).test;const scores=TARGETS.map((_,t)=>auc(test.map(i=>state.data.rows[i].y[t]),test.map(i=>p.probabilities[i][t])));check(JSON.stringify(scores)===JSON.stringify(summary.perTarget),'Checkpoint evaluation differs from saved predictions.');});
@@ -95,4 +111,4 @@ export function result(state){return{evidence:'SYNTHETIC_ONLY',purpose:'Generic 
 
 // A corruption/compatibility fingerprint, not a security signature. Changes to the
 // numerical recipe invalidate previous weights even when CONFIG is unchanged.
-export const ENGINE_SIGNATURE = hash(JSON.stringify(CONFIG) + [rng,sigmoid,makeDataset,foldIndices,fitScaler,createExperiment,vector,predict,step,auc,roc,metrics].map(fn=>fn.toString()).join('\n'));
+export const ENGINE_SIGNATURE = hash(JSON.stringify(CONFIG) + [rng,sigmoid,makeDataset,foldIndices,fitScaler,createExperiment,vector,predict,preparedFold,step,auc,roc,metrics].map(fn=>fn.toString()).join('\n'));

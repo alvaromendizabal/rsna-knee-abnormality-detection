@@ -1,6 +1,7 @@
 /** Dependency-free checks of the public synthetic engine and actual UI handlers. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 
@@ -81,6 +82,16 @@ await test('all five trained folds yield bounded probabilities and evaluated evi
   assert.equal(E.result(full).evidence,'SYNTHETIC_ONLY');
   assert.equal(E.result(full).status,'COMPLETE');
 });
+await test('fold caching preserves the pre-optimization numerical outputs exactly', () => {
+  // Captured before changing the implementation, using the unchanged public recipe.
+  const expected=new Map([[2026,'c6c259ba682565cbb1e737a5ee7ef7883a865442556d6a140b5710d461fe3fd9'],[2027,'e36895c7a93ea172996e1028b7ff945184f4a0d396eb99dd8ec1e2d4647d06e7']]);
+  for(const [seed,digest] of expected){
+    const state=seed===2026?full:finish(E.createExperiment(seed));
+    const actual=createHash('sha256').update(JSON.stringify({probabilities:state.probabilities,summaries:state.summaries,lossHistory:state.lossHistory})).digest('hex');
+    assert.equal(actual,digest);
+    assert.ok(!JSON.parse(JSON.parse(E.snapshot(state)).body).vectors);
+  }
+});
 await test('mid-fold checkpoint resumes to exactly the uninterrupted result', () => {
   const partial=advance(E.createExperiment(),77);
   assert.equal(E.result(partial).status,'PARTIAL');
@@ -110,6 +121,8 @@ await test('checkpoint schema rejects leaked membership and altered normalizatio
   assert.throws(()=>E.restore(reEnvelope(raw,p=>p.probabilities[0]=Array(12).fill(.5))));
   assert.throws(()=>E.restore(reEnvelope(raw,p=>p.scaler.mean[0]+=1)));
   assert.throws(()=>E.restore(reEnvelope(raw,p=>p.weights[0][0]=null)));
+  assert.throws(()=>E.restore(reEnvelope(raw,p=>p.weights[0].fill(1e308))),/active fold/);
+  assert.throws(()=>E.restore(reEnvelope(raw,p=>delete p.seed)),/seed/);
   assert.throws(()=>E.restore(reEnvelope(raw,p=>p.lossHistory.pop())));
 });
 await test('checkpoint metrics must agree with committed predictions', () => {
@@ -200,6 +213,45 @@ await test('actual UI remains runnable when browser storage is denied', async ()
   const b=await browser({storageDenied:true});assert.equal(b.nodes.get('run').disabled,false);
   b.nodes.get('run').click();b.flush(10);b.nodes.get('pause').click();
   assert.equal(b.nodes.get('status').textContent,'PAUSED');assert.match(b.nodes.get('storage-note').textContent,/unavailable/);b.restoreURL();
+});
+await test('portable checkpoint download and import resume the exact saved run', async () => {
+  const b=await browser({checkpoint:saved});b.nodes.get('checkpoint-save').click();
+  const raw=await b.exported.text();assert.deepEqual(E.result(E.restore(raw)),E.result(E.restore(saved)));
+  assert.equal(b.download.download,'synthetic-checkpoint-seed-2026.json');
+  b.nodes.get('reset').click();
+  b.nodes.get('checkpoint-file').files=[{size:raw.length,text:async()=>raw}];
+  await b.nodes.get('checkpoint-file').handlers.change();
+  assert.equal(b.progress.attributes['aria-valuenow'],'17');
+  b.nodes.get('run').click();b.flush(400);
+  assert.equal(b.nodes.get('status').textContent,'COMPLETE');
+  b.nodes.get('export').click();assert.deepEqual(JSON.parse(await b.exported.text()),E.result(full));b.restoreURL();
+});
+await test('invalid and oversized imports preserve the active checkpoint and progress', async () => {
+  const b=await browser({checkpoint:saved});const prior=b.storage.values().next().value;
+  for(const file of [{size:saved.length,text:async()=>reEnvelope(saved,p=>p.weights[0].fill(1e308))},{size:9,text:async()=>'corrupted'},{size:1000000,text:async()=>{throw new Error('oversized file was read');}}]){
+    b.nodes.get('checkpoint-file').files=[file];await b.nodes.get('checkpoint-file').handlers.change();
+    assert.equal(b.progress.attributes['aria-valuenow'],'17');assert.equal(b.storage.values().next().value,prior);
+    assert.match(b.nodes.get('notice').textContent,/import rejected/);assert.equal(b.nodes.get('run').disabled,false);
+  }b.restoreURL();
+});
+await test('checkpoint import is serialized with training and reset', async () => {
+  const b=await browser({checkpoint:saved});let finishRead;
+  b.nodes.get('checkpoint-file').files=[{size:saved.length,text:()=>new Promise(resolve=>{finishRead=resolve;})}];
+  const pending=b.nodes.get('checkpoint-file').handlers.change();
+  assert.equal(b.nodes.get('run').disabled,true);assert.equal(b.nodes.get('reset').disabled,true);
+  assert.equal(b.nodes.get('checkpoint-load').disabled,true);finishRead(saved);await pending;
+  assert.equal(b.nodes.get('reset').disabled,false);b.nodes.get('run').click();
+  assert.equal(b.nodes.get('checkpoint-load').disabled,true);assert.equal(b.nodes.get('checkpoint-save').disabled,true);
+  b.nodes.get('pause').click();b.restoreURL();
+});
+await test('valid import recovers from corrupt storage and works without persistence', async () => {
+  for(const options of [{checkpoint:'corrupt'}, {storageDenied:true}]){
+    const b=await browser(options);b.nodes.get('checkpoint-file').files=[{size:saved.length,text:async()=>saved}];
+    await b.nodes.get('checkpoint-file').handlers.change();
+    assert.equal(b.nodes.get('run').disabled,false);assert.equal(b.progress.attributes['aria-valuenow'],'17');
+    if(options.storageDenied)assert.match(b.nodes.get('storage-note').textContent,/unavailable/);
+    b.restoreURL();
+  }
 });
 await test('public UI uses only local assets and labels its synthetic scope', () => {
   assert.ok(html.includes('SYNTHETIC_ONLY'));assert.ok(html.includes('not an MRI classifier'));
