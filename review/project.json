@@ -86,5 +86,19 @@
   ],
   "schema_version": 1,
   "repository": "alvaromendizabal/rsna-knee-abnormality-detection",
-  "reviewed_base_commit": "6441ad8911a166b8a0a6c2a3f04e11c5fa7efee4"
+  "reviewed_base_commit": "6441ad8911a166b8a0a6c2a3f04e11c5fa7efee4",
+  "source_scopes": [
+    {
+      "directory": "public-demo",
+      "suffixes": [
+        ".js",
+        ".json",
+        ".html",
+        ".css"
+      ]
+    }
+  ],
+  "source_files": [
+    "review/run.py"
+  ]
 }

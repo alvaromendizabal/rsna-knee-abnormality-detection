@@ -12,7 +12,9 @@ python -m http.server 8000
 
 Visit `http://localhost:8000/public-demo/`. No package installation or backend is required. The page generates 480 synthetic rows across 120 nested groups and 10 scanners, then trains twelve logistic outputs across five scanner-disjoint folds. Normalization uses each training fold only.
 
-Pause and resume an active run, reset it, inspect held-out metrics and export the result. Training executes in the browser. The browser and Python pipeline are independent public implementations and report their own results; neither recalculates historical MRI scores.
+Pause and resume an active run, reset it, inspect held-out metrics and export the result. Open **Move a run between devices** to save or import a portable checkpoint while paused. Imports are read locally, limited to files smaller than 1 MB, and checked against the exact engine/configuration, synthetic input fingerprint, progress, training-only scaler, fold membership and metric/prediction consistency. A rejected file leaves the current run unchanged; imports cannot race training or reset. A checksum detects corruption, not authorship or adversarial forgery. Older engine checkpoints are intentionally rejected after an implementation change. Training executes in the browser. The browser caches normalized training vectors once per active fold in memory; that derived cache is rebuilt after restore and excluded from checkpoint authority. Regression checks preserve the pre-optimization predictions, loss history and fold summaries for two seeds exactly. Wall-clock speed depends on the browser and device.
+
+The browser and Python pipeline are independent public implementations and report their own results; neither recalculates historical MRI scores.
 
 With Node.js installed, the browser engine checks run locally:
 

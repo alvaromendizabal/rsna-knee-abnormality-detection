@@ -34,7 +34,7 @@ The research used Python, PyTorch, AWS SageMaker and S3. The public demonstratio
 python -m http.server 8000
 ```
 
-Open `http://localhost:8000/public-demo/`. Generate a synthetic cohort, train twelve logistic outputs across five scanner-disjoint folds, and inspect held-out metrics as the run progresses. Pause, resume, reset and export the result. Training executes in the browser; normalization uses only each fold's training rows.
+Open `http://localhost:8000/public-demo/`. Generate a synthetic cohort, train twelve logistic outputs across five scanner-disjoint folds, and inspect held-out metrics as the run progresses. Pause, resume, reset and export the result. Save a portable checkpoint and resume it on another device with the same demo version. Training executes in the browser; normalization uses only each fold's training rows.
 
 ## Run the Python pipeline
 

@@ -8,6 +8,7 @@ let stableCheckpoint = snapshot(experiment);
 let running = false;
 let frame = null;
 let blockedCheckpoint = false;
+let importing = false;
 let selectedFold = 0;
 let notes = [];
 let evaluation = metrics(experiment);
@@ -129,10 +130,14 @@ function renderProgress() {
   const complete = experiment.fold === CONFIG.folds;
   $('status').textContent = blockedCheckpoint ? 'CHECKPOINT ERROR' : running ? 'TRAINING' : complete ? 'COMPLETE' : epochs ? 'PAUSED' : 'READY';
   $('status').className = `status ${blockedCheckpoint ? 'error' : running ? 'running' : complete ? 'complete' : ''}`;
-  $('run').disabled = running || complete || blockedCheckpoint;
+  $('run').disabled = running || complete || blockedCheckpoint || importing;
+  $('reset').disabled = importing;
+  $('checkpoint-save').disabled = running || importing || blockedCheckpoint || !epochs;
+  $('checkpoint-load').disabled = running || importing;
+  $('checkpoint-file').disabled = running || importing;
   $('run').textContent = complete ? 'Experiment complete ✓' : epochs ? 'Resume experiment →' : 'Run experiment →';
   $('pause').disabled = !running;
-  $('seed').disabled = running || epochs > 0 || blockedCheckpoint;
+  $('seed').disabled = running || epochs > 0 || blockedCheckpoint || importing;
   $('export').disabled = !evaluation.rows;
   $('percent').textContent = `${Math.floor(epochs / (CONFIG.folds * CONFIG.epochs) * 100)}%`;
   $('progress-fill').style.width = `${epochs / (CONFIG.folds * CONFIG.epochs) * 100}%`;
@@ -221,14 +226,51 @@ $('reset').addEventListener('click', () => {
   renderEvaluation();
   renderProgress();
 });
-$('export').addEventListener('click', () => {
-  const blob = new Blob([JSON.stringify(result(experiment), null, 2)], {type:'application/json'});
+function downloadJSON(contents, filename) {
+  const blob = new Blob([contents], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = `synthetic-experiment-seed-${experiment.seed}.json`;
+  link.download = filename;
   link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+$('checkpoint-save').addEventListener('click', () => {
+  if (running || importing || blockedCheckpoint || !experiment.lossHistory.length) return;
+  downloadJSON(snapshot(experiment), `synthetic-checkpoint-seed-${experiment.seed}.json`);
+  note(`Saved a portable checkpoint at ${experiment.lossHistory.length} completed epochs.`);
+});
+$('checkpoint-load').addEventListener('click', () => {
+  if (!running && !importing) $('checkpoint-file').click();
+});
+$('checkpoint-file').addEventListener('change', async () => {
+  if (running || importing) return;
+  const file = $('checkpoint-file').files?.[0];
+  if (!file) return;
+  importing = true;
+  renderProgress();
+  try {
+    if (!Number.isSafeInteger(file.size) || file.size <= 0 || file.size >= 1000000) throw new Error('Choose a checkpoint smaller than 1 MB.');
+    // Build and validate separately; a rejected file cannot replace the current run.
+    const recovered = restore(await file.text());
+    experiment = recovered;
+    blockedCheckpoint = false;
+    $('seed').value = String(experiment.seed);
+    selectedFold = Math.min(experiment.fold, CONFIG.folds-1);
+    saveCheckpoint();
+    $('notice').textContent = '';
+    note(`Imported ${experiment.lossHistory.length} completed epochs. Resume continues from saved weights.`);
+    renderEvaluation();
+  } catch (error) {
+    $('notice').textContent = `Checkpoint import rejected: ${error.message} Current progress is unchanged.`;
+  } finally {
+    importing = false;
+    $('checkpoint-file').value = '';
+    renderProgress();
+  }
+});
+$('export').addEventListener('click', () => {
+  downloadJSON(JSON.stringify(result(experiment), null, 2), `synthetic-experiment-seed-${experiment.seed}.json`);
   note(`Exported ${evaluation.rows} held-out rows as synthetic JSON.`);
 });
 $('target').replaceChildren(...TARGETS.map((name, i) => {
