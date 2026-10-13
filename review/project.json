@@ -1,0 +1,90 @@
+{
+  "title": "Imaging ML with group-aware evidence and recovery.",
+  "discipline": "Medical-imaging research / validation / reliable training",
+  "summary": "A twelve-label knee-MRI research workflow connecting scanner-aware evaluation, image-model studies, cross-slice context, and recoverable experiments. Public demonstrations make the engineering inspectable without patient data.",
+  "signals": [
+    {
+      "value": "12 labels",
+      "label": "Knee finding prediction tasks"
+    },
+    {
+      "value": "59 groups",
+      "label": "Documented scanner groups"
+    },
+    {
+      "value": "4,349 studies",
+      "label": "Matched grouped development population"
+    }
+  ],
+  "scope": "The Python check verifies public source, retained notebook evidence, and research contracts. Optional Node tests execute the synthetic browser training pipeline. Historical MRI evaluation is separate; no clinical validity is established by these demonstrations.",
+  "private_boundary": "MRI/DICOM images, patient or study identifiers, private prediction rows, trained weights, exact tuned inference recipes, and private GPU checkpoints remain excluded.",
+  "cards": [
+    {
+      "audience": "Data science",
+      "title": "Respect acquisition groups during validation.",
+      "decision": "Keep scanner groups disjoint and inspect aligned targets rather than relying on a random row split.",
+      "boundary": "Grouped development measurements are not evidence of clinical deployment readiness.",
+      "implementation": "src/rsna_research/protocol.py",
+      "tests": "tests/test_research_protocol.py",
+      "evidence": "docs/EMPLOYER_CASE_STUDY.md"
+    },
+    {
+      "audience": "Applied AI",
+      "title": "Test cross-slice context as a controlled change.",
+      "decision": "Compare ordered context and image-model alternatives on a matched development population.",
+      "boundary": "A small positive point estimate with inconclusive evidence is not promoted as a confirmed gain.",
+      "implementation": "src/rsna_research/image_models.py",
+      "tests": "tests/test_image_models.py",
+      "evidence": "reports/current_frontier/results.json"
+    },
+    {
+      "audience": "ML engineering",
+      "title": "Make fold recovery content-bound.",
+      "decision": "Demonstrate checkpoint verification, corruption rejection, and completed-fold reuse in a small public pipeline.",
+      "boundary": "The synthetic tabular pipeline demonstrates engineering behavior, not MRI diagnosis.",
+      "implementation": "src/rsna_review/public_pipeline.py",
+      "tests": "tests/test_public_pipeline.py",
+      "evidence": "docs/REPRODUCIBILITY.md"
+    },
+    {
+      "audience": "Data science",
+      "title": "Keep score scope and inference validity separate.",
+      "decision": "Validate twelve-label metrics, row ordering, and uncertainty decisions without treating an integration fixture as clinical evidence.",
+      "boundary": "A schema-valid prediction file does not establish an accurate or deployable model.",
+      "implementation": "src/rsna_knee/metrics.py",
+      "tests": "tests/test_metrics_and_evidence.py",
+      "evidence": "examples/run_public_review.py"
+    }
+  ],
+  "commands": [
+    {
+      "id": "public-source-contracts",
+      "runtime": "python",
+      "entry": "tools/public_quality.py",
+      "args": []
+    },
+    {
+      "id": "scanner-grouped-browser-pipeline",
+      "runtime": "node",
+      "entry": "tools/test_public_demo.mjs",
+      "args": []
+    }
+  ],
+  "read_more": [
+    {
+      "path": "docs/EMPLOYER_CASE_STUDY.md",
+      "label": "Case study"
+    },
+    {
+      "path": "docs/REPRODUCIBILITY.md",
+      "label": "Reproduction guide"
+    },
+    {
+      "path": "docs/GIT_PUBLICATION.md",
+      "label": "Publication scope"
+    }
+  ],
+  "schema_version": 1,
+  "repository": "alvaromendizabal/rsna-knee-abnormality-detection",
+  "reviewed_base_commit": "6441ad8911a166b8a0a6c2a3f04e11c5fa7efee4"
+}
