@@ -54,6 +54,15 @@
       "implementation": "src/rsna_knee/metrics.py",
       "tests": "tests/test_metrics_and_evidence.py",
       "evidence": "examples/run_public_review.py"
+    },
+    {
+      "audience": "Data science",
+      "title": "Evaluate probabilities against a held-out baseline.",
+      "decision": "Compare per-label Brier and log loss, training-fold prevalence and scanner slices alongside AUC; preserve reliability-bin counts.",
+      "boundary": "Synthetic diagnostics do not establish calibration or clinical performance on MRI.",
+      "implementation": "src/rsna_review/diagnostics.py",
+      "tests": "tests/test_probability_diagnostics.py",
+      "evidence": "docs/REPRODUCIBILITY.md"
     }
   ],
   "commands": [
@@ -86,7 +95,7 @@
   ],
   "schema_version": 1,
   "repository": "alvaromendizabal/rsna-knee-abnormality-detection",
-  "reviewed_base_commit": "6441ad8911a166b8a0a6c2a3f04e11c5fa7efee4",
+  "reviewed_base_commit": "fd29fa2b37f95e8ad95635357348510b8a346b33",
   "source_scopes": [
     {
       "directory": "public-demo",
@@ -99,6 +108,8 @@
     }
   ],
   "source_files": [
-    "review/run.py"
+    "review/run.py",
+    "tools/check_figure_exports.py",
+    "reports/figures/ASSET_LAYOUT.json"
   ]
 }

@@ -1,7 +1,5 @@
 # RSNA Knee Abnormality Detection
 
-> **Inspect the engineering:** [Source-linked review brief](review/README.md) · [Run the verified public checks](review/README.md#one-command-an-inspectable-result) · [Review-kit CI](https://github.com/alvaromendizabal/rsna-knee-abnormality-detection/actions/workflows/employer-review.yml)
-
 [![Publication checks](https://github.com/alvaromendizabal/rsna-knee-abnormality-detection/actions/workflows/publication-checks.yml/badge.svg)](https://github.com/alvaromendizabal/rsna-knee-abnormality-detection/actions/workflows/publication-checks.yml)
 [![Public quality](https://github.com/alvaromendizabal/rsna-knee-abnormality-detection/actions/workflows/public-quality.yml/badge.svg)](https://github.com/alvaromendizabal/rsna-knee-abnormality-detection/actions/workflows/public-quality.yml)
 
@@ -26,6 +24,15 @@ I built a research and evaluation system for twelve knee-MRI findings: scanner-d
 
 The research used Python, PyTorch, AWS SageMaker and S3. The public demonstrations run on CPU without cloud credentials or private data.
 
+## Results with their evidence
+
+| Result | Evaluation scope | Inspect |
+|---|---|---|
+| **0.943 macro ROC-AUC** | Historical external evaluation; separate from the public synthetic demo | [Case study](docs/EMPLOYER_CASE_STUDY.md) |
+| **0.7943834 → 0.7978448** | Matched scanner-grouped development population, 4,349 studies | [Aggregate report](reports/current_frontier/results.json) |
+| **0.7978946** | Subsequent increment remained inconclusive and was not promoted | [Uncertainty and decision](docs/CONTEXT_MODELING_FRONTIER.md) |
+| **59 scanner groups; zero cross-fold overlap** | Evaluation contract; not an untouched external cohort | [Protocol implementation](src/rsna_research/protocol.py) |
+
 ## Try the browser demo
 
 [Open the public demo](https://alvaro-rsna-engineering-lab.tartmacaw2.chatgpt.site), or serve the checkout locally:
@@ -46,11 +53,22 @@ python3.12 -m venv ../rsna-public-review-env
 
 Open `/tmp/rsna-public-demo/report.html`. This pipeline creates predictions, metrics, content-bound checkpoints and an HTML report. Repeating the command verifies and reuses completed folds. [Pause/resume and test commands](docs/REPRODUCIBILITY.md)
 
+The report pairs AUC with **Brier score, log loss, a training-fold prevalence
+baseline and scanner-level probability diagnostics**. Its twelve reliability
+profiles retain empty bins and the observed sample counts. The baseline excludes
+each held-out fold's labels; the report performs no evaluation-set calibration or
+threshold selection. [Diagnostic implementation](src/rsna_review/diagnostics.py)
+
 Both demos are labeled **SYNTHETIC_ONLY** and exercise the engineering workflow on generated tabular data. Historical MRI scores are separate evidence; neither demo is a clinical model.
 
 ## Inspect the research
 
-[Employer review guide](docs/EMPLOYER_REVIEW_GUIDE.md) · [Case study](docs/EMPLOYER_CASE_STUDY.md) · [Architecture](docs/ARCHITECTURE.md) · [Executed Notebook 14](notebooks/14_winner_transfer_and_context_modeling.ipynb)
+[Employer review guide](docs/EMPLOYER_REVIEW_GUIDE.md) · [Case study](docs/EMPLOYER_CASE_STUDY.md) · [Architecture](docs/ARCHITECTURE.md) · [Executed Notebook 14](notebooks/14_winner_transfer_and_context_modeling.ipynb) · [Source-linked checks](review/README.md)
+
+The [offline figure archive](reports/figures/README.md) shares one identical
+runtime across 36 earlier figures, removing 9.5 MB of duplicate files while
+preserving original chart specifications and export manifests. Its integrity check
+reconstructs the original HTML hashes from the recorded path-only change.
 
 The [dated aggregate report](reports/current_frontier/results.json) preserves research through Stage 104. Internal development metrics are distinct from the external score. The 58 fully labeled audit rows are not an untouched confirmation cohort, and full raw-image test serving or clinical validity is not established by this release.
 
