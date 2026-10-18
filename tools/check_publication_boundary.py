@@ -29,12 +29,8 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 MAX_PUBLIC_BYTES = 2 * 1024 * 1024
 # Exact existing chart/library assets, not MRI or learned model artifacts.
-AUDITED_ASSETS = {'reports/figures/01_metadata_and_representation_audit/8a4095f4e826bdc40b0c/plotly.min.js': {'bytes': 4763993,
-                                                                                             'sha256': '122e3be346d66616944d0b83eaaf7242581508c3c1cfa0995a17af0d83eff770'},
- 'reports/figures/02_protocol_feature_investigation/82d90a2f9d54f5a8cd7a/plotly.min.js': {'bytes': 4763993,
-                                                                                          'sha256': '122e3be346d66616944d0b83eaaf7242581508c3c1cfa0995a17af0d83eff770'},
- 'reports/figures/03_image_context_feature_investigation/6bc5b6131cb21b09e04c/plotly.min.js': {'bytes': 4763993,
-                                                                                               'sha256': '122e3be346d66616944d0b83eaaf7242581508c3c1cfa0995a17af0d83eff770'},
+AUDITED_ASSETS = {'reports/figures/_vendor/plotly-3.1.0.min.js': {'bytes': 4763993,
+ 'sha256': '122e3be346d66616944d0b83eaaf7242581508c3c1cfa0995a17af0d83eff770'},
  'reports/figures/saved_results/01_metadata_and_representation_audit/054175b007951924.png': {'bytes': 41860,
                                                                                              'sha256': '22d34bfa520e51e5a56a3b1f407b9188a7d0000fc29307a1593383f1cf5f6582'},
  'reports/figures/saved_results/01_metadata_and_representation_audit/186c0ce4a4c0b3d4.png': {'bytes': 83673,

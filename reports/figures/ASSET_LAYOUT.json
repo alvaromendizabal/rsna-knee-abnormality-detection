@@ -1,0 +1,69 @@
+{
+  "schema": "rsna-figure-layout-v1",
+  "purpose": "Deduplicate identical offline Plotly runtime copies while retaining original export manifests and figure values.",
+  "research_reexecuted": false,
+  "shared_asset": {
+    "path": "reports/figures/_vendor/plotly-3.1.0.min.js",
+    "sha256": "122e3be346d66616944d0b83eaaf7242581508c3c1cfa0995a17af0d83eff770",
+    "bytes": 4763993
+  },
+  "exports": [
+    {
+      "manifest": "reports/figures/01_metadata_and_representation_audit/8a4095f4e826bdc40b0c/EXPORT_MANIFEST.json",
+      "manifest_sha256": "9162036682aafeba2bc5e9a268401aca9eb99eda47f4cd0fe729ab4d072f4c47",
+      "relocated_runtime": "../../_vendor/plotly-3.1.0.min.js",
+      "html_files": {
+        "figure_01.html": "2dd57e1f2d22721d365315184ee419da5776378bae0dbae3692bfd8402c3b444",
+        "figure_02.html": "f3ea87c16d388abd0bc2b1eccf8d1b9688425accf0becf787e9e33e0f66dadd2",
+        "figure_03.html": "6a6dad127a37e7d289d23e135d1c75c3f3b47e9e95a180be0184874239575f37",
+        "figure_04.html": "c17fdc83a312711cb42c2c6399db577b3166f91b0e8fb546f2d2b8db4eb43194",
+        "figure_05.html": "6899f27f934462d383854b1622a7e3e4fbc028b9a88bff13f4c9c46fba448fe0",
+        "figure_06.html": "2eedacd101e3d202c01c4c11b5f497482922a15078d8de3d3162aa5c8e0a8cac",
+        "figure_07.html": "12cc9ceaa7d52deac75c2cc4591fb3d9f6275020630ab791d8dcab4448d5a63a",
+        "figure_08.html": "2be29181e0a2d7afe0e6c367f006ed3bd3d3520f7274c6d2c2a3ec9b1e5ac491",
+        "figure_09.html": "363442ff1cbf14a8d7b81efdb414f21684304bd7a3cada67147df22c1517a448",
+        "figure_10.html": "d791b7893c45f48ca3fcb4c996ea59556f61b9ea248b5fefcaaffe3117fa09b6",
+        "figure_11.html": "fb9c6ccfc68b62cdcccaf813939de1724a0cb1a658ad7871daa03ca2f61f7390",
+        "figure_12.html": "fec4d28035349e770e6afe8d31a34ac544f71e896516f5e9355666e3055f3ea5"
+      }
+    },
+    {
+      "manifest": "reports/figures/02_protocol_feature_investigation/82d90a2f9d54f5a8cd7a/EXPORT_MANIFEST.json",
+      "manifest_sha256": "aa506ae49e34489e0f6d0990f7f3d350d17f8023216d28cba88596a0fc4eb4be",
+      "relocated_runtime": "../../_vendor/plotly-3.1.0.min.js",
+      "html_files": {
+        "figure_01.html": "a25eaf685ccbb55fc602ff2a2aa964017a4e806ff2b8334b12eb2cb081142463",
+        "figure_02.html": "42257f5e29bbd6d8f9454eddcdd6b380c07017c0436053a55b6dbaa5c230acae",
+        "figure_03.html": "a6cef5b7324ec13be4ea6cbe634b086f2c5f252163b662aff013829c55939201",
+        "figure_04.html": "761843fb34badcbdf747a24f2505d92fe65ab419217134533b533f582f71ca6f",
+        "figure_05.html": "d9ca30e9ec3477df27a1ab7af96d253a9ba57f59a520545d2a576a2128429ff4",
+        "figure_06.html": "6a4a9cb23e223280a07b112bcc593f436ef49c94c5522b1b95c970640c07090f",
+        "figure_07.html": "dbc8ec8f67201644011573618168b4584e46585809922559dbc8e4ee29fe3b57",
+        "figure_08.html": "bf6b8b76c30410ed91aa7cb55864535d78a8dc56f6a35d61b9d76964b8448c29",
+        "figure_09.html": "83b9ad6be12760b9828eb5ac13fe21c2e821b14be59a02587a9aee5ad691d17a",
+        "figure_10.html": "03dc47d0bad87e5c22ff22e82aeca113411574f9faf8d44ec7503cac5268911a",
+        "figure_11.html": "eff1815fd531a96376e1bad33c68564d8c5e7ec3690a89c76c42899ba34176a6",
+        "figure_12.html": "58ca32679fc5d6fe8e55749f28ec54713fcd0d52550a16e5e8e7093445ba58f5"
+      }
+    },
+    {
+      "manifest": "reports/figures/03_image_context_feature_investigation/6bc5b6131cb21b09e04c/EXPORT_MANIFEST.json",
+      "manifest_sha256": "30d8456fc73bbe774c9899913598256dda78c39994f87afeddd906d29839e498",
+      "relocated_runtime": "../../_vendor/plotly-3.1.0.min.js",
+      "html_files": {
+        "figure_01.html": "2b7926ac9a508fe82280beee6ce4c680cdbd4161098288d227fa4fde11ee3d39",
+        "figure_02.html": "423c6a8ea1e20e73814f88b5b25568cff7989f2cfd4c3467d5b2851447667f53",
+        "figure_03.html": "c0219f30857169c8c0e3c97d2ed51b80d2b0ef420d90b5dcd3446e8189e6582c",
+        "figure_04.html": "f4ad3474c33a3be1fe0e2f3e28ba1b32c030fcfd31c371db06de283a46f6839f",
+        "figure_05.html": "163c1adfd9c88c07e859ee7e98b520e545738fab526c9d23a956fca5f934c36d",
+        "figure_06.html": "9802315278d6d8f10f927d05df2ed7c30825c54bff8c085e159fb6224878cfc7",
+        "figure_07.html": "e080125db5ffc6f20ecb67d8a4015dcb930c2fc5e45e8626364681b0c80aeb1a",
+        "figure_08.html": "e54f7164924a6409c74e6237c4e3eaacfe3ffbb945ecb3d97ae1ec7af55c2c98",
+        "figure_09.html": "f3ee5eceabce793bd263ec06d111cda158f6884d27ee04562ffc2636bf666a2d",
+        "figure_10.html": "7b23d216a0576632f67e8e666198d99022941fbfb393f956f1cfcd205bbff6d1",
+        "figure_11.html": "18acac5c09a67d9f313e0a26a53ca7de6c49aa97337ba1c21bfaa74ddfd31cad",
+        "figure_12.html": "401502ec7d31ad3aba06c03ae868bc0cc58bc6f9441dbb754fd26aad7d6de6df"
+      }
+    }
+  ]
+}

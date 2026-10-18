@@ -53,6 +53,26 @@ Inspect:
 
 All outputs are labeled **SYNTHETIC_ONLY**. Their metrics describe generated tabular data. MRI performance and clinical evidence remain outside the demo claim.
 
+### Interpret the probability diagnostics
+
+The completed report exposes AUC and probability quality side by side. Brier score
+averages squared error across held-out rows and labels. Log loss uses natural
+logarithms, with probabilities clipped to `[1e-15, 1 - 1e-15]` for that calculation
+only. Neither loss fits an evaluation-time calibration model.
+
+The reference predicts each label's frequency in the other four folds. It never
+reads the held-out fold's labels when computing that fold's baseline prediction.
+**Brier skill = 1 - model Brier / reference Brier**: positive values improve over
+this reference; negative values are worse. A zero reference loss produces `null`
+skill because the ratio is undefined.
+
+`results.json` retains per-label losses and ten equal-width reliability bins,
+including empty bins with zero counts and `null` means. Values of exactly `1`
+belong to the last bin. Expand the report's reliability charts to inspect their
+sample counts, and the scanner table to inspect differences across the ten held-out
+acquisition groups. These are descriptive slices, not independent trials or
+confidence intervals. No label threshold is selected in the public report.
+
 Run the same command again to validate and reuse all completed folds with zero additional fits. A changed input, configuration, source or runtime invalidates an incompatible cache rather than silently overwriting it; choose a new output directory for a different run.
 
 ## Demonstrate checkpoint recovery
@@ -75,6 +95,7 @@ python -m pytest -q
 python tools/public_quality.py
 python tools/check_publication_boundary.py
 python tools/check_current_frontier.py
+python tools/check_figure_exports.py
 python scripts/verify_review_notebook.py
 ```
 

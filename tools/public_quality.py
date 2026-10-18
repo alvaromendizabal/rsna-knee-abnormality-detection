@@ -42,4 +42,5 @@ subprocess.run([sys.executable, str(ROOT / "tools/check_image_models.py")], chec
 subprocess.run([sys.executable, str(ROOT / "tools/check_training_frontier.py")], check=True)
 subprocess.run([sys.executable, str(ROOT / "tools/check_scored_reference_frontier.py")], check=True)
 subprocess.run([sys.executable, str(ROOT / "tools/check_aws_residual_frontier.py")], check=True)
+subprocess.run([sys.executable, str(ROOT / "tools/check_figure_exports.py")], check=True)
 print("PUBLIC_QUALITY_PASSED")

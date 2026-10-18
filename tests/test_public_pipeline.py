@@ -21,6 +21,8 @@ def test_resume_matches_uninterrupted_predictions_and_metrics(tmp_path, monkeypa
     resumed = pipeline.run_pipeline(tmp_path / "resumed")
     assert resumed["execution"] == {"reused_folds": 2, "fitted_folds": 3}
     assert resumed["metrics"] == direct["metrics"]
+    assert paused["probability_diagnostics"] is None
+    assert resumed["probability_diagnostics"] == direct["probability_diagnostics"]
     assert resumed["predictions_sha256"] == direct["predictions_sha256"]
     assert (tmp_path / "direct/synthetic_predictions.csv").read_bytes() == (tmp_path / "resumed/synthetic_predictions.csv").read_bytes()
     monkeypatch.setattr(pipeline, "fit_fold", lambda *a, **k: pytest.fail("Completed run must not fit again"))

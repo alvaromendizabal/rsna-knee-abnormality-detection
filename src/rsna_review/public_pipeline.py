@@ -25,6 +25,7 @@ import pandas as pd
 from rsna_knee import metrics as public_metrics
 from rsna_knee import schema as public_schema
 from rsna_knee.schema import LABELS
+from . import diagnostics
 
 SCHEMA = "public-synthetic-pipeline-v1"
 SCOPE = "SYNTHETIC_ONLY: generated tabular features and labels; not MRI training or clinical evidence."
@@ -161,7 +162,8 @@ def _code_fingerprint() -> str:
     # Include the actual metric/schema implementations, not only a version label.
     sources = {"pipeline": Path(__file__).read_bytes(),
                "metrics": Path(public_metrics.__file__).read_bytes(),
-               "schema": Path(public_schema.__file__).read_bytes()}
+               "schema": Path(public_schema.__file__).read_bytes(),
+               "diagnostics": Path(diagnostics.__file__).read_bytes()}
     return _sha(_canonical({name: _sha(raw) for name, raw in sources.items()}))
 
 
@@ -299,6 +301,14 @@ def _load_fold(raw, data, fold, config):
         raise CacheValidationError("Invalid checkpoint arrays; use a new output directory.") from exc
 
 
+def _reliability_chart(label, values):
+    """Small multiples use each label's observed bins, with counts in tooltips."""
+    points = "".join(
+        f'<circle cx="{36 + 174 * row["mean_probability"]:.3f}" cy="{194 - 174 * row["observed_fraction"]:.3f}" r="4" fill="#087f8c"><title>{row["count"]} rows; mean probability {row["mean_probability"]:.4f}; observed {row["observed_fraction"]:.4f}</title></circle>'
+        for row in values["reliability"] if row["count"])
+    return f'''<figure style="margin:0;border:1px solid #dce5ed;border-radius:8px;padding:12px"><figcaption><strong>{html.escape(label)}</strong></figcaption><svg viewBox="0 0 242 232" role="img" aria-label="Reliability for {html.escape(label)}"><title>Mean probability versus observed positive fraction; each point is one occupied bin.</title><path d="M36 20V194H210" fill="none" stroke="#8ca0b0"/><path d="M36 194L210 20" stroke="#9caeb6" stroke-dasharray="4 4"/>{points}<g font-family="system-ui,sans-serif" font-size="10" fill="#456077"><text x="30" y="207">0</text><text x="205" y="207">1</text><text x="22" y="24">1</text><text x="22" y="197">0</text><text x="73" y="224">Mean probability</text><text x="11" y="148" transform="rotate(-90 11 148)">Observed fraction</text></g></svg></figure>'''
+
+
 def _render_report(result) -> str:
     metrics = result["metrics"]
     auc = f'{metrics["macro_auc_12"]:.4f}' if metrics else "Pending"
@@ -307,6 +317,19 @@ def _render_report(result) -> str:
         for label, value in (metrics["per_label_auc"].items() if metrics else []))
     folds = "".join(f'<tr><td>{r["fold"] + 1}</td><td>{r["train_rows"]}</td><td>{r["heldout_rows"]}</td><td>{r["heldout_scanners"]}</td><td>0 / 0</td></tr>' for r in result["folds"])
     provenance = html.escape(json.dumps(result["provenance"], indent=2, sort_keys=True))
+    diagnostic = result["probability_diagnostics"]
+    diagnostic_html = '<p>Probability diagnostics appear after every held-out fold is complete.</p>'
+    if diagnostic:
+        macro = diagnostic["macro"]
+        skill = f'{macro["brier_skill"]:.1%}' if macro["brier_skill"] is not None else "Undefined"
+        target_rows = "".join(f'<tr><th scope="row">{html.escape(label)}</th><td>{row["brier"]:.4f}</td><td>{row["baseline_brier"]:.4f}</td><td>{row["log_loss"]:.4f}</td><td>{row["prevalence"]:.1%}</td></tr>' for label, row in diagnostic["per_target"].items())
+        scanner_rows = "".join(f'<tr><th scope="row">{html.escape(row["scanner"])}</th><td>{row["rows"]}</td><td>{row["brier"]:.4f}</td><td>{row["baseline_brier"]:.4f}</td></tr>' for row in diagnostic["by_scanner"])
+        reliability_charts = "".join(_reliability_chart(label, values) for label, values in diagnostic["per_target"].items())
+        diagnostic_html = f'''<p>Macro Brier <strong>{macro["brier"]:.4f}</strong> · training-fold prevalence baseline <strong>{macro["baseline_brier"]:.4f}</strong> · Brier skill <strong>{skill}</strong>. Lower Brier is better; positive skill improves over the reference.</p>
+<p>The reference learns each label's frequency from training folds only. Log loss uses natural logarithms. Equal-width reliability bins for all twelve labels are exported in results.json; empty bins remain explicit. No calibration or threshold is fitted on the held-out labels.</p>
+<table><caption>Held-out probability quality by label</caption><thead><tr><th scope="col">Target</th><th scope="col">Brier ↓</th><th scope="col">Baseline Brier ↓</th><th scope="col">Log loss ↓</th><th scope="col">Observed rate</th></tr></thead><tbody>{target_rows}</tbody></table>
+<details><summary>Inspect reliability across the twelve targets</summary><p>Each point is an occupied probability bin; the diagonal is perfect empirical agreement. Hover a point for its sample count. Bin shapes depend on sample size and do not establish calibration on future data.</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">{reliability_charts}</div></details>
+<details><summary>Inspect each held-out scanner</summary><p>These descriptive slices use the same fixed predictions. Small scanner samples do not establish a confidence interval or biological generalization.</p><table><thead><tr><th scope="col">Scanner</th><th scope="col">Rows</th><th scope="col">Brier ↓</th><th scope="col">Baseline Brier ↓</th></tr></thead><tbody>{scanner_rows}</tbody></table></details>'''
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Synthetic pipeline · Engineering evidence</title><style>
 :root{{color-scheme:light;--navy:#142e46;--teal:#087f8c}}*{{box-sizing:border-box}}body{{margin:0;background:#f4f7fa;color:var(--navy);font:16px/1.6 system-ui,sans-serif}}main{{max-width:1060px;margin:auto;padding:44px 24px}}header{{border-top:5px solid var(--teal);padding-top:22px}}h1{{font-size:clamp(2rem,4vw,3.2rem);line-height:1.12;letter-spacing:-.04em;margin:8px 0 18px}}h2{{font-size:1.3rem}}.eyebrow{{text-transform:uppercase;letter-spacing:.13em;font-size:.8rem;font-weight:750;color:var(--teal)}}.note{{max-width:850px;color:#456077}}.cards{{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0}}.card,section{{background:white;border:1px solid #dce5ed;border-radius:12px;padding:22px}}.card strong{{display:block;font-size:2rem;line-height:1.3}}.card span{{color:#456077}}section{{margin-bottom:20px;overflow:auto}}table{{border-collapse:collapse;width:100%;font-size:.9rem}}th,td{{text-align:left;padding:9px 8px;border-bottom:1px solid #e8eef3}}.track{{background:#e6f3f3;height:12px;border-radius:8px;min-width:100px}}.track span{{display:block;background:var(--teal);height:12px;border-radius:8px}}pre{{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.75rem;color:#35516b}}a{{color:var(--teal)}}@media(max-width:640px){{.cards{{grid-template-columns:1fr}}main{{padding:24px 14px}}.fold-table th,.fold-table td{{font-size:.72rem;padding:7px 4px}}}}
@@ -314,6 +337,7 @@ def _render_report(result) -> str:
 <div class="cards"><div class="card"><strong>{html.escape(result["status"])}</strong><span>{result["completed_folds"]} / {result["total_folds"]} folds committed</span></div><div class="card"><strong>{auc}</strong><span>Synthetic heldout macro AUC · 12 targets</span></div><div class="card"><strong>{result["heldout_rows"]}</strong><span>Heldout rows · each predicted once</span></div></div>
 <section><h2>Evaluation evidence</h2><p>Every model learns normalization from its training rows only. No scanner or synthetic patient group appears on both sides of a fold.</p><table class="fold-table"><thead><tr><th>Fold</th><th>Train rows</th><th>Heldout rows</th><th>Heldout scanners</th><th>Group / scanner overlap</th></tr></thead><tbody>{folds}</tbody></table></section>
 <section><h2>Twelve-target synthetic ranking</h2><p>AUC uses average ranks for ties and requires both classes for every target. Scores characterize only this generated problem.</p><table><tbody>{bars or '<tr><td>Full-cohort metrics appear after every fold is complete.</td></tr>'}</tbody></table></section>
+<section><h2>Probability quality and scanner variation</h2>{diagnostic_html}</section>
 <section><h2>Resume and provenance</h2><p>This invocation fitted {result["execution"]["fitted_folds"]} folds and reused {result["execution"]["reused_folds"]} verified checkpoints. Input, configuration, source and runtime fingerprints must match; changed or corrupt caches are rejected. SHA-256 detects accidental corruption; this local manifest is not a signed attestation.</p><p><a href="results.json">Machine-readable results</a> · <a href="synthetic_predictions.csv">Synthetic heldout probabilities</a></p><details><summary>Inspect fingerprints</summary><pre>{provenance}</pre></details></section>
 </main></body></html>'''
 
@@ -385,10 +409,14 @@ def run_pipeline(output, config: DemoConfig = DemoConfig(), *, data=None, stop_a
         done = completed == config.folds
         mask = data.folds < completed
         metrics = None
+        probability_summary = None
         if done:
             metrics = public_metrics.macro_auc_12(
                 pd.DataFrame(data.labels, columns=LABELS, index=data.ids),
                 pd.DataFrame(probabilities, columns=LABELS, index=data.ids))
+            probability_summary = diagnostics.probability_diagnostics(
+                data.labels, probabilities, diagnostics.training_prevalence(data.labels, data.folds),
+                data.scanners, LABELS)
         frame = pd.DataFrame(probabilities[mask], columns=LABELS)
         frame.insert(0, "fold", data.folds[mask])
         frame.insert(0, "synthetic_id", data.ids[mask])
@@ -397,7 +425,8 @@ def run_pipeline(output, config: DemoConfig = DemoConfig(), *, data=None, stop_a
         result = {"schema": SCHEMA, "evidence_type": "SYNTHETIC_ONLY", "scope": SCOPE,
                   "status": "COMPLETE" if done else "PAUSED", "completed_folds": completed,
                   "total_folds": config.folds, "rows": len(data.ids), "heldout_rows": int(mask.sum()),
-                  "targets": LABELS, "metrics": metrics, "provenance": identity,
+                  "targets": LABELS, "metrics": metrics, "probability_diagnostics": probability_summary,
+                  "provenance": identity,
                   "predictions_sha256": _sha(csv_raw),
                   "validation": {"group_overlap": 0, "scanner_overlap": 0,
                                  "train_only_normalization": True, "every_row_heldout_once": done,
