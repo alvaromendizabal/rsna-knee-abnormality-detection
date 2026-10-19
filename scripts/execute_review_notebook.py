@@ -8,7 +8,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src'))
-from rsna_review.evidence import NOTEBOOKS, fingerprints, verify_notebook
+from rsna_review.evidence import NOTEBOOK, fingerprints, verify_notebook
 
 if __name__ == '__main__':
     import nbformat
@@ -17,10 +17,9 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--notebook', choices=('12', '13', '14'), default='14')
     parser.add_argument('--engine', choices=('jupyter', 'ipython-inprocess'), default='jupyter')
     args = parser.parse_args()
-    notebook = nbformat.read(ROOT / NOTEBOOKS[args.notebook], as_version=4)
+    notebook = nbformat.read(ROOT / NOTEBOOK, as_version=4)
     for cell in notebook.cells:
         if cell.cell_type == 'code':
             cell.outputs = []
@@ -56,5 +55,5 @@ if __name__ == '__main__':
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     nbformat.write(notebook, args.output)
-    verify_notebook(ROOT, args.output, args.notebook)
+    verify_notebook(ROOT, args.output)
     print('EXECUTED_SAVED_REOPENED_VERIFIED', args.output)

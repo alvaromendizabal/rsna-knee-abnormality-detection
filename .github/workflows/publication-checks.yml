@@ -1,140 +1,98 @@
 name: Publication checks
-
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-
 permissions:
   contents: read
-
 jobs:
   public-contract:
     runs-on: ubuntu-24.04
+    timeout-minutes: 5
     steps:
-      - name: Check out repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
-
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
-          python-version: "3.12"
-
-      - name: Run dependency-free publication tests
+          python-version: '3.12'
+      - name: Verify maintained source, final evidence and publication boundaries
         run: |
-          python -m unittest discover -s tests -p 'test_current_frontier.py'
-          python -m unittest discover -s tests -p 'test_anatomy_qualification.py'
-          python -m unittest discover -s tests -p 'test_winner_transfer.py'
-          python -m unittest discover -s tests -p 'test_employer_portfolio.py'
-
-      - name: Verify publication boundary and current frontier
-        run: |
+          python -S tools/public_quality.py
           python tools/check_publication_boundary.py
-          python tools/check_current_frontier.py
-
   reproducible-review:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     env:
-      PYTHONHASHSEED: "0"
+      PYTHONHASHSEED: '0'
       MPLBACKEND: Agg
-      OMP_NUM_THREADS: "1"
-      OPENBLAS_NUM_THREADS: "1"
-      MKL_NUM_THREADS: "1"
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
     steps:
-      - name: Check out repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
-
-      - name: Set up locked Python environment
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
-          python-version: "3.12"
+          python-version: '3.12'
           cache: pip
           cache-dependency-path: requirements-review.lock
-
-      - name: Install and verify public review dependencies
+      - name: Install the hash-locked public stack
         run: |
           python -m pip install --disable-pip-version-check --require-hashes -r requirements-review.lock
           python -m pip check
-
-      - name: Run complete public tests and synthetic example
+      - name: Test every retained component, including real DICOM decoding
         run: |
           python -m pytest -q
           python examples/run_public_review.py
           python -O scripts/verify_review_notebook.py
-
-      - name: Pause public pipeline after one committed fold
+      - name: Prove pause, verified recovery and unchanged prediction reuse
+        shell: python
         run: |
-          python examples/run_public_pipeline.py --output "$RUNNER_TEMP/public-demo" --stop-after-fold 1
-          python - "$RUNNER_TEMP/public-demo/results.json" <<'PY'
-          import json
-          import sys
-          from pathlib import Path
-          result = json.loads(Path(sys.argv[1]).read_text())
-          assert result["status"] == "PAUSED"
-          assert result["completed_folds"] == 1
-          assert result["execution"] == {"reused_folds": 0, "fitted_folds": 1}
-          PY
-
-      - name: Resume the public pipeline and fit remaining folds
+          import hashlib, json, os, pathlib, subprocess, sys
+          out = pathlib.Path(os.environ['RUNNER_TEMP']) / 'public-demo'
+          command = [sys.executable, 'examples/run_public_pipeline.py', '--output', str(out)]
+          def run(extra=()):
+              subprocess.run(command + list(extra), check=True, timeout=180)
+              return json.loads((out / 'results.json').read_text())
+          first = run(('--stop-after-fold', '1'))
+          if first['status'] != 'PAUSED' or first['completed_folds'] != 1:
+              raise RuntimeError('A single completed fold must be committed before pausing')
+          if first['execution'] != {'reused_folds': 0, 'fitted_folds': 1}:
+              raise RuntimeError('Incorrect pause accounting')
+          resumed = run()
+          total = resumed['total_folds']
+          if resumed['status'] != 'COMPLETE' or resumed['completed_folds'] != total:
+              raise RuntimeError('Resume did not complete the frozen fold plan')
+          if resumed['execution'] != {'reused_folds': 1, 'fitted_folds': total - 1}:
+              raise RuntimeError('The committed fold was not independently verified and reused')
+          repeated = run()
+          if repeated['status'] != 'COMPLETE' or repeated['execution'] != {'reused_folds': total, 'fitted_folds': 0}:
+              raise RuntimeError('An unchanged rerun unexpectedly fitted models')
+          digest = hashlib.sha256((out / 'synthetic_predictions.csv').read_bytes()).hexdigest()
+          if digest != repeated['predictions_sha256'] or digest != resumed['predictions_sha256']:
+              raise RuntimeError('Verified predictions changed across reuse')
+          if repeated['metrics'] != resumed['metrics']:
+              raise RuntimeError('Verified metrics changed across reuse')
+          print('PUBLIC_PIPELINE_PAUSE_RESUME_AND_EXACT_REUSE_VERIFIED')
+      - name: Execute and independently reopen the final aggregate notebook
         run: |
-          python examples/run_public_pipeline.py --output "$RUNNER_TEMP/public-demo"
-          python - "$RUNNER_TEMP/public-demo/results.json" <<'PY'
-          import json
-          import sys
-          from pathlib import Path
-          result = json.loads(Path(sys.argv[1]).read_text())
-          assert result["status"] == "COMPLETE"
-          assert result["completed_folds"] == result["total_folds"]
-          assert result["execution"] == {"reused_folds": 1, "fitted_folds": result["total_folds"] - 1}
-          PY
-          cp "$RUNNER_TEMP/public-demo/results.json" "$RUNNER_TEMP/public-demo-completed.json"
-
-      - name: Verify complete rerun reuses every fold and preserves predictions
-        run: |
-          python examples/run_public_pipeline.py --output "$RUNNER_TEMP/public-demo"
-          python - "$RUNNER_TEMP/public-demo" "$RUNNER_TEMP/public-demo-completed.json" <<'PY'
-          import hashlib
-          import json
-          import sys
-          from pathlib import Path
-          output = Path(sys.argv[1])
-          previous = json.loads(Path(sys.argv[2]).read_text())
-          current = json.loads((output / "results.json").read_text())
-          assert current["status"] == "COMPLETE"
-          assert current["execution"] == {"reused_folds": current["total_folds"], "fitted_folds": 0}
-          assert current["metrics"] == previous["metrics"]
-          actual_sha = hashlib.sha256((output / "synthetic_predictions.csv").read_bytes()).hexdigest()
-          assert actual_sha == current["predictions_sha256"] == previous["predictions_sha256"]
-          print("PUBLIC_PIPELINE_RESUME_VERIFIED")
-          PY
-
-      - name: Execute and verify saved review notebooks
-        run: |
-          python scripts/execute_review_notebook.py --notebook 12 --output "$RUNNER_TEMP/rsna-review/12.ipynb"
-          python scripts/execute_review_notebook.py --notebook 13 --output "$RUNNER_TEMP/rsna-review/13.ipynb"
-          python scripts/execute_review_notebook.py --notebook 14 --output "$RUNNER_TEMP/rsna-review/14.ipynb"
-
-      - name: Preserve public demo results
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+          python scripts/execute_review_notebook.py --output "$RUNNER_TEMP/rsna-review/context-evaluation.ipynb"
+          python scripts/verify_review_notebook.py --notebook "$RUNNER_TEMP/rsna-review/context-evaluation.ipynb"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: public-pipeline-demo
           path: |
             ${{ runner.temp }}/public-demo/results.json
             ${{ runner.temp }}/public-demo/report.html
             ${{ runner.temp }}/public-demo/synthetic_predictions.csv
-          retention-days: 14
           if-no-files-found: error
-
-      - name: Preserve executed notebooks for review
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+          retention-days: 14
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: public-review-notebooks
-          path: ${{ runner.temp }}/rsna-review/*.ipynb
-          retention-days: 14
+          name: final-context-evaluation
+          path: ${{ runner.temp }}/rsna-review/context-evaluation.ipynb
           if-no-files-found: error
+          retention-days: 14

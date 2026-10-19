@@ -1,138 +1,70 @@
-# Reproducibility
+# Reproduce and inspect
 
-The public release supports an interactive browser trainer, an offline CPU pipeline, the public test suite and replay of selected aggregate notebooks. The private MRI experiments are represented by dated aggregate evidence; their data, weights and tuned research implementation are not distributed.
+The public checks need no AWS resource, Kaggle credential, MRI image, or private
+checkpoint. They validate the maintained engineering components and final aggregate
+analysis, not the withheld competition model.
 
-## Open the browser demo
-
-[Launch the public demo](https://alvaro-rsna-engineering-lab.tartmacaw2.chatgpt.site) without an account or installation. To serve the same source locally, run from the checkout root:
+## Credential-free walkthrough
 
 ```bash
-python -m http.server 8000
+python3 -S review/run.py --output /tmp/rsna-review --with-node
+python3 -S review/run.py --output /tmp/rsna-review --with-node --check
 ```
 
-Visit `http://localhost:8000/public-demo/`. No package installation or backend is required. The page generates 480 synthetic rows across 120 nested groups and 10 scanners, then trains twelve logistic outputs across five scanner-disjoint folds. Normalization uses each training fold only.
+Python 3.11+ is required; Node.js enables actual browser-control tests. The generated
+HTML binds its implementation map and outputs to source hashes. A changed source
+or corrupted export is not accepted as an unchanged rerun.
 
-Pause and resume an active run, reset it, inspect held-out metrics and export the result. Open **Move a run between devices** to save or import a portable checkpoint while paused. Imports are read locally, limited to files smaller than 1 MB, and checked against the exact engine/configuration, synthetic input fingerprint, progress, training-only scaler, fold membership and metric/prediction consistency. A rejected file leaves the current run unchanged; imports cannot race training or reset. A checksum detects corruption, not authorship or adversarial forgery. Older engine checkpoints are intentionally rejected after an implementation change. Training executes in the browser. The browser caches normalized training vectors once per active fold in memory; that derived cache is rebuilt after restore and excluded from checkpoint authority. Regression checks preserve the pre-optimization predictions, loss history and fold summaries for two seeds exactly. Wall-clock speed depends on the browser and device.
+## Locked Python reference
 
-The browser and Python pipeline are independent public implementations and report their own results; neither recalculates historical MRI scores.
-
-With Node.js installed, the browser engine checks run locally:
-
-```bash
-node tools/test_public_demo.mjs
-```
-
-## Set up the pinned environment
-
-Use **Python 3.12** and keep the environment and generated outputs outside the checkout. `requirements-review.txt` lists direct dependencies; `requirements-review.lock` pins transitive distributions and their hashes.
+Use Python 3.12 in an isolated environment:
 
 ```bash
-python3.12 -m venv ../rsna-public-review-env
-../rsna-public-review-env/bin/python -m pip install --require-hashes -r requirements-review.lock
-source ../rsna-public-review-env/bin/activate
-```
-
-Installation requires package access once. The commands below then run locally without cloud credentials, MRI, model downloads or a GPU.
-
-## Run the public pipeline
-
-```bash
-python examples/run_public_pipeline.py --output /tmp/rsna-public-demo
-```
-
-The pipeline generates synthetic tabular features with nested patient/scanner groups, creates five scanner-disjoint folds, fits twelve logistic outputs with training-only normalization, and scores held-out predictions. The default seed is `2026`; `--seed` selects a different synthetic fixture.
-
-Inspect:
-
-| Output | Purpose |
-|---|---|
-| `report.html` | Standalone visual report of the synthetic run |
-| `results.json` | Machine-readable metrics, execution state and provenance |
-| `synthetic_predictions.csv` | Held-out predictions for fictional rows |
-| Fold checkpoints and manifests | Committed work with fingerprints and checksums for resume validation |
-
-All outputs are labeled **SYNTHETIC_ONLY**. Their metrics describe generated tabular data. MRI performance and clinical evidence remain outside the demo claim.
-
-### Interpret the probability diagnostics
-
-The completed report exposes AUC and probability quality side by side. Brier score
-averages squared error across held-out rows and labels. Log loss uses natural
-logarithms, with probabilities clipped to `[1e-15, 1 - 1e-15]` for that calculation
-only. Neither loss fits an evaluation-time calibration model.
-
-The reference predicts each label's frequency in the other four folds. It never
-reads the held-out fold's labels when computing that fold's baseline prediction.
-**Brier skill = 1 - model Brier / reference Brier**: positive values improve over
-this reference; negative values are worse. A zero reference loss produces `null`
-skill because the ratio is undefined.
-
-`results.json` retains per-label losses and ten equal-width reliability bins,
-including empty bins with zero counts and `null` means. Values of exactly `1`
-belong to the last bin. Expand the report's reliability charts to inspect their
-sample counts, and the scanner table to inspect differences across the ten held-out
-acquisition groups. These are descriptive slices, not independent trials or
-confidence intervals. No label threshold is selected in the public report.
-
-Run the same command again to validate and reuse all completed folds with zero additional fits. A changed input, configuration, source or runtime invalidates an incompatible cache rather than silently overwriting it; choose a new output directory for a different run.
-
-## Demonstrate checkpoint recovery
-
-Use a fresh output directory:
-
-```bash
-python examples/run_public_pipeline.py --output /tmp/rsna-public-resume --stop-after-fold 1
-python examples/run_public_pipeline.py --output /tmp/rsna-public-resume
-```
-
-The first invocation commits one fold and exits successfully with status `PAUSED`. This is a controlled interruption demonstration. The second verifies that checkpoint and completes the remaining folds. After an unclean process kill, first verify that no run still owns the output directory, then remove only its stale `.pipeline-lock` directory before resuming.
-
-An incompatible or corrupted cache raises `CacheValidationError` and exits with code 2.
-
-## Check code and published evidence
-
-```bash
+python -m venv /tmp/rsna-review-env
+source /tmp/rsna-review-env/bin/activate
+python -m pip install --require-hashes -r requirements-review.lock
+python -m pip check
 python -m pytest -q
-python tools/public_quality.py
-python tools/check_publication_boundary.py
-python tools/check_current_frontier.py
-python tools/check_figure_exports.py
+python examples/run_public_pipeline.py --output /tmp/rsna-reference
+```
+
+This fits twelve logistic controls on authored, scanner-grouped features. It reports
+held-out AUC, Brier score, log loss, reliability-bin counts and scanner slices,
+including the training-fold prevalence baseline. It is `SYNTHETIC_ONLY`: no MRI
+performance or clinical calibration is implied.
+
+## Demonstrate verified recovery
+
+```bash
+python examples/run_public_pipeline.py --output /tmp/rsna-resume --stop-after-fold 1
+python examples/run_public_pipeline.py --output /tmp/rsna-resume
+python examples/run_public_pipeline.py --output /tmp/rsna-resume
+```
+
+The first call records one fold and reports `PAUSED`. The next verifies that fold
+and fits the remaining ones. The third verifies and reuses every completed fold.
+Tests compare resumed and fresh predictions. Configuration/source mismatches and
+corrupted checkpoints raise `CacheValidationError` with exit code 2. Never remove
+a lock while another process owns the output directory.
+
+## Re-execute the final analysis
+
+```bash
 python scripts/verify_review_notebook.py
+python scripts/execute_review_notebook.py --output /tmp/rsna-analysis.ipynb
+python scripts/verify_review_notebook.py --notebook /tmp/rsna-analysis.ipynb
+python tools/check_publication_boundary.py
 ```
 
-The smaller metric/schema example remains available:
+The executor uses a real clean Jupyter kernel, saves outputs, reopens them and
+verifies source/report fingerprints, plotted values, execution counts and three
+persistent Plotly/SVG pairs. A restricted environment may use the explicitly labelled
+`--engine ipython-inprocess` alternative. These charts recompute the original
+published aggregates, not private row-level predictions or bootstrap samples.
 
-```bash
-python examples/run_public_review.py
-```
+The [recorded report](../reports/current_frontier/results.json) remains unchanged:
+ordered context improved grouped AUC from **0.7943834 to 0.7978448**. The subsequent
+**0.7978946** point estimate has an inconclusive interval. The external **0.943**
+record is a different setting. The 58 audit rows are not untouched confirmation.
 
-It uses four fictional studies to exercise the twelve-target metric, reject invalid prediction tables and preserve an inconclusive uncertainty decision. Its illustrative 0.75 AUC is not a research result.
-
-The notebook verifier checks source/report fingerprints, saved execution counts, plotted values and persistent Plotly/SVG outputs. Aggregate consistency is distinct from recalculating private row-level predictions.
-
-## Optionally execute Notebooks 12–14
-
-```bash
-python scripts/execute_review_notebook.py --notebook 12 --output /tmp/rsna-review-notebooks/12.ipynb
-python scripts/execute_review_notebook.py --notebook 13 --output /tmp/rsna-review-notebooks/13.ipynb
-python scripts/execute_review_notebook.py --notebook 14 --output /tmp/rsna-review-notebooks/14.ipynb
-```
-
-The executor runs a real Jupyter kernel, saves the notebook, reopens it and verifies its output. The kernel needs permission to bind local sockets. In restricted environments, `--engine ipython-inprocess` executes the cells in process; that mode is explicitly separate from a Jupyter kernel run.
-
-Notebook 12 replays historical aggregate chart values. Notebook 13 presents historical engineering priorities and completion counts. Notebook 14 checks the Stage 104 aggregate report, uncertainty state and coverage counts. None retrains private MRI models or independently verifies the underlying scores.
-
-Notebook 00 is a prepared, unexecuted private preflight template. Notebooks 01–11 are historical execution records with their original data/environment assumptions. They are outside the clean public replay claim. The review refresh repaired the executable chart sources and saved-output consistency of Notebooks 12–14; it did not change historical metric reports.
-
-## Evidence boundaries
-
-| Evidence | What can be established here | What is outside the claim |
-|---|---|---|
-| Browser trainer | Actual logistic training, group isolation, pause/resume and export on synthetic data | MRI performance or durable Python checkpoint behavior |
-| Python pipeline | Group isolation, training/evaluation flow, validated resume and reporting on synthetic data | MRI performance or clinical validity |
-| Public helpers/tests | Metric, schema, fallback, provenance and publication contracts | Private model/checkpoint equivalence |
-| Aggregate notebook replay | Published values, arithmetic, plots and uncertainty decisions agree | Independent reconstruction of private predictions |
-| Archived research report | Dated development outcomes and their stated scope | New experiments, a new submission or an untouched confirmation cohort |
-
-The [aggregate snapshot](../reports/current_frontier/results.json) retains Stage 102's grouped result **0.7978448** and Stage 104's **0.7978946** inconclusive increment. The external **0.943** record is separate. The 58 fully labeled audit rows were within recovered selection lineage and are not treated as untouched confirmation.
-
-MRI/DICOM data, identifiers, row-level research predictions, private checkpoints, cloud locations, private runners/returns and tuned research inference code remain excluded. Full raw-image test serving is not established by this release. The [closeout](PROJECT_CLOSEOUT.md) defines completion; historical preparation notes are not an ongoing work promise.
+[Publication boundary](GIT_PUBLICATION.md) · [Final scope](PROJECT_CLOSEOUT.md)

@@ -48,7 +48,7 @@ Decision:
 - retain the point estimate;
 - do not promote it as established improvement;
 - close repeated micro-tuning of this exact mechanism;
-- move to a materially different ranked capability.
+- preserve the uncertainty as part of the final evaluation record.
 
 ## Why this is portfolio-relevant
 

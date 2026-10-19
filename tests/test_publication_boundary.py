@@ -139,13 +139,15 @@ class PublicationBoundaryTests(unittest.TestCase):
         self.git('add', 'link.txt')
         self.assertIn('NONREGULAR_OR_UNMERGED_INDEX_ENTRY', self.rules())
 
-    def test_existing_asset_allowance_requires_exact_path_and_bytes(self):
-        for name in (next(x for x in guard.AUDITED_ASSETS if x.endswith('.png')),
-                     next(x for x in guard.AUDITED_ASSETS if x.endswith('.js'))):
-            raw = (ROOT / name).read_bytes()
+    def test_asset_allowance_requires_exact_path_and_bytes(self):
+        from unittest.mock import patch
+        raw = b'\x89PNG\x00inert-generated-test-fixture'
+        name = 'assets/fixture.png'
+        pin = {'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
+        with patch.dict(guard.AUDITED_ASSETS, {name: pin}, clear=True):
             self.assertEqual(guard.inspect_bytes(name, raw), [])
             self.assertEqual(guard.inspect_bytes(name, raw + b'changed'), ['AUDITED_ASSET_CHANGED'])
-            self.assertTrue(guard.inspect_bytes('elsewhere/' + Path(name).name, raw))
+            self.assertTrue(guard.inspect_bytes('elsewhere/fixture.png', raw))
 
     def test_cli_reports_only_safe_locations_and_rules(self):
         token = github_fixture()

@@ -1,46 +1,23 @@
 #!/usr/bin/env python3
+"""Verify maintained source and final aggregate review without private inputs."""
 from __future__ import annotations
-import ast, json, pathlib, subprocess, sys
+import ast
+from pathlib import Path
+import subprocess
+import sys
+ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT/'src'))
+from rsna_review.evidence import verify_notebook
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]
-
-for p in ROOT.rglob("*.py"):
-    if ".git" not in p.parts:
-        ast.parse(p.read_text(encoding="utf-8"), filename=str(p))
-
-markers = {
-    "01_metadata_and_representation_audit.ipynb": "M01_METADATA_AUDIT_COMPLETE",
-    "02_protocol_feature_investigation.ipynb": "R01_FEATURE_INVESTIGATION_COMPLETE",
-    "03_image_context_feature_investigation.ipynb": "R02_IMAGE_PILOT_COMPLETE",
-    "04_supervision_and_validation.ipynb": "SUPERVISION_MILESTONE_COMPLETE",
-    "05_multilingual_teacher_pilot.ipynb": "TEACHER_PILOT_RECORDED",
-}
-for name, marker in markers.items():
-    p = ROOT / "notebooks" / name
-    if not p.is_file():
-        raise SystemExit(f"missing notebook: {name}")
-    nb = json.loads(p.read_text(encoding="utf-8"))
-    blob = json.dumps(nb, ensure_ascii=False)
-    if marker not in blob:
-        raise SystemExit(f"missing completion marker in {name}")
-    plotly = png = 0
-    for cell in nb.get("cells", []):
-        for out in cell.get("outputs", []) or []:
-            data = out.get("data") or {}
-            plotly += int("application/vnd.plotly.v1+json" in data)
-            png += int("image/png" in data)
-    if plotly < 12 or png < 12:
-        raise SystemExit(
-            f"{name}: expected >=12 Plotly and >=12 PNG outputs; found {plotly}/{png}"
-        )
-
-for bad in ["data", "artifacts", "logs", "returns", ".venv"]:
-    if (ROOT / bad).exists():
-        raise SystemExit(f"forbidden public path: {bad}")
-
-subprocess.run([sys.executable, str(ROOT / "tools/check_image_models.py")], check=True)
-subprocess.run([sys.executable, str(ROOT / "tools/check_training_frontier.py")], check=True)
-subprocess.run([sys.executable, str(ROOT / "tools/check_scored_reference_frontier.py")], check=True)
-subprocess.run([sys.executable, str(ROOT / "tools/check_aws_residual_frontier.py")], check=True)
-subprocess.run([sys.executable, str(ROOT / "tools/check_figure_exports.py")], check=True)
-print("PUBLIC_QUALITY_PASSED")
+def main():
+    names=subprocess.check_output(['git','-C',str(ROOT),'ls-files','--cached','--others','--exclude-standard','-z']).decode().split('\0')
+    checked=0
+    for name in set(filter(None,names)):
+        p=ROOT/name
+        if p.is_file() and p.suffix=='.py':
+            ast.parse(p.read_text(encoding='utf-8'),filename=name);checked+=1
+    verify_notebook(ROOT)
+    for name in ('test_image_models.py','test_current_frontier.py','test_employer_portfolio.py'):
+        subprocess.run([sys.executable,'-S','-m','unittest','discover','-s','tests','-p',name,'-q'],cwd=ROOT,check=True,timeout=60)
+    print('PUBLIC_QUALITY_PASSED',checked,'Python sources; final evidence and numerical contracts')
+if __name__=='__main__':main()

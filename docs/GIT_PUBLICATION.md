@@ -23,12 +23,11 @@ Use the hash-locked Python 3.12 environment in [Reproducibility](REPRODUCIBILITY
 python -m pytest -q
 python tools/public_quality.py
 python tools/check_publication_boundary.py
-python tools/check_current_frontier.py
 python scripts/verify_review_notebook.py
 python examples/run_public_pipeline.py --output /tmp/rsna-public-release-check
 ```
 
-Review the generated HTML and JSON outside the checkout. Check the intentional pause/resume path when checkpoint code changes. Changes to the aggregate notebook sources also require the documented real-kernel replay of the affected Notebooks 12–14.
+Review the generated HTML and JSON outside the checkout. Check the intentional pause/resume path when checkpoint code changes. Changes to the aggregate notebook sources also require the documented real-kernel replay of the final context-evaluation notebook.
 
 CI checks and local tests provide evidence for the public layer. They do not establish private MRI inference correctness or authorize publishing private artifacts.
 

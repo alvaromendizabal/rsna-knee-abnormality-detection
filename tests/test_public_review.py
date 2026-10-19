@@ -10,7 +10,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src'))
-from rsna_review.evidence import NOTEBOOK, NOTEBOOKS, REPORT, summary, verify_notebook
+from rsna_review.evidence import NOTEBOOK, REPORT, summary, verify_notebook
 
 
 class PublicReviewTests(unittest.TestCase):
@@ -28,8 +28,6 @@ class PublicReviewTests(unittest.TestCase):
             ('research_frontier', 'stage84_retained_macro_auc', True),
             ('aws_validation', 'fold_studies', [870] * 5),
             ('aws_validation', 'cross_fold_scanner_groups', 1),
-            ('winner_technique_inventory', 'fully_implemented', 8.2),
-            ('winner_technique_inventory', 'missing', 7),
             ('stage104_neighbor_context', 'delta_vs_matched_control', .01),
             ('stage104_neighbor_context', 'ci90_lower', .00001),
             ('public_score', 'internal_metrics_directly_comparable', True),
@@ -41,23 +39,6 @@ class PublicReviewTests(unittest.TestCase):
                 data[section][key] = value
                 with self.assertRaises(ValueError):
                     summary(data)
-
-    def test_historical_notebooks_match_saved_values(self):
-        for number in ('12', '13'):
-            with self.subTest(notebook=number):
-                verify_notebook(ROOT, number=number)
-
-    def test_historical_changed_chart_rejected(self):
-        for number in ('12', '13'):
-            with self.subTest(notebook=number), tempfile.TemporaryDirectory() as directory:
-                notebook = json.loads((ROOT / NOTEBOOKS[number]).read_text())
-                cell = next(c for c in notebook['cells'] if c['cell_type'] == 'code')
-                output = next(o for o in cell['outputs'] if 'data' in o)
-                output['data']['application/vnd.plotly.v1+json']['data'][0]['y'][0] = 999
-                path = Path(directory) / 'historical.ipynb'
-                path.write_text(json.dumps(notebook))
-                with self.assertRaises(ValueError):
-                    verify_notebook(ROOT, path, number)
 
     def test_stale_source_rejected(self):
         self.notebook['cells'][1]['source'] += ['\nprint("changed")']
