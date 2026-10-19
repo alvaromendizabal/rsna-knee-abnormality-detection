@@ -1,71 +1,31 @@
-# Public release procedure
+# Public source and evidence boundary
 
-This procedure publishes the reviewed engineering portfolio. The public release scope is defined in [Project closeout](PROJECT_CLOSEOUT.md); historical milestone instructions do not govern the current release workflow.
+The [completed project](PROJECT_CLOSEOUT.md) publishes the final context evaluation,
+its necessary controls, and the numerical/data contracts behind the public reference.
+The [reproduction guide](REPRODUCIBILITY.md) is the canonical execution path.
 
-## Inspect the intended checkout
+## Included
 
-Run from the repository root:
+The maintained source contains twelve-label scoring, physical slice-order and
+DICOM-decoding checks, global attention-pooling contracts, grouped uncertainty,
+fitted synthetic controls, verified checkpoint reuse, a genuinely executed final
+aggregate notebook, tests, and the browser demonstration.
 
-```bash
-git status --short --branch
-git remote -v
-git diff --stat
-git diff --check
-```
+## Excluded
 
-Confirm the branch and public destination before publication, preserve unrelated work, and inspect the actual changed files. Use a reviewed feature branch and pull request. Remote configuration must not contain embedded credentials.
+MRI/DICOM inputs, patient/study identifiers, private row-level predictions, model
+weights, tuned private inference settings, credentials and private run bundles are
+not distributed. Generated local checkpoints belong outside the checkout.
 
-## Validate the public artifacts
+Original aggregate measurements and their population limits are preserved. Synthetic
+training and aggregate replay do not reproduce the withheld MRI model or establish
+clinical validity. The external and grouped development results remain distinct.
 
-Use the hash-locked Python 3.12 environment in [Reproducibility](REPRODUCIBILITY.md):
+## Verification
 
-```bash
-python -m pytest -q
-python tools/public_quality.py
-python tools/check_publication_boundary.py
-python scripts/verify_review_notebook.py
-python examples/run_public_pipeline.py --output /tmp/rsna-public-release-check
-```
+The configured CI checks cover the maintained source, all retained native tests,
+clean-kernel notebook replay, pause/resume and prediction identity, browser behavior,
+publication boundaries, and repository navigation. A clean public checkout requires
+no old AWS space or private cloud resource.
 
-Review the generated HTML and JSON outside the checkout. Check the intentional pause/resume path when checkpoint code changes. Changes to the aggregate notebook sources also require the documented real-kernel replay of the final context-evaluation notebook.
-
-CI checks and local tests provide evidence for the public layer. They do not establish private MRI inference correctness or authorize publishing private artifacts.
-
-## Review the staged boundary
-
-Stage only the source, tests, documentation, assets and configuration that have been inspected. Use explicit file paths with `git add --`; do not use a broad staging command as a substitute for reviewing the file list.
-
-Then inspect:
-
-```bash
-git diff --cached --stat
-git diff --cached --check
-python tools/check_publication_boundary.py
-git diff --cached
-git status --short
-```
-
-The release may include aggregate reports, public helpers, synthetic examples, executed aggregate notebooks, SVG assets and CI definitions. Preserve the original dates and interpretation of historical evidence; a presentation refresh is not a new experiment.
-
-Exclude:
-
-- MRI/DICOM files, radiology reports, study/patient identifiers and scanner assignments;
-- row-level research predictions, cache shards, model weights and private checkpoints;
-- credentials, signed URLs, cloud resource locations and private source-recovery handles;
-- private runners, execution bundles and exact competition inference/fusion/submission implementation;
-- generated environments, caches and local demo checkpoints or predictions.
-
-The demo's generated rows are fictional, but generated files still belong outside the checkout. `.gitignore` is a supporting control; it does not inspect files that were already tracked. Review notebook outputs as well as their source cells.
-
-## Commit and publish the reviewed branch
-
-Once the staged diff matches the public release scope and the checks pass:
-
-```bash
-git commit -m "Complete engineering portfolio release"
-git push --set-upstream origin HEAD
-```
-
-Open a pull request against the intended default branch, inspect the rendered README and diagrams, and require the publication and public-quality checks to pass before merging. Resolve a rejected push through ordinary history inspection and integration; this procedure does not use a force push, history rewrite or destructive cleanup.
-
-The release description should identify the runnable synthetic pipeline, verified aggregate notebooks, documentation and test coverage. State the evidence boundary and link to [Project closeout](PROJECT_CLOSEOUT.md). Do not imply a new competition submission, clinical deployment or scientific result from publishing the repository.
+[Model and evaluation scope](CONTEXT_MODELING_FRONTIER.md) · [Attribution](SOURCES.md)
