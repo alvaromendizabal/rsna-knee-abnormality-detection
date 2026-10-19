@@ -1,75 +1,60 @@
-# RSNA Knee Abnormality Detection
+# Knee MRI: reliable multi-label modeling
 
-[![Publication checks](https://github.com/alvaromendizabal/rsna-knee-abnormality-detection/actions/workflows/publication-checks.yml/badge.svg)](https://github.com/alvaromendizabal/rsna-knee-abnormality-detection/actions/workflows/publication-checks.yml)
-[![Public quality](https://github.com/alvaromendizabal/rsna-knee-abnormality-detection/actions/workflows/public-quality.yml/badge.svg)](https://github.com/alvaromendizabal/rsna-knee-abnormality-detection/actions/workflows/public-quality.yml)
+**Medical-imaging ML · scanner-aware validation · recoverable inference**
 
-![Medical-imaging ML engineering portfolio: validation, recovery and evidence](docs/assets/portfolio-hero.svg)
+![Knee MRI engineering](docs/assets/portfolio-hero.svg)
 
-**Alvaro Mendizabal · Machine Learning Engineer**
+A twelve-finding MRI project with scanner-disjoint evaluation, ordered cross-slice
+context, and strict separation between model quality, inference equivalence, and
+clinical validity. The public release contains the numerical and data contracts,
+a fitted CPU reference, a browser training demonstration, and reproducible final
+aggregate analysis—without publishing patient data or the private model recipe.
 
-I built a research and evaluation system for twelve knee-MRI findings: scanner-disjoint validation, heterogeneous image models, cross-slice context, and recoverable AWS execution. I also built the data contracts, checkpoint validation, tests and reporting needed to make expensive experiments reviewable.
-
-**Historical external result: 0.943 macro ROC-AUC.** Separately, ordered context improved grouped development AUC from **0.7943834 to 0.7978448** on the same 4,349-study population. A further 0.7978946 estimate remained inconclusive; I preserved that result without promoting it as a confirmed gain.
-
-**Start here:** [Interactive training demo](https://alvaro-rsna-engineering-lab.tartmacaw2.chatgpt.site) · [Case study](docs/EMPLOYER_CASE_STUDY.md) · [Three-minute review](docs/EMPLOYER_REVIEW_GUIDE.md) · [Run locally](docs/REPRODUCIBILITY.md)
-
-## What I built
-
-| Capability | Implementation and evidence |
+| Evidence | Recorded result and scope |
 |---|---|
-| Group-aware evaluation | 59 scanner groups, zero cross-fold scanner overlap, aligned targets and paired uncertainty |
-| Controlled modeling | Multi-model integration, ordered-context studies, matched controls and explicit negative decisions |
-| Recoverable execution | Atomic artifacts, input/source fingerprints, validated fold checkpoints and corruption rejection |
-| Reviewable results | Aggregate notebooks, machine-readable reports, tests and CI |
+| External evaluation | **0.943** macro ROC-AUC; historical external record |
+| Grouped development | **4,349 studies**, **59 scanner groups**, zero cross-fold scanner overlap |
+| Ordered context | **0.7943834 → 0.7978448** on the same grouped development population |
+| Narrower extension | **0.7978946** point estimate; paired interval crossed zero, so the increment remains inconclusive |
 
-The research used Python, PyTorch, AWS SageMaker and S3. The public demonstrations run on CPU without cloud credentials or private data.
+[Case study](docs/EMPLOYER_CASE_STUDY.md) · [Architecture](docs/ARCHITECTURE.md) ·
+[Review guide](docs/EMPLOYER_REVIEW_GUIDE.md) · [Reproduce](docs/REPRODUCIBILITY.md) ·
+[Final scope](docs/PROJECT_CLOSEOUT.md) ·
+[Interactive engineering lab](https://alvaro-rsna-engineering-lab.tartmacaw2.chatgpt.site)
 
-## Results with their evidence
-
-| Result | Evaluation scope | Inspect |
-|---|---|---|
-| **0.943 macro ROC-AUC** | Historical external evaluation; separate from the public synthetic demo | [Case study](docs/EMPLOYER_CASE_STUDY.md) |
-| **0.7943834 → 0.7978448** | Matched scanner-grouped development population, 4,349 studies | [Aggregate report](reports/current_frontier/results.json) |
-| **0.7978946** | Subsequent increment remained inconclusive and was not promoted | [Uncertainty and decision](docs/CONTEXT_MODELING_FRONTIER.md) |
-| **59 scanner groups; zero cross-fold overlap** | Evaluation contract; not an untouched external cohort | [Protocol implementation](src/rsna_research/protocol.py) |
-
-## Try the browser demo
-
-[Open the public demo](https://alvaro-rsna-engineering-lab.tartmacaw2.chatgpt.site), or serve the checkout locally:
+## Run the public review
 
 ```bash
-python -m http.server 8000
+python3 -S review/run.py --output /tmp/rsna-review --with-node
+python3 -S review/run.py --output /tmp/rsna-review --with-node --check
 ```
 
-Open `http://localhost:8000/public-demo/`. Generate a synthetic cohort, train twelve logistic outputs across five scanner-disjoint folds, and inspect held-out metrics as the run progresses. Pause, resume, reset and export the result. Save a portable checkpoint and resume it on another device with the same demo version. Training executes in the browser; normalization uses only each fold's training rows.
+Python 3.11+ and Node.js are sufficient for the walkthrough, evidence verification,
+and browser-training contracts. Open the generated `index.html` to inspect each
+engineering decision, its implementation, and the tests behind it.
 
-## Run the Python pipeline
+For actual CPU fitting, install the hash-pinned [requirements-review.lock](requirements-review.lock)
+and run [examples/run_public_pipeline.py](examples/run_public_pipeline.py). It fits
+12 logistic models on authored features, evaluates scanner-disjoint folds, reports
+AUC/Brier/log loss and reliability counts, and can resume verified checkpoints.
+**All public training outputs are `SYNTHETIC_ONLY`; they are not MRI performance.**
 
-```bash
-python3.12 -m venv ../rsna-public-review-env
-../rsna-public-review-env/bin/python -m pip install --require-hashes -r requirements-review.lock
-../rsna-public-review-env/bin/python examples/run_public_pipeline.py --output /tmp/rsna-public-demo
-```
+## Maintained implementation
 
-Open `/tmp/rsna-public-demo/report.html`. This pipeline creates predictions, metrics, content-bound checkpoints and an HTML report. Repeating the command verifies and reuses completed folds. [Pause/resume and test commands](docs/REPRODUCIBILITY.md)
+| Component | Why it is here |
+|---|---|
+| `src/rsna_knee/schema.py` | Twelve-label order, missing-label semantics, safe metadata joins |
+| `src/rsna_research/pixels.py` | Physical slice ordering, safe DICOM decoding and within-series normalization |
+| `src/rsna_research/image_models.py` | Stable global attention pooling across encoding microbatches |
+| `src/rsna_research/comparison.py` | Paired grouped uncertainty without resampling individual correlated rows |
+| `src/rsna_review/public_pipeline.py` | Fitted CPU reference, group isolation, train-only preprocessing and exact resume |
+| `src/rsna_review/diagnostics.py` | Probability diagnostics against training-fold prevalence |
+| `notebooks/01_context_evaluation.ipynb` | Executed final-result arithmetic, population counts and uncertainty plots |
 
-The report pairs AUC with **Brier score, log loss, a training-fold prevalence
-baseline and scanner-level probability diagnostics**. Its twelve reliability
-profiles retain empty bins and the observed sample counts. The baseline excludes
-each held-out fold's labels; the report performs no evaluation-set calibration or
-threshold selection. [Diagnostic implementation](src/rsna_review/diagnostics.py)
-
-Both demos are labeled **SYNTHETIC_ONLY** and exercise the engineering workflow on generated tabular data. Historical MRI scores are separate evidence; neither demo is a clinical model.
-
-## Inspect the research
-
-[Employer review guide](docs/EMPLOYER_REVIEW_GUIDE.md) · [Case study](docs/EMPLOYER_CASE_STUDY.md) · [Architecture](docs/ARCHITECTURE.md) · [Executed Notebook 14](notebooks/14_winner_transfer_and_context_modeling.ipynb) · [Source-linked checks](review/README.md)
-
-The [offline figure archive](reports/figures/README.md) shares one identical
-runtime across 36 earlier figures, removing 9.5 MB of duplicate files while
-preserving original chart specifications and export manifests. Its integrity check
-reconstructs the original HTML hashes from the recorded path-only change.
-
-The [dated aggregate report](reports/current_frontier/results.json) preserves research through Stage 104. Internal development metrics are distinct from the external score. The 58 fully labeled audit rows are not an untouched confirmation cohort, and full raw-image test serving or clinical validity is not established by this release.
-
-This [completed portfolio release](docs/PROJECT_CLOSEOUT.md) publishes code, aggregate evidence and synthetic examples. MRI/DICOM data, identifiers, private predictions, checkpoints and tuned research inference code remain excluded. [Publication boundary](docs/GIT_PUBLICATION.md)
+The final result does not depend on the retired experiment launchers or old AWS
+spaces. The public data/recovery contracts and reference examples are independently
+testable. Restricted MRI/DICOM files, study identifiers, private predictions,
+weights, tuned inference recipes and private checkpoints are excluded.
+The external and grouped development scores are **not directly comparable**.
+[Sources and attribution](docs/SOURCES.md) remain explicit. This is research
+software, not a diagnostic device or a clinically validated service.

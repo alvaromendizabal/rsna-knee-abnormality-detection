@@ -1,57 +1,47 @@
 # System architecture
 
-![Private research and public review, joined by aggregate evidence](assets/architecture.svg)
+![Private research and public review](assets/architecture.svg)
 
-The project has two execution surfaces. The original research uses private MRI and model artifacts on AWS. The public review surface runs entirely on synthetic features and retained aggregate reports. They share engineering principles; the public demonstration does not reproduce the private model or its scientific scores.
+The recorded MRI system and public reference are distinct. The former used private
+images and trained model artifacts. The latter exposes the implementation contracts,
+fitted synthetic controls, and original final aggregate evaluation.
 
 ## Data and model identity
 
-A model's effective identity includes source state, selected acquisitions, image transforms, target order, fitted aggregation, and evaluation membership. A restored checkpoint alone cannot establish equivalence. The research therefore kept input signatures and numerical-parity gates alongside weights.
+The recorded cache contains 4,407 studies. The grouped development population is
+4,349 studies in 59 scanner groups, with no group crossing folds. The 58 fully
+labeled audit rows have historical selection exposure and are not untouched
+confirmation. Exact private split membership is not reconstructed by a count check.
 
-The canonical cache contains **4,407 studies**. The retained grouped development population contains **4,349 studies in 59 scanner groups**, with zero scanner groups crossing folds. The **58 fully labeled audit rows** have historical selection exposure and are not treated as untouched confirmation.
+## Retained contracts
 
-## Research execution
-
-| Layer | Responsibility | Public evidence |
+| Layer | Implementation | Scope |
 |---|---|---|
-| Data contracts | Schema, joins, DICOM geometry, acquisition coverage | [Protocol](RESEARCH_PROTOCOL.md) and public helpers |
-| Heterogeneous models | Restore trained branches with strict source and input identity | [Historical reconstruction record](SCORED_REFERENCE_FRONTIER.md) |
-| Experiment control | Resume compatible work, monitor resources, preserve failures | [Engineering case study](EMPLOYER_CASE_STUDY.md) |
-| Evaluation | Grouped development metrics, parity checks, paired uncertainty | [Executed research notebook](../notebooks/14_winner_transfer_and_context_modeling.ipynb) |
-| Publication | Aggregate results, reviewable code, restricted-artifact checks | [Publication procedure](GIT_PUBLICATION.md) |
+| Input integrity | `rsna_knee/schema.py`, `downloads.py` | Label order, metadata joins, bounded safe CSV input |
+| MRI preprocessing | `rsna_research/pixels.py` | Physical slice order, geometry rejection, bounded decoding |
+| Global pooling | `rsna_research/image_models.py` | Softmax over all encoding microbatches, not independent chunks |
+| Evaluation | `rsna_research/comparison.py`, `rsna_knee/metrics.py` | Key alignment, twelve-target scoring, grouped uncertainty |
+| Recovery | `rsna_review/public_pipeline.py` | Atomic, content-bound fold checkpoints |
+| Reporting | `rsna_review/diagnostics.py`, `evidence.py` | Held-out probability diagnostics and exact aggregate replay |
 
-The reconstruction record includes 20 native trained members, five A5 folds, four Raptor diagnostic views on incomplete input scope, and seven CoAt predictions. Complete historical parity is not claimed while compatible source inputs and independent evaluation membership remain unresolved. Exact private aggregation and inference implementation are excluded.
-
-## Public pipeline
-
-[Source](../src/rsna_review/public_pipeline.py) · [CLI](../examples/run_public_pipeline.py) · [Tests](../tests/test_public_pipeline.py)
-
-The CPU demonstration generates synthetic features and twelve binary targets. Scanner-disjoint folds, train-only normalization, and a generic logistic model produce held-out predictions. Every number in this demonstration describes generated data only.
+## Public training path
 
 ```mermaid
-flowchart TD
-    A["Data, code and configuration"] --> B{"Compatible checkpoint?"}
-    B -->|Verified| C["Reuse completed fold"]
-    B -->|Missing| D["Fit and validate fold"]
-    D --> E["Atomically save checkpoint"]
-    C --> F["Assemble held-out report"]
-    E --> F
-    B -->|Mismatch| G["Stop with evidence intact"]
+flowchart LR
+    A[Authored inputs] --> B[Scanner-disjoint folds]
+    B --> C[Training-only preprocessing]
+    C --> D[12 fitted logistic controls]
+    D --> E[Held-out metrics and diagnostics]
+    D --> F[Atomic content-bound checkpoint]
+    F --> G[Verify and resume]
+    G --> E
 ```
 
-A manifest binds input, configuration, implementation, and runtime identity. Checkpoint content hashes are validated before reuse. The same command can resume a deliberately interrupted run; tests compare its completed output against a fresh run. Incompatible or damaged state is rejected rather than silently reused.
+An incompatible checkpoint stops rather than silently reusing stale work. Browser
+and Python exports are independently testable and explicitly synthetic. The final
+private MRI ensemble and tuned fusion are not shipped or impersonated by the
+public reference. Numerical parity within a tested input scope does not establish
+clinical validity or generalization to new acquisitions.
 
-## Evidence classes
-
-| Class | What it supports | What it does not support |
-|---|---|---|
-| Recorded external evaluation | Historical project performance in that setting | Current clinical performance |
-| Grouped development evaluation | Controlled research comparisons | Independent confirmation after repeated selection |
-| Engineering parity | Equivalence within tested inputs and tolerances | Generalization to untested acquisitions |
-| Synthetic demonstration | Code behavior, contracts, recovery | MRI diagnostic accuracy |
-
-Ordered cross-slice context improved the retained grouped result from **0.7943834 to 0.7978448**. A later extension reached **0.7978946**, but its paired interval crossed zero. The public record preserves both the useful improvement and the uncertainty.
-
-## Publication boundary
-
-Public artifacts include aggregate reports, executed aggregate notebooks, generic helpers, synthetic data generation, tests, and diagrams. Raw MRI, patient/study identifiers, research row-level predictions, model weights, private runners, cloud paths, and exact inference/fusion logic remain excluded. See [Reproducibility](REPRODUCIBILITY.md) for the supported environment and commands.
+[Case study](EMPLOYER_CASE_STUDY.md) · [Reproduction](REPRODUCIBILITY.md) ·
+[Original evidence](../reports/current_frontier/results.json)
