@@ -1,7 +1,7 @@
 {
   "title": "Imaging ML with group-aware evidence and recovery.",
   "discipline": "Medical-imaging research / validation / reliable training",
-  "summary": "A twelve-label knee-MRI research workflow connecting scanner-aware evaluation, image-model studies, cross-slice context, and recoverable experiments. Public demonstrations make the engineering inspectable without patient data.",
+  "summary": "A twelve-label MRI project with scanner-grouped evidence, ordered context, validated data and numerical contracts, and recoverable training. Public controls are fitted on authored data and clearly separated from the private model.",
   "signals": [
     {
       "value": "12 labels",
@@ -24,15 +24,15 @@
       "title": "Respect acquisition groups during validation.",
       "decision": "Keep scanner groups disjoint and inspect aligned targets rather than relying on a random row split.",
       "boundary": "Grouped development measurements are not evidence of clinical deployment readiness.",
-      "implementation": "src/rsna_research/protocol.py",
-      "tests": "tests/test_research_protocol.py",
+      "implementation": "src/rsna_review/public_pipeline.py",
+      "tests": "tests/test_public_pipeline.py",
       "evidence": "docs/EMPLOYER_CASE_STUDY.md"
     },
     {
       "audience": "Applied AI",
-      "title": "Test cross-slice context as a controlled change.",
-      "decision": "Compare ordered context and image-model alternatives on a matched development population.",
-      "boundary": "A small positive point estimate with inconclusive evidence is not promoted as a confirmed gain.",
+      "title": "Preserve global pooling across microbatches.",
+      "decision": "Normalize attention over all encoded windows; independent chunk softmax is not equivalent.",
+      "boundary": "These are numerical reference contracts, not the private MRI model recipe.",
       "implementation": "src/rsna_research/image_models.py",
       "tests": "tests/test_image_models.py",
       "evidence": "reports/current_frontier/results.json"
@@ -109,7 +109,7 @@
   ],
   "source_files": [
     "review/run.py",
-    "tools/check_figure_exports.py",
-    "reports/figures/ASSET_LAYOUT.json"
+    "src/rsna_review/evidence.py",
+    "notebooks/01_context_evaluation.ipynb"
   ]
 }

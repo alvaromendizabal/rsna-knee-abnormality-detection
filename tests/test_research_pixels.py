@@ -2,7 +2,7 @@ from types import SimpleNamespace
 import importlib.metadata
 import numpy as np
 import pytest
-from rsna_research.pixels import ordered_geometry,normalize,image_features,glcm,pool2d,load_volume,FAMILIES
+from rsna_research.pixels import ordered_geometry,normalize,load_volume
 from rsna_knee.schema import ContractError
 
 
@@ -10,10 +10,6 @@ def headers(n=8):
     return [SimpleNamespace(ImageOrientationPatient=[0,1,0,0,0,1],ImagePositionPatient=[i*3,0,0],PixelSpacing=[.5,.5]) for i in range(n)]
 
 def volume(seed=42): return np.random.default_rng(seed).normal(100,20,size=(8,16,16)).astype('float32')
-
-def geometry():
-    _,g,_=ordered_geometry(headers()); g.update(rows=16.,columns=16.,pixel_padding_fraction=0.)
-    return g
 
 def test_pinned_reader_version(): assert importlib.metadata.version('pydicom')=='3.0.2'
 
@@ -53,27 +49,6 @@ def test_padding_stays_missing():
     v=volume(); v[:,:,0]=np.nan; x,_=normalize(v)
     assert np.isnan(x[:,:,0]).all()
 
-@pytest.mark.parametrize('seed',[1,42,20260912])
-def test_round2_all_families_and_finite(seed):
-    x,_=normalize(volume(seed)); f,r=image_features(x,geometry())
-    assert len(f)==140 and len(r)==140 and {x['family'] for x in r}==set(FAMILIES)
-    assert np.isfinite(list(f.values())).all()
-    assert all(not x['uses_report_or_label'] for x in r)
-    assert any(k.startswith('full__') for k in f) and any(k.startswith('center75__') for k in f)
-
-def test_too_few_slices_stops():
-    x,_=normalize(volume()[:3])
-    with pytest.raises(ContractError): image_features(x,geometry())
-
-def test_glcm_constant_expected():
-    g=glcm(np.zeros((8,16,16)),1)
-    assert g['contrast']==0 and g['asm']==1 and g['homogeneity']==1 and g['entropy']==0
-
-@pytest.mark.parametrize('scale',[2,4])
-def test_pooling_constant_and_shape(scale):
-    p=pool2d(np.ones((8,16,16)),scale)
-    assert p.shape==(8,16//scale,16//scale) and np.all(p==1)
-
 def test_actual_synthetic_dicom_roundtrip(tmp_path):
     from pydicom.dataset import FileDataset,FileMetaDataset
     from pydicom.uid import ExplicitVRLittleEndian,MRImageStorage
@@ -94,6 +69,6 @@ def test_actual_synthetic_dicom_roundtrip(tmp_path):
         ds.save_as(p,enforce_file_format=True); paths.append(p)
     v,g=load_volume(paths[::-1],'1.2.3','1.2.3.4','Sagittal')
     assert v.shape==(8,16,16) and v[0,0,0]==0 and v[-1,0,0]==28
-    x,_=normalize(v); f,r=image_features(x,g)
-    assert len(f)==140 and g['slice_count']==8
+    x,_=normalize(v)
+    assert x.shape==(8,16,16) and g['slice_count']==8
     with pytest.raises(ContractError): load_volume(paths,'1.2.3','1.2.3.4','Axial')

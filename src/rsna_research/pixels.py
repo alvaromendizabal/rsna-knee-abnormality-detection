@@ -1,25 +1,11 @@
-"""Round 2: explicit whole-view and center-window MRI representations.
-
-Research candidates, not clinical measurements or IBSI-certified radiomics.
-No anatomical segmentation is inferred. Crop coordinates are image-relative.
-No image intensity is described as CT Hounsfield units or quantitative T1/T2.
+"""Public MRI ingestion: spatial ordering, bounded decoding and case-local normalization.
+These primitives are not the private model or a handcrafted feature campaign.
+No anatomical segmentation, quantitative T1/T2 or clinical validity is implied.
 """
 from __future__ import annotations
 from pathlib import Path
 import numpy as np
 from rsna_knee.schema import ContractError
-
-FAMILIES={
- 'intensity_distribution':'Within-series robustly normalized signal distribution.',
- 'signal_tails':'High/low normalized-signal fractions and tail extent.',
- 'spatial_gradients':'In-plane edge magnitude and directional differences.',
- 'cooccurrence_texture':'Explicit 16-bin, 2D co-occurrence statistics at 1/2-pixel offsets.',
- 'regional_heterogeneity':'Image-relative 3x3 patch summaries; NOT anatomical ROIs.',
- 'slice_context':'Adjacent/two-step slice differences and continuity.',
- 'multiscale_context':'Fixed 2x/4x average-pooled image-scale descriptors.',
- 'physical_geometry':'Voxel spacing, coverage, obliquity, and spacing consistency.',
-}
-
 
 def ordered_geometry(headers):
     if len(headers)<3: raise ContractError('At least three slices are required for context features.')
@@ -55,7 +41,6 @@ def ordered_geometry(headers):
         'slice_count':float(len(headers)),
         'through_inplane_ratio':float(median/np.sqrt(np.prod(spacing[0])))}
     return order,geometry,plane
-
 
 def load_volume(paths: list[Path], study: str, series: str, expected_plane: str):
     import pydicom
@@ -115,7 +100,6 @@ def load_volume(paths: list[Path], study: str, series: str, expected_plane: str)
                     pixel_padding_fraction=float((~np.isfinite(volume)).mean()))
     return volume,geometry
 
-
 def normalize(volume):
     x=np.asarray(volume,dtype=np.float32)
     if x.ndim!=3 or min(x.shape)<3 or np.isinf(x).any(): raise ContractError('Expected finite-or-padding 3D volume.')
@@ -126,109 +110,3 @@ def normalize(volume):
     out=np.clip((x-lo)/(hi-lo),0,1).astype(np.float32)
     return out,{'normalization':'within_series_p01_p99','valid_pixel_count':int(len(valid)),
                 'low_clipped_fraction':float((valid<lo).mean()),'high_clipped_fraction':float((valid>hi).mean())}
-
-
-def entropy(values,bins=16):
-    x=np.asarray(values); x=x[np.isfinite(x)]
-    if not x.size: return 0.0
-    n=np.histogram(x,bins=np.linspace(0,1,bins+1))[0].astype(float)
-    p=n[n>0]/n.sum()
-    return float(-(p*np.log2(p)).sum())
-
-
-def glcm(volume,offset):
-    """Average normalized symmetric matrices from horizontal and vertical pairs.
-
-    Pooling across slices is explicit; no cross-slice pair is included here.
-    Matrices exclude pairs containing padding. This is NOT certified IBSI code.
-    """
-    size=16; matrices=[]
-    for axis in (1,2):
-        a=[slice(None)]*3; b=[slice(None)]*3
-        a[axis]=slice(None,-offset); b[axis]=slice(offset,None)
-        x,y=volume[tuple(a)],volume[tuple(b)]; mask=np.isfinite(x)&np.isfinite(y)
-        if not mask.any(): continue
-        qa=np.minimum((x[mask]*size).astype(int),size-1)
-        qb=np.minimum((y[mask]*size).astype(int),size-1)
-        counts=np.bincount(qa*size+qb,minlength=size*size).reshape(size,size).astype(float)
-        counts+=counts.T.copy(); matrices.append(counts/counts.sum())
-    if not matrices: raise ContractError('No valid co-occurrence pairs.')
-    p=np.mean(matrices,axis=0); i,j=np.indices(p.shape); d=np.abs(i-j)
-    return {'contrast':float((p*d*d).sum()),'dissimilarity':float((p*d).sum()),
-        'homogeneity':float((p/(1+d*d)).sum()),'asm':float((p*p).sum()),
-        'entropy':float(-(p[p>0]*np.log2(p[p>0])).sum())}
-
-
-def pool2d(volume,scale):
-    z,h,w=volume.shape; h=h//scale*scale; w=w//scale*scale
-    if min(h,w)<scale: raise ContractError('Image too small for the requested pooling scale.')
-    x=volume[:,:h,:w].reshape(z,h//scale,scale,w//scale,scale)
-    finite=np.isfinite(x); counts=finite.sum(axis=(2,4)); sums=np.where(finite,x,0).sum(axis=(2,4))
-    return np.divide(sums,counts,out=np.full(sums.shape,np.nan),where=counts>0)
-
-
-def image_features(normalized,geometry):
-    volume=np.asarray(normalized,dtype=np.float32)
-    if volume.ndim!=3 or min(volume.shape)<8: raise ContractError('At least 8 slices and 8x8 pixels required for this complete feature panel.')
-    finite=volume[np.isfinite(volume)]
-    if not finite.size or finite.min()<0 or finite.max()>1: raise ContractError('Expected within-series normalized [0,1] signal.')
-    values={}; registry=[]
-    def add(name,value,family):
-        if name in values or not np.isfinite(value): raise ContractError('Duplicate or invalid image descriptor.')
-        values[name]=float(value); registry.append({'feature':name,'family':family,
-            'available_at_inference':True,'uses_report_or_label':False,'predictive_status':'not_evaluated',
-            'role':'image-relative candidate, not clinical measurement'})
-    # Compare full field-of-view versus a predetermined 75% center window.
-    h,w=volume.shape[1:]; dh,dw=h//8,w//8
-    crops={'full':volume,'center75':volume[:,dh:h-dh,dw:w-dw]}
-    for crop,x in crops.items():
-        v=x[np.isfinite(x)]
-        def put(name,value,family): add(crop+'__'+name,value,family)
-        for name,val in [('mean',v.mean()),('std',v.std()),('entropy16',entropy(v))]: put(name,val,'intensity_distribution')
-        for q in (10,25,50,75,90): put(f'p{q}',np.percentile(v,q),'intensity_distribution')
-        put('iqr',np.percentile(v,75)-np.percentile(v,25),'intensity_distribution')
-        for threshold in (.80,.90,.95): put(f'bright_fraction_{int(100*threshold)}',(v>threshold).mean(),'signal_tails')
-        for threshold in (.05,.10): put(f'dark_fraction_{int(100*threshold)}',(v<threshold).mean(),'signal_tails')
-        put('upper_tail_span',np.percentile(v,99)-np.percentile(v,90),'signal_tails')
-        gradients=[]
-        for axis in (1,2):
-            d=np.abs(np.diff(x,axis=axis)); d=d[np.isfinite(d)]
-            if not d.size: raise ContractError('No valid gradient neighbors.')
-            gradients.append(d)
-            put(f'axis{axis}_gradient_mean',d.mean(),'spatial_gradients')
-            put(f'axis{axis}_gradient_p90',np.percentile(d,90),'spatial_gradients')
-            put(f'axis{axis}_gradient_energy',np.mean(d*d),'spatial_gradients')
-        put('gradient_direction_ratio',gradients[0].mean()/max(float(gradients[1].mean()),1e-8),'spatial_gradients')
-        for distance in (1,2):
-            for name,val in glcm(x,distance).items(): put(f'glcm_d{distance}_{name}',val,'cooccurrence_texture')
-        means=[]
-        for r,rr in enumerate(np.array_split(np.arange(x.shape[1]),3)):
-            for c,cc in enumerate(np.array_split(np.arange(x.shape[2]),3)):
-                patch=x[:,rr][:,:,cc]; p=patch[np.isfinite(patch)]
-                mean=float(p.mean()) if p.size else 0.0
-                if p.size: means.append(mean)
-                put(f'patch{r}{c}_mean',mean,'regional_heterogeneity')
-                put(f'patch{r}{c}_missing',not p.size,'regional_heterogeneity')
-        put('patch_mean_range',max(means)-min(means) if means else 0,'regional_heterogeneity')
-        for lag in (1,2):
-            d=np.abs(x[lag:]-x[:-lag]); d=d[np.isfinite(d)]
-            if not d.size: raise ContractError('No valid slice-context pairs.')
-            put(f'lag{lag}_difference_mean',d.mean(),'slice_context')
-            put(f'lag{lag}_difference_p90',np.percentile(d,90),'slice_context')
-        corrs=[]
-        for a,b in zip(x[:-1],x[1:]):
-            mask=np.isfinite(a)&np.isfinite(b)
-            av,bv=a[mask],b[mask]
-            if av.size>=8 and av.std()>1e-8 and bv.std()>1e-8: corrs.append(float(np.corrcoef(av,bv)[0,1]))
-        put('adjacent_correlation_mean',np.mean(corrs) if corrs else 0,'slice_context')
-        put('adjacent_correlation_min',min(corrs) if corrs else 0,'slice_context')
-        put('adjacent_correlation_missing',not corrs,'slice_context')
-        for scale in (2,4):
-            pooled=pool2d(x,scale); p=pooled[np.isfinite(pooled)]
-            put(f'scale{scale}_std',p.std(),'multiscale_context')
-            put(f'scale{scale}_entropy16',entropy(p),'multiscale_context')
-            d=np.abs(np.diff(pooled,axis=2)); d=d[np.isfinite(d)]
-            put(f'scale{scale}_gradient_mean',d.mean() if d.size else 0,'multiscale_context')
-    for name,value in sorted(geometry.items()): add('geometry__'+name,value,'physical_geometry')
-    if {r['family'] for r in registry}!=set(FAMILIES): raise ContractError('An image-representation family is missing.')
-    return values,registry

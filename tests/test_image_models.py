@@ -40,11 +40,5 @@ class ImageModelContractTests(unittest.TestCase):
         with self.assertRaises(ValueError): m.attention_pool([[1], [1, 2]], [0, 0])
     def test_nonfinite_attention(self):
         with self.assertRaises(ValueError): m.attention_pool([[1]], [math.inf])
-    def test_primary_failed(self): self.assertEqual(m.promotion(-0.0032600308641975717, -0.0071902767015902536, 12, 12), 'STOP_FIXED_BLEND_DIRECTION')
-    def test_brier_cannot_rescue_auc(self): self.assertEqual(m.promotion(-0.01, -0.1, 12, 12), 'STOP_FIXED_BLEND_DIRECTION')
-    def test_promotion_is_not_submission(self): self.assertEqual(m.promotion(0.003, 0.0, 12, 12), 'CANDIDATE_FOR_BROADER_VALIDATION')
-    def test_insufficient_support(self): self.assertEqual(m.promotion(0.1, -0.1, 11, 12), 'INCONCLUSIVE_SUPPORT')
-    def test_too_few_studies(self): self.assertEqual(m.promotion(0.1, -0.1, 12, 5), 'INCONCLUSIVE_SUPPORT')
-    def test_small_effect(self): self.assertEqual(m.promotion(0.001, 0.0, 12, 12), 'INCONCLUSIVE_EFFECT')
 
 if __name__ == '__main__': unittest.main()

@@ -11,7 +11,6 @@ class EmployerPortfolioTests(unittest.TestCase):
             "README.md",
             "docs/ARCHITECTURE.md",
             "docs/EMPLOYER_CASE_STUDY.md",
-            "docs/RESEARCH_TIMELINE.md",
             "docs/EMPLOYER_REVIEW_GUIDE.md",
             "docs/REPRODUCIBILITY.md",
             "docs/PROJECT_CLOSEOUT.md",
@@ -19,8 +18,7 @@ class EmployerPortfolioTests(unittest.TestCase):
             "docs/assets/architecture.svg",
             "examples/run_public_pipeline.py",
             "docs/CONTEXT_MODELING_FRONTIER.md",
-            "docs/WINNER_TRANSFER_FRONTIER.md",
-            "notebooks/14_winner_transfer_and_context_modeling.ipynb",
+            "notebooks/01_context_evaluation.ipynb",
         ]
         for rel in required:
             self.assertTrue((ROOT / rel).is_file(), rel)
@@ -67,12 +65,6 @@ class EmployerPortfolioTests(unittest.TestCase):
         ]:
             self.assertIn(phrase, text)
 
-    def test_timeline_records_decisions(self):
-        text = (ROOT / "docs/RESEARCH_TIMELINE.md").read_text(encoding="utf-8")
-        self.assertGreaterEqual(text.count("### Decision"), 8)
-        self.assertIn("winner-technique audit", text.lower())
-        self.assertIn("ordered cross-slice context", text.lower())
-
     def test_context_frontier_shows_gain_and_uncertainty(self):
         text = (ROOT / "docs/CONTEXT_MODELING_FRONTIER.md").read_text(encoding="utf-8")
         self.assertIn("0.7943834", text)
@@ -80,20 +72,13 @@ class EmployerPortfolioTests(unittest.TestCase):
         self.assertIn("0.7978946", text)
         self.assertIn("crossed zero", text.lower())
 
-    def test_winner_frontier_has_inventory_and_coverage(self):
-        text = (ROOT / "docs/WINNER_TRANSFER_FRONTIER.md").read_text(encoding="utf-8")
-        for phrase in ["9 prior competitions", "15 independent", "37 normalized", "29 high-confidence"]:
-            self.assertIn(phrase, text)
-
     def test_employer_docs_respect_publication_boundary(self):
         paths = [
             "README.md",
             "docs/EMPLOYER_CASE_STUDY.md",
-            "docs/RESEARCH_TIMELINE.md",
             "docs/EMPLOYER_REVIEW_GUIDE.md",
             "docs/REPRODUCIBILITY.md",
             "docs/CONTEXT_MODELING_FRONTIER.md",
-            "docs/WINNER_TRANSFER_FRONTIER.md",
         ]
         banned = [
             r"1\.2\.826\.0\.1\.3680043",

@@ -11,7 +11,6 @@ from rsna_review.evidence import verify_notebook
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--notebook', type=Path)
-    parser.add_argument('--number', choices=('12', '13', '14'), default='14')
     args = parser.parse_args()
-    verify_notebook(ROOT, args.notebook, args.number)
+    verify_notebook(ROOT, args.notebook)
     print('PUBLIC_REVIEW_NOTEBOOK_VERIFIED')
